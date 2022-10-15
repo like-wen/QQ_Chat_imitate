@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="294.0" prefWidth="506.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lkw.client.ClientController.LoginController">
    <children>
@@ -12,11 +13,14 @@
 
       <TextField fx:id="password" layoutX="91.0" layoutY="111.0"><font><Font size="15.0" /></font></TextField>
 
-      <Button  onAction="#loginBtn" layoutX="91.0" layoutY="180.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="116.0" text="登录"><font><Font size="16.0" /></font></Button>
+      <Text fx:id="tips" layoutX="93.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="227.240234375" />
+
+      <Button layoutX="91.0" layoutY="180.0" mnemonicParsing="false" onAction="#loginBtn" prefHeight="30.0" prefWidth="116.0" text="登录"><font><Font size="16.0" /></font></Button>
 
       <Button layoutX="293.0" layoutY="180.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="116.0" text="注册"><font><Font size="16.0" /></font></Button>
 
       <CheckBox layoutX="91.0" layoutY="242.0" mnemonicParsing="false" text="我已阅读并同意服务条款、隐私政策" />
+
 
    </children>
 </AnchorPane>
