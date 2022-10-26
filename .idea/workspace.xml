@@ -9,32 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="添加部分页面逻辑">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/Client_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml.baiduyun.uploading.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml.baiduyun.uploading.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/main/java/META-INF/MANIFEST.MF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/MyClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/ClientApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/ClientApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/ClientController/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/ClientController/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/ClientController/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/ClientController/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/MainStart.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/MainStart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/ClientApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/ClientApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/ClientController/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/ClientController/LoginController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/ClientController/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/ClientController/MainController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/MainStart.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/MainStart.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/login.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/main.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/lkw/ChatRoomClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/lkw/ChatRoomClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/lkw/ChatRoomServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/lkw/ChatRoomServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/lkw/ClientFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/lkw/ClientFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ChatRoomClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/lkw/ChatRoomClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ChatRoomServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/lkw/ChatRoomServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ClientFrame$ReadMessageThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/lkw/ClientFrame$ReadMessageThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ClientFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/lkw/ClientFrame.class" afterDir="false" />
-    </list>
+    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="添加socket,但是比较乱" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -204,6 +179,7 @@
       <workItem from="1666246288076" duration="6000" />
       <workItem from="1666264228301" duration="322000" />
       <workItem from="1666265729704" duration="3930000" />
+      <workItem from="1666779287165" duration="286000" />
     </task>
     <task id="LOCAL-00001" summary="基础代码">
       <created>1663814396212</created>
@@ -247,7 +223,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665831271079</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="添加socket,但是比较乱">
+      <created>1666779434975</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1666779434975</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -274,7 +257,8 @@
     <MESSAGE value="添加javafx图形界面,能打开,但是不能用" />
     <MESSAGE value="添加springboot,&#10;页面跳转逻辑完成" />
     <MESSAGE value="添加部分页面逻辑" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加部分页面逻辑" />
+    <MESSAGE value="添加socket,但是比较乱" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加socket,但是比较乱" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

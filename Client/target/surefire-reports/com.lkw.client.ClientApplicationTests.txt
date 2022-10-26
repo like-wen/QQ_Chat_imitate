@@ -1,0 +1,7 @@
+-------------------------------------------------------------------------------
+Test set: com.lkw.client.ClientApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.268 s <<< FAILURE! - in com.lkw.client.ClientApplicationTests
+com.lkw.client.ClientApplicationTests  Time elapsed: 0.266 s  <<< ERROR!
+java.lang.IllegalStateException: Found multiple @SpringBootConfiguration annotated classes [Generic bean: class [com.lkw.client.ClientApplication]; scope=; abstract=false; lazyInit=null; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [D:\work\javacode\QQ_Chat\Client\target\classes\com\lkw\client\ClientApplication.class], Generic bean: class [com.lkw.client.ClientApplication2]; scope=; abstract=false; lazyInit=null; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [D:\work\javacode\QQ_Chat\Client\target\classes\com\lkw\client\ClientApplication2.class]]
+
