@@ -23,6 +23,8 @@ public class ClientApplication extends Application {
     public void start(Stage primaryStage) {
         Parent root = null;
         try {
+
+
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/login.fxml")));
             primaryStage.setTitle("QQ");
             primaryStage.getIcons().add(new Image("/QQ.png"));

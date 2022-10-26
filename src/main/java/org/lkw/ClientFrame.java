@@ -54,7 +54,7 @@ public class ClientFrame extends JFrame {
                     System.exit( 0 );
                 }
             }
-        } );
+        });
         // 发送按钮
         JButton btnSend = new JButton( "发送" );
         btnSend.setBounds( 680,550,100,30 );
@@ -71,7 +71,7 @@ public class ClientFrame extends JFrame {
         } );
         // 实例化客户端对象
         try {
-            client = new ChatRoomClient( ip,4569 ); // 创建客户端对象
+            client = new ChatRoomClient( ip,8088 ); // 创建客户端对象
         } catch(UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -79,6 +79,9 @@ public class ClientFrame extends JFrame {
         }
         ReadMessageThread messageThread = new ReadMessageThread(); // 创建读取客户端消息的线程类对象
         messageThread.start();
+
+        client.sendMessage(userName);
+
         // 控件初始化
         JLabel text = new JLabel( "消息对话框:" );
         text.setBounds( 10,0,200,30 );

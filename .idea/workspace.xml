@@ -1,15 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="Client:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="添加springboot,&#10;页面跳转逻辑完成">
+    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="添加部分页面逻辑">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/Client_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml.baiduyun.uploading.cfg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml.baiduyun.uploading.cfg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client/src/main/java/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/MyClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/ClientApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/ClientApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/ClientController/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/ClientController/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/ClientController/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/ClientController/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/MainStart.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/MainStart.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/ClientApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/ClientApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/ClientController/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/ClientController/LoginController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/ClientController/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/ClientController/MainController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/MainStart.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/MainStart.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/classes/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/classes/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/lkw/ChatRoomClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/lkw/ChatRoomClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/lkw/ChatRoomServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/lkw/ChatRoomServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/lkw/ClientFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/lkw/ClientFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ChatRoomClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/lkw/ChatRoomClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ChatRoomServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/lkw/ChatRoomServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ClientFrame$ReadMessageThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/lkw/ClientFrame$ReadMessageThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ClientFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/lkw/ClientFrame.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,15 +70,15 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/work/javacode/QQ_Chat/Server/src/main/java/com/lkw/server/ServerController&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/work/javacode/git_download/JavaFX-Chat&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;spring.configuration.checksum&quot;: &quot;587c446a63103530d5d08b0cda6169ec&quot;
   }
 }</component>
@@ -69,6 +93,8 @@
       <recent name="D:\work\javacode\QQ_Chat\src\main\java\org\lkw" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.lkw.client" />
+      <recent name="com.lkw.client.Utils" />
       <recent name="com.lkw.client.ClientController" />
     </key>
   </component>
@@ -80,51 +106,12 @@
     </option>
   </component>
   <component name="RunManager" selected="Spring Boot.ClientApplication">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.lkw.Main" />
-      <module name="QQ_Chat" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.lkw.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="MainStart" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.lkw.client.MainStart" />
       <module name="Client" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.lkw.client.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="org.lkw.ChatRoomServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.lkw.ChatRoomServer" />
-      <module name="QQ_Chat" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.lkw.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="org.lkw.ClientFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.lkw.ClientFrame" />
-      <module name="QQ_Chat" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.lkw.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -145,9 +132,30 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Client-0.0.1-SNAPSHOT.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/Client/target/Client-0.0.1-SNAPSHOT.jar" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Client.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/Client_jar/Client.jar" />
+      <method v="2" />
+    </configuration>
     <configuration name="ClientApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="Client" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.lkw.client.ClientApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ClientApplication2" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="Client" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.lkw.client.ClientApplication2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.lkw.client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -162,10 +170,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.MainStart" />
+        <item itemvalue="JAR Application.Client-0.0.1-SNAPSHOT.jar" />
+        <item itemvalue="Spring Boot.ClientApplication2" />
+        <item itemvalue="JAR Application.Client.jar" />
         <item itemvalue="Application.org.lkw.LinkServerFrame" />
-        <item itemvalue="Application.org.lkw.ChatRoomServer" />
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.org.lkw.ClientFrame" />
       </list>
     </recent_temporary>
   </component>
@@ -187,7 +195,15 @@
       <workItem from="1665066580048" duration="153000" />
       <workItem from="1665066770623" duration="804000" />
       <workItem from="1665574539989" duration="396000" />
-      <workItem from="1665803686964" duration="7074000" />
+      <workItem from="1665803686964" duration="7484000" />
+      <workItem from="1665850707539" duration="31000" />
+      <workItem from="1665919383861" duration="31351000" />
+      <workItem from="1666018389675" duration="5451000" />
+      <workItem from="1666149982164" duration="1285000" />
+      <workItem from="1666242310918" duration="955000" />
+      <workItem from="1666246288076" duration="6000" />
+      <workItem from="1666264228301" duration="322000" />
+      <workItem from="1666265729704" duration="3930000" />
     </task>
     <task id="LOCAL-00001" summary="基础代码">
       <created>1663814396212</created>
@@ -224,7 +240,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665066810364</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="添加部分页面逻辑">
+      <created>1665831271079</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1665831271079</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,7 +273,19 @@
     <MESSAGE value="基础代码" />
     <MESSAGE value="添加javafx图形界面,能打开,但是不能用" />
     <MESSAGE value="添加springboot,&#10;页面跳转逻辑完成" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加springboot,&#10;页面跳转逻辑完成" />
+    <MESSAGE value="添加部分页面逻辑" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加部分页面逻辑" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/MyClient.java</url>
+          <line>64</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

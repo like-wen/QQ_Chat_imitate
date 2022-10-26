@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="591.0" prefWidth="918.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lkw.client.ClientController.MainController">
    <children>
-      <Button layoutX="755.0" layoutY="540.0" mnemonicParsing="false" onAction="#sendTextBtn" prefHeight="35.0" prefWidth="147.0" text="发送"><font><Font size="16.0" /></font></Button>
+      <Button fx:id="sendBtn" layoutX="755.0" layoutY="540.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="147.0" text="发送"><font><Font size="16.0" /></font></Button>
 
       <Button layoutX="755.0" layoutY="498.0" mnemonicParsing="false" onAction="#sendFileBtn" prefHeight="35.0" prefWidth="147.0" text="发送文件"><font><Font size="16.0" /></font></Button>
 

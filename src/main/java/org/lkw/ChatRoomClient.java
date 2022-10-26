@@ -36,7 +36,7 @@ public class ChatRoomClient {
      *          服务器与客户端互联的端口
      */
     public ChatRoomClient(String host, int port) throws UnknownHostException, IOException {
-        socket = new Socket( host, port ); // 连接服务器
+        socket = new Socket( "192.168.199.100", port ); // 连接服务器
         bufferedReader = new BufferedReader( new InputStreamReader( socket.getInputStream() ) ); // 字节流读取套接字输入流
         pWriter = new PrintWriter( socket.getOutputStream() ); // 字节流写入套接字输出流
     }

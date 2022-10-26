@@ -16,7 +16,7 @@ public class ChatRoomServer {
     // 聊天室构造方法
     public ChatRoomServer(){
         try {
-            serverSocket = new ServerSocket( 4569 );
+            serverSocket = new ServerSocket( 8088 );
         } catch (IOException e) {
             e.printStackTrace();
         }

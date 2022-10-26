@@ -5,20 +5,18 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.web.WebView?>
 
-
-<AnchorPane   maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="591.0" prefWidth="918.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lkw.client.ClientController.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="591.0" prefWidth="918.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lkw.client.ClientController.MainController">
    <children>
-      <Button onAction="#sendTextBtn" layoutX="755.0" layoutY="540.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="147.0" text="发送"><font><Font size="16.0" /></font></Button>
+      <Button fx:id="sendBtn" layoutX="755.0" layoutY="540.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="147.0" text="发送"><font><Font size="16.0" /></font></Button>
 
-      <Button onAction="#sendFileBtn" layoutX="755.0" layoutY="498.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="147.0" text="发送文件"><font><Font size="16.0" /></font></Button>
+      <Button layoutX="755.0" layoutY="498.0" mnemonicParsing="false" onAction="#sendFileBtn" prefHeight="35.0" prefWidth="147.0" text="发送文件"><font><Font size="16.0" /></font></Button>
 
       <TextArea fx:id="sendArea" layoutX="14.0" layoutY="375.0" prefHeight="200.0" prefWidth="728.0" />
 
-      <WebView layoutX="14.0" layoutY="14.0" prefHeight="347.0" prefWidth="890.0" />
-
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#03b0ff52" height="109.0" layoutX="755.0" layoutY="375.0" stroke="TRANSPARENT" strokeType="INSIDE" width="147.0" />
+
+      <TextArea fx:id="acceptArea" layoutX="14.0" layoutY="14.0" prefHeight="352.0" prefWidth="889.0" style="-fx-background-color: backgroundColor;" />
 
    </children>
 </AnchorPane>
