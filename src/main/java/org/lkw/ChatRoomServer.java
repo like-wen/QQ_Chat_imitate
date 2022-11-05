@@ -20,7 +20,7 @@ public class ChatRoomServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        allSockets = new HashSet<>(  ); //  实例化客户端套接字集合
+        allSockets = new HashSet<>(); //  实例化客户端套接字集合
     }
 
     // 启动聊天室的方法

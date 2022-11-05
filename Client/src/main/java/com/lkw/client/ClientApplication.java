@@ -25,7 +25,7 @@ public class ClientApplication extends Application {
         try {
 
 
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/login.fxml")));
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/main.fxml")));
             primaryStage.setTitle("QQ");
             primaryStage.getIcons().add(new Image("/QQ.png"));
             primaryStage.setScene(new Scene(root));

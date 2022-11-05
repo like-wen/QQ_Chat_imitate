@@ -5,18 +5,23 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="591.0" prefWidth="918.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lkw.client.ClientController.MainController">
+<AnchorPane fx:id="myPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="606.0" prefWidth="914.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lkw.client.Controller.javafxController">
    <children>
-      <Button fx:id="sendBtn" layoutX="755.0" layoutY="540.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="147.0" text="发送"><font><Font size="16.0" /></font></Button>
+      <TextArea fx:id="acceptArea" layoutX="14.0" layoutY="14.0" prefHeight="312.0" prefWidth="885.0" style="-fx-background-color: backgroundColor;" />
 
-      <Button layoutX="755.0" layoutY="498.0" mnemonicParsing="false" onAction="#sendFileBtn" prefHeight="35.0" prefWidth="147.0" text="发送文件"><font><Font size="16.0" /></font></Button>
+      <Button fx:id="sendBtn" layoutX="684.0" layoutY="539.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="110.0" text="发送"><font><Font size="16.0" /></font></Button>
 
-      <TextArea fx:id="sendArea" layoutX="14.0" layoutY="375.0" prefHeight="200.0" prefWidth="728.0" />
+      <Button fx:id="sendFileBtn" layoutX="684.0" layoutY="497.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="110.0" text="发送文件"><font><Font size="16.0" /></font></Button>
 
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#03b0ff52" height="109.0" layoutX="755.0" layoutY="375.0" stroke="TRANSPARENT" strokeType="INSIDE" width="147.0" />
+      <TextArea fx:id="filePathArea" layoutX="14.0" layoutY="334.0" prefHeight="37.0" prefWidth="660.0" />
 
-      <TextArea fx:id="acceptArea" layoutX="14.0" layoutY="14.0" prefHeight="352.0" prefWidth="889.0" style="-fx-background-color: backgroundColor;" />
+      <TextArea fx:id="sendArea" layoutX="14.0" layoutY="379.0" prefHeight="196.0" prefWidth="660.0" />
+
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#03b0ff52" height="151.0" layoutX="684.0" layoutY="333.0" stroke="TRANSPARENT" strokeType="INSIDE" width="218.0" />
+
+      <Text fx:id="toolTips" layoutX="14.0" layoutY="594.0" strokeType="OUTSIDE" strokeWidth="0.0" />
 
    </children>
 </AnchorPane>

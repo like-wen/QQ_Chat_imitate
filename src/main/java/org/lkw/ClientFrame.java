@@ -116,6 +116,7 @@ public class ClientFrame extends JFrame {
         public void run() {
             while (true) {
                 String str = client.receiveMessage(); // 客户端收到服务器发来的文本内容
+                System.out.println(str);
                 textArea.append( str+"\n" ); // 向文本框添加内容
             }
         }
