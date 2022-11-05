@@ -8,6 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.DecimalFormat;
 
+
+//服务器文件接收的初始方法
 public class FileTransferServer extends ServerSocket {
  
     private static final int SERVER_PORT = 9998; // 服务端端口

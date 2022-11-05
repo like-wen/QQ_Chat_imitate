@@ -14,11 +14,6 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 服务端
- * @author 花大侠
- *
- */
 public class MyServer implements Runnable {
 	
 	//Server端监听的端口号

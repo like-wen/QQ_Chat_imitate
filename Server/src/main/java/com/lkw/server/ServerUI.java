@@ -1,5 +1,6 @@
 package com.lkw.server;
 
+import com.lkw.server.FileServer.MyFileServer;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -98,6 +99,10 @@ public class ServerUI extends Application{
 		statusText.setText("0 Connect success.");
 		//启动server线程
 		new Thread(new MyServer(ipText, portText, sendMsgArea, statusText, sendButton, receivedMsgArea, clients, clientListView)).start();
+		//缝合进的文件server线程
+		System.out.println("启动myserver线程");
+		new Thread(new MyFileServer()).start();
+
 
 	}
  
