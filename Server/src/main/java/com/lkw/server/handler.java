@@ -120,11 +120,17 @@ public class handler implements Runnable {
 			String message;
 			while(true) {
 				message = bReader.readLine();
+
 				receivedMsgArea.appendText(message + "\n");
 			}
 		} catch (IOException e) {
 			updateForDisConnect(remoteSocketAddress);
 		}
 	}
+
+	//转发
+
+
+
  
 }
