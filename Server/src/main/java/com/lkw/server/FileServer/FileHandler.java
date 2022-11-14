@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.text.DecimalFormat;
 import java.util.Map;
 
-public class fileHandler implements Runnable{
+public class FileHandler implements Runnable{
 
     private Map<String, PrintWriter> map;
     private Socket socket;
@@ -14,6 +14,9 @@ public class fileHandler implements Runnable{
     private DataInputStream dis;
 
     private FileOutputStream fos;
+
+    private DataOutputStream writerFile;
+    private FileInputStream fileInputStream;
 
 
     private static DecimalFormat df = null;
@@ -26,7 +29,7 @@ public class fileHandler implements Runnable{
         df.setMaximumFractionDigits(1);
     }
 
-    public fileHandler(Map<String, PrintWriter> map, Socket socket) {
+    public FileHandler(Map<String, PrintWriter> map, Socket socket) {
         super();
         this.socket=socket;
         this.map=map;
@@ -41,12 +44,18 @@ public class fileHandler implements Runnable{
         String remoteSocketAddress = socket.getRemoteSocketAddress().toString().substring(1);
         System.out.println("服务器文件处理连接的地址为"+remoteSocketAddress);
 
+        writerFile = new DataOutputStream(socket.getOutputStream());
 
         dis = new DataInputStream(socket.getInputStream());
             while (true){
-
                     // 文件名和长度
                     String fileName = dis.readUTF();
+                    if(matchStringByIndexOf(fileName,"<get>")){
+                        //响应获取文件
+                        System.out.println("响应");
+                        //截取文件名传入响应
+                        responseFile(fileName.substring(5));
+                    }
                     long fileLength = dis.readLong();
                     File directory = new File(System.getProperty("user.dir")+"\\MyFile");//指定目录
                     if(!directory.exists()) {
@@ -70,16 +79,45 @@ public class fileHandler implements Runnable{
                             break;
                     }
                     fos.close();
-
                     System.out.println("======== 文件接收成功 [File Name：" + fileName + "] [Size：" + getFormatFileSize(fileLength) + "] ========");
-
-
-
             }
     }catch (IOException e){
         System.out.println("文件传输失败");
     }
     }
+
+    /**
+     * 响应回文件
+     */
+    private void responseFile(String substring) {
+
+        File file = new File(System.getProperty("user.dir") + "\\MyFile\\"+substring);
+        System.out.println(System.getProperty("user.dir") + "\\MyFile\\"+substring);
+        try {
+            fileInputStream = new FileInputStream(file);
+            //传输文件名和长度
+
+            writerFile.writeUTF(file.getName());
+            writerFile.flush();
+            writerFile.writeLong(file.length());
+            writerFile.flush();
+            //传输文件
+            byte[] bytes = new byte[1024];
+            int length = 0;
+            long progress = 0;
+            while ((length = fileInputStream.read(bytes, 0, bytes.length)) != -1) {
+                writerFile.write(bytes, 0, length);
+                writerFile.flush();
+                progress += length;
+                System.out.print("| " + (100 * progress / file.length()) + "% |");
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
+
+    }
+
     /**
      * 格式化文件大小
      * @param length
@@ -100,5 +138,18 @@ public class fileHandler implements Runnable{
         }
         return length + "B";
     }
+    //方法1、通过String的indexOf(String str, int fromIndex)方法
+    private boolean matchStringByIndexOf( String parent,String child )
+    {
+        int index = 0;
+        while( ( index = parent.indexOf(child, index) ) != -1 )
+        {
+            index = index+child.length();
+
+            return true;
+        }						  //结果输出
+        return false;
+    }
 
 }
+

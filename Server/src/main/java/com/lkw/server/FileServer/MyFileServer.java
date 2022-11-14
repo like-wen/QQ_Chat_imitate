@@ -1,7 +1,5 @@
 package com.lkw.server.FileServer;
 
-import com.lkw.server.handler;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -32,7 +30,7 @@ public class MyFileServer implements Runnable{
                 socket = server.accept();
                 //一个客户端接入就启动一个handler线程去处理
                 System.out.println("启动myfileserver线程");
-                new Thread(new fileHandler(map, socket)).start();
+                new Thread(new FileHandler(map, socket)).start();
             }
         } catch (IOException e) {
             // TODO 自动生成的 catch 块

@@ -1,5 +1,6 @@
 package com.lkw.client.Thread;
 
+import com.lkw.client.Utils.Object2Json;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
@@ -24,13 +25,16 @@ public class MyClientThread implements Runnable {
 
 	private Text toolTips;
 
+	private String username;
 
-	public MyClientThread(Button sendBtn, TextArea sendArea, TextArea acceptArea, Text toolTips) {
+
+	public MyClientThread(Button sendBtn, TextArea sendArea, TextArea acceptArea, Text toolTips, String username) {
 		super();
 		this.sendBtn=sendBtn;
 		this.sendArea=sendArea;
 		this.acceptArea=acceptArea;
 		this.toolTips=toolTips;
+		this.username=username;
 	}
 
 	@Override
@@ -44,18 +48,19 @@ public class MyClientThread implements Runnable {
 			PrintWriter pWriter = new PrintWriter(socket.getOutputStream());
 
 			sendBtn.setOnAction(e->{
-
-				if(sendArea.getText().equals("")){
+				String sendMsg=sendArea.getText();
+				if(sendMsg.equals("")){
 					toolTips.setText("没有内容");
-
 				}else {
-					pWriter.write(sendArea.getText() + "\r\n");
+
+					//形式
+					String json = Object2Json.creat(username, 1).addObject("text", sendMsg).buildJson();
+
+					pWriter.write( json+ "\r\n");
 					pWriter.flush();
 					sendArea.setText("");
 				}
 			});
-
-
 
 			//发消息
 			String message;

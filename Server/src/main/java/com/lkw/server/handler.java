@@ -88,6 +88,7 @@ public class handler implements Runnable {
 	 *   2.1遍历printWriters集合
 	 *   2.2写入待发送的消息
 	 */
+
 	public void sendMessage() {
 		Set<PrintWriter> printWriters = new HashSet<>();
 		clientListView.getSelectionModel().selectedItemProperty().addListener(ov->{
