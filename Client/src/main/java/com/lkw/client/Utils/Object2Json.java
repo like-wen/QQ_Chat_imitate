@@ -1,7 +1,7 @@
 package com.lkw.client.Utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson2.JSON;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,20 +36,12 @@ public class Object2Json {
     }
 
     public String  buildJson(){
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(this);
-            return json;
-
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return JSON.toJSONString(this);
     }
 
 
 
     //getter setter
-
 
     public String getUsername() {
         return username;

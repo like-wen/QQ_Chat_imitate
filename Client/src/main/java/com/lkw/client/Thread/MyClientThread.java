@@ -54,7 +54,9 @@ public class MyClientThread implements Runnable {
 				}else {
 
 					//形式
-					String json = Object2Json.creat(username, 1).addObject("text", sendMsg).buildJson();
+					String json = Object2Json.creat(username, 1)
+							.addObject("text", sendMsg)
+							.buildJson();
 
 					pWriter.write( json+ "\r\n");
 					pWriter.flush();
