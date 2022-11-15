@@ -6,9 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="QQ_Chat_imitate" />
+        <module name="QQ_Chat" />
         <module name="Server" />
         <module name="Client" />
-        <module name="QQ_Chat" />
       </profile>
     </annotationProcessing>
   </component>
