@@ -1,4 +1,4 @@
-package com.lkw.server;
+package com.lkw.server.Server;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;

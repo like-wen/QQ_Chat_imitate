@@ -5,6 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.math.RoundingMode;
@@ -19,7 +21,8 @@ import java.text.DecimalFormat;
 public class MyFileThread implements Runnable {
 
 	private Text toolTips;
-	private ObservableList<String> items;
+
+	private Button selectFileBtn;
 	private Socket socketFile;
 
 	private Button sendFileBtn;
@@ -49,12 +52,13 @@ public class MyFileThread implements Runnable {
 
 
 
-	public MyFileThread(Button sendFileBtn, Button acceptAreaFileBtn, TextArea filePathArea, ListView<String> listFile, ObservableList<String> items, Text toolTips) {
+	public MyFileThread(Button sendFileBtn, Button acceptAreaFileBtn, TextArea filePathArea, ListView<String> listFile, Button selectFileBtn, Text toolTips) {
 		super();
 		this.filePathArea = filePathArea;
 		this.sendFileBtn = sendFileBtn;
 		this.acceptAreaFileBtn=acceptAreaFileBtn;
 		this.listFile=listFile;
+		this.selectFileBtn=selectFileBtn;
 		this.toolTips = toolTips;
 	}
 
@@ -74,11 +78,19 @@ public class MyFileThread implements Runnable {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		selectFileBtn.setOnAction(e->{
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("选择上传云端的文件");
+			fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+			File file = fileChooser.showOpenDialog(new Stage());
+			filePathArea.setText(file.getAbsolutePath());
+		});
 
 
 		sendFileBtn.setOnAction(e -> {
-			//读取地址输入框内容并转换成文件
 			File file = new File(filePathArea.getText());
+
+
 			try {
 				fileInputStream = new FileInputStream(file);
 				//传输文件名和长度
@@ -95,9 +107,9 @@ public class MyFileThread implements Runnable {
 					writerFile.write(bytes, 0, length);
 					writerFile.flush();
 					progress += length;
-					toolTips.setText("");
-					System.out.print("| " + (100 * progress / file.length()) + "% |");
+					System.out.println("文件传输进度: " + (100 * progress / file.length()) + "% ");
 				}
+				toolTips.setText("传输完成");
 			} catch (Exception ex) {
 				toolTips.setText("文件找不到!");
 				throw new RuntimeException(ex);

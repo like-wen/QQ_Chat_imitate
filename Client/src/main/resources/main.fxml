@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -16,7 +15,7 @@
 
       <Button fx:id="sendFileBtn" layoutX="684.0" layoutY="497.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="108.0" text="发送文件"><font><Font size="16.0" /></font></Button>
 
-      <TextArea fx:id="filePathArea" layoutX="14.0" layoutY="334.0" prefHeight="37.0" prefWidth="660.0" />
+      <TextArea fx:id="filePathArea" layoutX="14.0" layoutY="334.0" prefHeight="15.0" prefWidth="547.0" />
 
       <TextArea fx:id="sendArea" layoutX="14.0" layoutY="379.0" prefHeight="196.0" prefWidth="660.0" />
 
@@ -25,9 +24,14 @@
       <Button fx:id="acceptAreaFileBtn" layoutX="798.0" layoutY="497.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="108.0" text="接收文件"><font><Font size="16.0" /></font></Button>
 
 
-      <ListView fx:id="listFile"  layoutX="684.0" layoutY="334.0" prefHeight="157.0" prefWidth="221.0">
+      <ListView fx:id="listFile" layoutX="684.0" layoutY="334.0" prefHeight="157.0" prefWidth="221.0">
 
       </ListView>
+      <Button fx:id="selectFileBtn" layoutX="566.0" layoutY="335.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="108.0" text="选择文件">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
 
    </children>
 </AnchorPane>

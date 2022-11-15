@@ -1,6 +1,7 @@
 package com.lkw.server;
 
 import com.lkw.server.FileServer.MyFileServer;
+import com.lkw.server.Server.MyServer;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,7 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 public class ServerUI extends Application{
 	
@@ -100,9 +100,5 @@ public class ServerUI extends Application{
 		//缝合进的文件server线程
 		new Thread(new MyFileServer()).start();
 		primaryStage.show();
-
-
-
 	}
- 
 }

@@ -1,5 +1,6 @@
-package com.lkw.server;
+package com.lkw.server.Server;
 
+import com.lkw.server.Utils.Json2Object;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -118,20 +119,51 @@ public class handler implements Runnable {
 			//发消息
 			sendMessage();
 			//收消息
-			String message;
+			String json;
 			while(true) {
-				message = bReader.readLine();
+				json = bReader.readLine();
+				//个人响应
+				System.out.println("收到"+json);
 
-				receivedMsgArea.appendText(message + "\n");
+				//解析json
+				Json2Object json2Object = new Json2Object(json);
+				//判断mode
+				if(json2Object.getMode().equals("login")){
+					String returnJson = json2Object.Json2PasswordCheck();
+					System.out.println("发送"+returnJson);
+					pWriter.write(returnJson);
+					pWriter.flush();
+				}else if(false){//其他情况
+					//TODO 编写其他mode的
+				}
+
+
+				//群转发
+				//][]\]==
+				// sendMessage2All(json,pWriter);
+
+
+				receivedMsgArea.appendText(json + "\n");
 			}
 		} catch (IOException e) {
 			updateForDisConnect(remoteSocketAddress);
 		}
 	}
 
-	//转发
+	//群转发
+	public void sendMessage2All(String message, PrintWriter pWriter){
+		for (PrintWriter printWriter:map.values()){
+			if(!pWriter.equals(printWriter)) {
+				printWriter.write(message);
+				printWriter.flush();
+			}
+		}
+
+	}
 
 
 
- 
+
+
+
 }

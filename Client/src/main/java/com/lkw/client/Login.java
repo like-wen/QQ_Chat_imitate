@@ -10,8 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-
-public class Main extends Application {
+public class Login extends Application {
     public static void main(String[] args) {
         launch(args);
     }
@@ -20,7 +19,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         Parent root = null;
         try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/main.fxml")));
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/login.fxml")));
             primaryStage.setTitle("QQ");
             primaryStage.getIcons().add(new Image("/QQ.png"));
             primaryStage.setScene(new Scene(root));
@@ -28,7 +27,5 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }
