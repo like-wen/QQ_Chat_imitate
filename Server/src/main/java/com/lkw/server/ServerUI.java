@@ -15,19 +15,23 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
+
 public class ServerUI extends Application{
-	
+
 	TextArea receivedMsgArea = new TextArea();
 	TextField ipText = new TextField();
 	TextField portText = new TextField();
 	TextArea sendMsgArea = new TextArea();
 	TextField statusText = new TextField();
-	Button sendButton = new Button(" Send ");
+	Button sendButton = new Button(" Send");
 	ObservableList<String> clients = FXCollections.observableArrayList();
 	ListView<String> clientListView = new ListView<>(clients);
-	
+
 	public void start(Stage primaryStage) throws Exception {
-		
+
 		//右边 Received Message
 		GridPane rightPane = new GridPane();
 		rightPane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
@@ -39,7 +43,7 @@ public class ServerUI extends Application{
 		receivedMsgArea.setMaxWidth(350);
 		receivedMsgArea.setPrefHeight(410);
 		rightPane.add(receivedMsgArea, 0, 1);
-		
+
 		//左边 IPAdress+Port
 		GridPane leftPane1 = new GridPane();
 		leftPane1.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
@@ -51,7 +55,7 @@ public class ServerUI extends Application{
 		leftPane1.add(new Label("Port:"), 0, 1);
 		portText.setEditable(false);
 		leftPane1.add(portText, 1, 1);
-		
+
 		//左边 Choose Client
 		GridPane leftPane2 = new GridPane();
 		leftPane2.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
@@ -68,7 +72,7 @@ public class ServerUI extends Application{
 		sendMsgArea.setMaxWidth(275);
 		sendMsgArea.setWrapText(true);
 		leftPane2.add(sendMsgArea, 0, 3);
-		
+
 		//左边 Connect Status + button
 		GridPane leftPane3 = new GridPane();
 		leftPane3.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
@@ -77,13 +81,13 @@ public class ServerUI extends Application{
 		statusText.setEditable(false);
 		leftPane3.add(statusText, 0, 0);
 		leftPane3.add(sendButton, 1, 0);
-		
+
 		//组合
 		VBox vBox = new VBox();
 		vBox.getChildren().addAll(leftPane1, leftPane2, leftPane3);
 		HBox hBox = new HBox();
 		hBox.getChildren().addAll(vBox, rightPane);
-		
+
 		Scene scene = new Scene(hBox);
 		primaryStage.setTitle("server");
 		primaryStage.setScene(scene);
@@ -98,7 +102,7 @@ public class ServerUI extends Application{
 		//启动server线程
 		new Thread(new MyServer(ipText, portText, sendMsgArea, statusText, sendButton, receivedMsgArea, clients, clientListView)).start();
 		//缝合进的文件server线程
-		new Thread(new MyFileServer()).start();
+		// new Thread(new MyFileServer()).start();
 		primaryStage.show();
 	}
 }

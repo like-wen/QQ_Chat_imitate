@@ -9,39 +9,41 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="完成文件发送接收,文本发送修改为json传送,更好拓展">
-      <change afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/LoginController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Login.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Json2Object.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/Json2Object.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/Object2Json.java" afterDir="false" />
+    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="使用FastJson进行转换以及封装--shaw">
+      <change afterPath="$PROJECT_DIR$/Client/Client.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/FinalValue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Utils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/FinalValue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Client_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/HELP.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/mvnw.cmd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyFileThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyFileThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Json2Text.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Object2Json.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Object2Json.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/login.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/javafxController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/javafxController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyFileThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyFileThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Utils/Json2Text.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Utils/Object2Json.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Utils/Object2Json.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/login.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/main.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyFile/login.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyFile/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/HELP.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/mvnw.cmd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/MyServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/MyFileServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/MyFileServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/handler.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/ServerUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/ServerUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/handler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/MyServer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/MyFileServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/MyFileServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerController/ClientSocket.class.baiduyun.uploading.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerController/ServerThread.class.baiduyun.uploading.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/handler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/target/test-classes/com/lkw/server/MyServer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/target/test-classes/com/lkw/server/ServerUI$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/target/test-classes/com/lkw/server/ServerUI.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/target/test-classes/com/lkw/server/handler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +55,13 @@
       <list>
         <option value="Class" />
       </list>
+    </option>
+  </component>
+  <component name="Git.Pull.Settings">
+    <option name="OPTIONS">
+      <set>
+        <option value="REBASE" />
+      </set>
     </option>
   </component>
   <component name="Git.Settings">
@@ -71,50 +80,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "jdk.selected.JAVA_MODULE": "1.8",
-    "last_opened_file_path": "D:/work/javacode/QQ_Chat/Server/src/main/java/com/lkw/server",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "spring.configuration.checksum": "587c446a63103530d5d08b0cda6169ec"
-  }
-}]]></component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.1112347" />
+    <property name="project.structure.side.proportion" value="0.24937344" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.lkw.client.Controller" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\CodeOfJava\NetWorkSubject\QQ_Chat_imitate\Server\src\main\java\com\lkw\server\Utils" />
       <recent name="D:\work\javacode\QQ_Chat\Server\src\main\java\com\lkw\server" />
       <recent name="D:\work\javacode\QQ_Chat\Server\src\test\java\com\lkw\server" />
       <recent name="D:\work\javacode\QQ_Chat\Client\src\main\resources" />
       <recent name="D:\work\javacode\QQ_Chat\Client\src\main\java\com\lkw\client\Controller" />
-      <recent name="D:\work\javacode\QQ_Chat\Server\src\main\java\com\lkw\server\ServerController" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\work\javacode\QQ_Chat\src\main\resources" />
       <recent name="D:\work\javacode\QQ_Chat\src\main\java\org\lkw" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.lkw.server.Server" />
+      <recent name="com.lkw.client" />
       <recent name="com.lkw.client.Client" />
       <recent name="com.lkw.server" />
       <recent name="com.lkw.client.Controller" />
-      <recent name="com.lkw.client.Utils" />
-      <recent name="com.lkw.server.ServerController" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -124,33 +119,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Login">
-    <configuration name="FileTransferClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.lkw.server.FileServer.FileTransferClient" />
-      <module name="Server" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.lkw.server.FileServer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="FileTransferServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.lkw.server.FileServer.FileTransferServer" />
-      <module name="Server" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.lkw.server.FileServer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Application.NioClient (1)">
     <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.lkw.client.Login" />
       <module name="Client" />
@@ -177,6 +146,45 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="NioClient (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.lkw.server.Server.NioClient" />
+      <module name="Server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.lkw.server.Server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NioClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.lkw.client.NioClient" />
+      <module name="Client" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.lkw.client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NioClient" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.lkw.server.Server.NioClient" />
+      <module name="Server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.lkw.server.Server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ServerUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.lkw.server.ServerUI" />
       <module name="Server" />
@@ -186,6 +194,17 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -206,11 +225,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.NioClient (1)" />
+        <item itemvalue="Application.ServerUI" />
+        <item itemvalue="Application.NioClient" />
         <item itemvalue="Application.Login" />
-        <item itemvalue="Application.com.lkw.server.ServerUI" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="Application.com.lkw.server.FileServer.FileTransferClient" />
-        <item itemvalue="Application.com.lkw.server.FileServer.FileTransferServer" />
       </list>
     </recent_temporary>
   </component>
@@ -254,6 +273,8 @@
       <workItem from="1667559726989" duration="12000" />
       <workItem from="1667612398360" duration="12160000" />
       <workItem from="1668337106312" duration="47837000" />
+      <workItem from="1668581099009" duration="22000" />
+      <workItem from="1668593095422" duration="14631000" />
     </task>
     <task id="LOCAL-00001" summary="基础代码">
       <created>1663814396212</created>
@@ -385,6 +406,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
@@ -406,14 +428,29 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/handler.java</url>
-          <line>131</line>
-          <option name="timeStamp" value="45" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/LoginController.java</url>
           <line>80</line>
           <option name="timeStamp" value="47" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
+          <line>280</line>
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
+          <line>164</line>
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
+          <line>274</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
+          <line>202</line>
+          <option name="timeStamp" value="57" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
