@@ -44,7 +44,6 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         new Thread(new MyLoginThread()).start();
     }
 
@@ -63,6 +62,7 @@ public class LoginController implements Initializable {
                        String usernameText=username.getText();
                    System.out.println(password);
                        //形式
+                       //Todo 需要更改格式
                        String json = Object2Json.creat(usernameText, "login")
                                .addObject("password", password.getText())
                                .buildJson();
@@ -87,6 +87,7 @@ public class LoginController implements Initializable {
                            //关闭窗口
                            Stage stage = (Stage)signUpBtn.getScene().getWindow();
                            stage.close();
+
                        }
 
 

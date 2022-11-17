@@ -9,40 +9,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="使用FastJson进行转换以及封装--shaw">
-      <change afterPath="$PROJECT_DIR$/Client/Client.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/FinalValue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Message.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Utils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/FinalValue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/Message.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Client_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/HELP.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/HELP.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Json2Object.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Json2Object.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/MyFileServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/MyFileServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/handler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/ServerUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/ServerUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/MyFileServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/MyFileServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerController/ClientSocket.class.baiduyun.uploading.cfg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerController/ServerThread.class.baiduyun.uploading.cfg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/test-classes/com/lkw/server/MyServer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/test-classes/com/lkw/server/ServerUI$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/test-classes/com/lkw/server/ServerUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/test-classes/com/lkw/server/handler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/Message.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -87,6 +61,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.1112347" />
     <property name="project.structure.side.proportion" value="0.24937344" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -119,7 +94,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Application.NioClient (1)">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.lkw.client.Login" />
       <module name="Client" />
@@ -225,11 +200,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.NioClient (1)" />
         <item itemvalue="Application.ServerUI" />
         <item itemvalue="Application.NioClient" />
         <item itemvalue="Application.Login" />
-        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -274,7 +249,7 @@
       <workItem from="1667612398360" duration="12160000" />
       <workItem from="1668337106312" duration="47837000" />
       <workItem from="1668581099009" duration="22000" />
-      <workItem from="1668593095422" duration="14631000" />
+      <workItem from="1668593095422" duration="21958000" />
     </task>
     <task id="LOCAL-00001" summary="基础代码">
       <created>1663814396212</created>
@@ -367,7 +342,21 @@
       <option name="project" value="LOCAL" />
       <updated>1668407457644</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw">
+      <created>1668608710096</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1668608710096</updated>
+    </task>
+    <task id="LOCAL-00015" summary="服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw">
+      <created>1668608759226</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1668608759226</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -422,7 +411,8 @@
     <MESSAGE value="添加文件上传" />
     <MESSAGE value="文件上传合并" />
     <MESSAGE value="完成文件发送接收,文本发送修改为json传送,更好拓展" />
-    <option name="LAST_COMMIT_MESSAGE" value="完成文件发送接收,文本发送修改为json传送,更好拓展" />
+    <MESSAGE value="服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw" />
+    <option name="LAST_COMMIT_MESSAGE" value="服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -434,7 +424,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
-          <line>280</line>
+          <line>278</line>
           <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -444,7 +434,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
-          <line>274</line>
+          <line>272</line>
           <option name="timeStamp" value="56" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">

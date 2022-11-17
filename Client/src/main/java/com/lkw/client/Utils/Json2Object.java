@@ -1,11 +1,18 @@
 package com.lkw.client.Utils;
 
 import com.alibaba.fastjson2.JSONObject;
+import lombok.Data;
 
 import javax.jws.WebParam;
 
+@Data
 public class Json2Object {
     private  String username;
+
+
+    private  int type;
+    private String message;
+
 
     private String mode;
 
@@ -16,10 +23,13 @@ public class Json2Object {
     public  Json2Object(String json){
         //转换传输的消息格式
         //格式   json:{"username":"lkw","mode":1,"data":{"text":"lkw111111111"}}
+        //格式2 {"type":2,"message":....}
         JSONObject jsonObject = JSONObject.parseObject(json);
-        this.setMode((String) jsonObject.get("mode"));
-        this.setUsername((String)jsonObject.get("username"));
-        this.setData(jsonObject.getJSONObject("data"));
+        setType((int)jsonObject.get("type"));
+        setMessage((String) jsonObject.get("message"));
+        // this.setMode((String) jsonObject.get("mode"));
+        // this.setUsername((String)jsonObject.get("username"));
+        // this.setData(jsonObject.getJSONObject("data"));
     }
 
     public  String Json2Text() {

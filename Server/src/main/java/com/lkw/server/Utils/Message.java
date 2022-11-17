@@ -9,6 +9,7 @@ import java.nio.file.Files;
  */
 public class Message implements Serializable {
 	public int type;
+	public String SendUser;
 	public String message;
 
 	public Message() {

@@ -202,10 +202,8 @@ public class MyServer implements Runnable {
 
 				// ui.addClients(msg.message);
 				getConnectedChannel(channel).forEach(
-						selectionKey ->
-						{
+						selectionKey -> {
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-
 					sendMsgToClient(new Message("收到一条系统消息: " + msg.message + "已上线"), sc);
 				});
 				break;
@@ -214,7 +212,7 @@ public class MyServer implements Runnable {
 						selectionKey ->
 						{
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-							Message message = new Message(key.attachment() + "给大家发送了一条消息: " + msg.message);
+							Message message = new Message(MSG_GROUP,key.attachment() + "给大家发送了一条消息: " + msg.message);
 							sendMsgToClient(message, sc);
 							System.out.println(message);
 						});
@@ -228,7 +226,7 @@ public class MyServer implements Runnable {
 						.forEach(selectionKey ->
 						{
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-					sendMsgToClient(new Message(key.attachment() + "给你发送了一条消息: " + s[1]), sc);
+					sendMsgToClient(new Message(MSG_PRIVATE,key.attachment() + "给你发送了一条消息: " + s[1]), sc);
 					flag.set(true);
 				});
 				if (!flag.get()){

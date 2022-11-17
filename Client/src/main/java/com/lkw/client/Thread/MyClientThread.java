@@ -1,6 +1,7 @@
 package com.lkw.client.Thread;
 
 import com.lkw.client.Utils.Json2Object;
+import com.lkw.client.Utils.Message;
 import com.lkw.client.Utils.Object2Json;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -9,6 +10,9 @@ import javafx.scene.text.Text;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import static com.lkw.client.Utils.FinalValue.MSG_GROUP;
+import static com.lkw.client.Utils.FinalValue.MSG_PRIVATE;
 
 /**
  * 客户端
@@ -57,8 +61,10 @@ public class MyClientThread implements Runnable {
 
 					//形式
 					String json = Object2Json.creat(username, "text").addObject("text", sendMsg).buildJson();
-
-					pWriter.write( json+ "\r\n");
+					// Todo 判定群发以及私发
+					//暂时为群发
+					Message message = new Message(1, sendMsg);
+					pWriter.write( message + "\r\n");
 					pWriter.flush();
 					sendArea.setText("");
 				}
@@ -69,18 +75,25 @@ public class MyClientThread implements Runnable {
 
 			//收消息
 			while(true) {
-				json = bReader.readLine();
-
+				// json = bReader.readLine();
+				String msg = bReader.readLine();
 				//解析json
-				Json2Object json2Object = new Json2Object(json);
+				Json2Object json2Object = new Json2Object(msg);
 				//判断mode
-				if(json2Object.getMode().equals("text")){
-					String message = json2Object.Json2Text();
+				if(json2Object.getType()==MSG_GROUP||json2Object.getType()==MSG_PRIVATE){
+					String message = json2Object.getMessage();
 					acceptArea.appendText(message);
 					System.out.println("收到"+message);
 				}else if(false){//其他情况
 					//TODO 编写其他mode的
 				}
+				// if(json2Object.getMode().equals("text")){
+				// 	String message = json2Object.Json2Text();
+				// 	acceptArea.appendText(message);
+				// 	System.out.println("收到"+message);
+				// }else if(false){//其他情况
+				// 	//TODO 编写其他mode的
+				// }
 			}
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
