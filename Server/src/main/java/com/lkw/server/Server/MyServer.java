@@ -1,8 +1,7 @@
 package com.lkw.server.Server;
 
-import com.lkw.server.Utils.Json2Object;
-import com.lkw.server.Utils.Message;
-import com.lkw.server.Utils.Utils;
+import com.tool.Message;
+import com.tool.Utils;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -13,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -25,7 +22,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-import static com.lkw.server.Utils.FinalValue.*;
+import static com.tool.FinalValue.*;
 
 
 @Slf4j
@@ -33,7 +30,7 @@ public class MyServer implements Runnable {
 
 	private Selector selector;
 	private ServerSocketChannel ssc;
-
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 	private UIhandler ui;
 
 	//Server端监听的端口号
@@ -129,6 +126,7 @@ public class MyServer implements Runnable {
 	}
 
 	private void listen() throws Exception {
+		boolean first=true;
 		while (true) {
 			// select 方法, 没有事件发生，线程阻塞，有事件，线程才会恢复运行, 通过Selector的select（）方法可以选择已经准备就绪的通道 （这些通道包含你感兴趣的的事件）
 			//通过Selector的select（）方法可以选择已经准备就绪的通道 （这些通道包含你感兴趣的的事件）
@@ -153,7 +151,11 @@ public class MyServer implements Runnable {
 
 				} else if (key.isReadable()) {
 					//客户端是否发送信息
-					dealReadEvent(key);
+
+						dealReadEvent(key);
+
+
+
 				}
 			}
 		}
@@ -165,12 +167,14 @@ public class MyServer implements Runnable {
 			channel = (SocketChannel) key.channel();
 			ByteBuffer buffer = ByteBuffer.allocate(1024);
 			int read = channel.read(buffer);
+
 			// 如果是正常断开，read 的方法的返回值是 -1
 			if (read == -1) {
 				//cancel 会取消注册在 selector 上的 channel，并从 keys 集合中删除 key 后续不会再监听事件
 				key.cancel();
-			} else {
+			} else if(read>0) {
 				buffer.flip();
+				System.out.println(new String(buffer.array()));
 				Message msg =  Utils.decode(buffer.array());
 				log.debug(msg.toString());
 				System.out.println("SSS");
@@ -204,7 +208,7 @@ public class MyServer implements Runnable {
 				getConnectedChannel(channel).forEach(
 						selectionKey -> {
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-					sendMsgToClient(new Message("收到一条系统消息: " + msg.message + "已上线"), sc);
+					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.message + "已上线"), sc);
 				});
 				break;
 			case MSG_GROUP:
@@ -212,11 +216,11 @@ public class MyServer implements Runnable {
 						selectionKey ->
 						{
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-							Message message = new Message(MSG_GROUP,key.attachment() + "给大家发送了一条消息: " + msg.message);
+							Message message = new Message(MSG_GROUP,msg.getSendUser(),"all", msg.message);
 							sendMsgToClient(message, sc);
 							System.out.println(message);
 						});
-				receivedMsgArea.appendText( key.attachment()+" : "+msg.message + "\n");
+				receivedMsgArea.appendText(key.attachment()+" : "+msg.message + "  " +sdf.format(new Date())+" \n");
 				break;
 			case MSG_PRIVATE:
 				String[] s = msg.message.split("_");
@@ -245,7 +249,7 @@ public class MyServer implements Runnable {
 			case MSG_SYSTEM:
 				getConnectedChannel(channel).forEach(selectionKey -> {
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-					sendMsgToClient(new Message("收到一条系统消息: " + msg.message), sc);
+					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.message), sc);
 				});
 				break;
 			default:
@@ -271,14 +275,18 @@ public class MyServer implements Runnable {
 	private void ToSelected(){
 		if(ui.getSelected().size()<=0)
 			return;
-		selector.keys().stream()
+		List<SelectionKey> collect = selector.keys().stream()
 				.filter(i -> ui.getSelected().contains((String) i.attachment()))
-				.forEach(sk ->
+				.collect(Collectors.toList());
+		int size = collect.size();
+		System.out.println("给几个同名发 "+size);
+		collect.forEach(sk ->
 				{
 					SocketChannel sc = (SocketChannel) sk.channel();
-					sendMsgToClient(new Message("收到一条系统消息: " + sendMsgArea.getText()), sc);
-				});
+					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",sendMsgArea.getText()), sc);
 
+				});
+		sendMsgArea.clear();
 
 	}
 

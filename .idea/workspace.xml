@@ -9,10 +9,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="客户端部分逻辑修改&#10;   --shaw">
+    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="客户端修改输入输出流&#10;   --shaw">
+      <change afterPath="$PROJECT_DIR$/Tools/Tools.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Tools/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/FinalValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/src/main/java/com/tool/FinalValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/src/main/java/com/tool/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Utils/Utils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/NioClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/NioClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/FinalValue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/Message.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/src/main/java/com/tool/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/MyFileServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/MyFileServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,11 +52,16 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="HARD" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2F6M1wAhtbG0LxT4tE4zrIoP6u8" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -50,9 +70,11 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils" />
+    <property name="jdk.selected.JAVA_MODULE" value="1.8" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../Maven/apache-maven-3.5.4/maven-repo/com/alibaba/fastjson/2.0.11" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.1112347" />
     <property name="project.structure.side.proportion" value="0.24937344" />
@@ -64,11 +86,11 @@
       <recent name="com.lkw.client.Controller" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\CodeOfJava\NetWorkSubject\QQ_Chat_imitate\Tools\src\main\java" />
       <recent name="D:\CodeOfJava\NetWorkSubject\QQ_Chat_imitate\Server\src\main\java\com\lkw\server\Utils" />
       <recent name="D:\work\javacode\QQ_Chat\Server\src\main\java\com\lkw\server" />
       <recent name="D:\work\javacode\QQ_Chat\Server\src\test\java\com\lkw\server" />
       <recent name="D:\work\javacode\QQ_Chat\Client\src\main\resources" />
-      <recent name="D:\work\javacode\QQ_Chat\Client\src\main\java\com\lkw\client\Controller" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\work\javacode\QQ_Chat\src\main\resources" />
@@ -103,7 +125,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="Main" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.lkw.client.Main" />
       <module name="Client" />
       <extension name="coverage">
@@ -193,11 +215,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Login" />
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.NioClient" />
+      <item itemvalue="Application.NioClient (1)" />
+      <item itemvalue="Application.ServerUI" />
+      <item itemvalue="Spring Boot.ClientApplication" />
+      <item itemvalue="Spring Boot.ServerApplication" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
-        <item itemvalue="Application.NioClient (1)" />
         <item itemvalue="Application.ServerUI" />
+        <item itemvalue="Application.NioClient (1)" />
         <item itemvalue="Application.NioClient" />
         <item itemvalue="Application.Login" />
       </list>
@@ -244,7 +275,7 @@
       <workItem from="1667612398360" duration="12160000" />
       <workItem from="1668337106312" duration="47837000" />
       <workItem from="1668581099009" duration="22000" />
-      <workItem from="1668593095422" duration="24316000" />
+      <workItem from="1668593095422" duration="42134000" />
     </task>
     <task id="LOCAL-00001" summary="基础代码">
       <created>1663814396212</created>
@@ -358,7 +389,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668664700231</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="客户端修改输入输出流&#10;   --shaw">
+      <created>1668667328814</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1668667328814</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -415,7 +453,8 @@
     <MESSAGE value="完成文件发送接收,文本发送修改为json传送,更好拓展" />
     <MESSAGE value="服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw" />
     <MESSAGE value="客户端部分逻辑修改&#10;   --shaw" />
-    <option name="LAST_COMMIT_MESSAGE" value="客户端部分逻辑修改&#10;   --shaw" />
+    <MESSAGE value="客户端修改输入输出流&#10;   --shaw" />
+    <option name="LAST_COMMIT_MESSAGE" value="客户端修改输入输出流&#10;   --shaw" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -427,23 +466,76 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
-          <line>278</line>
-          <option name="timeStamp" value="52" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
-          <line>164</line>
+          <line>166</line>
           <option name="timeStamp" value="53" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
-          <line>272</line>
+          <line>276</line>
           <option name="timeStamp" value="56" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
+          <line>79</line>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java</url>
+          <line>65</line>
+          <option name="timeStamp" value="60" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
+          <line>151</line>
+          <option name="timeStamp" value="69" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
-          <line>202</line>
-          <option name="timeStamp" value="57" />
+          <line>177</line>
+          <option name="timeStamp" value="71" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
+          <line>65</line>
+          <option name="timeStamp" value="81" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
+          <line>68</line>
+          <option name="timeStamp" value="82" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/io/ObjectInputStream.java</url>
+          <line>865</line>
+          <option name="timeStamp" value="83" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
+          <line>106</line>
+          <option name="timeStamp" value="86" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
+          <line>78</line>
+          <option name="timeStamp" value="87" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
+          <line>154</line>
+          <option name="timeStamp" value="89" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
+          <line>64</line>
+          <option name="timeStamp" value="91" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
+          <line>61</line>
+          <properties class="com.lkw.client.Thread.MyClientThread" method="run">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="80" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

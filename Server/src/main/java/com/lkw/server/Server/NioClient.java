@@ -2,8 +2,8 @@ package com.lkw.server.Server;
 
 
 
-import com.lkw.server.Utils.Message;
-import com.lkw.server.Utils.Utils;
+import com.tool.Message;
+import com.tool.Utils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Scanner;
 
-import static com.lkw.server.Utils.FinalValue.*;
+import static com.tool.FinalValue.*;
 
 
 /**
@@ -91,13 +91,16 @@ public class NioClient {
 			byte[] bytes1 = Utils.encode(msg);
 			socketChannel.write(ByteBuffer.wrap(bytes1));
 		}
+
+		System.out.println("over1");
 	}
 
 	/**
 	 * 接受从服务器发送过来的消息
 	 */
 	private void acceptMessageFromServer() throws Exception {
-		while (selector.select() > 0) {
+		while (true) {
+			selector.select();
 			Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
 			while (iterator.hasNext()) {
 				SelectionKey key = iterator.next();
@@ -111,6 +114,7 @@ public class NioClient {
 				}
 			}
 		}
+
 	}
 }
 

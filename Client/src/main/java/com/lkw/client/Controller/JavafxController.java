@@ -58,13 +58,13 @@ public class JavafxController  {
         items.add("Main.java");
 
 
-
+        sendArea.setText("");
         //初始化
         //可以继承一个监听接口
         Platform.runLater(() -> {
         //其他线程调用组件,可以用这个进行保护
             new Thread(new MyClientThread(sendBtn,sendArea,acceptArea,toolTips,username)).start();
-            new Thread(new MyFileThread(sendFileBtn,acceptAreaFileBtn,filePathArea,listFile,selectFileBtn,toolTips)).start();
+            // new Thread(new MyFileThread(sendFileBtn,acceptAreaFileBtn,filePathArea,listFile,selectFileBtn,toolTips)).start();
         });
     }
 
