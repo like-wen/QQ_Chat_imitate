@@ -1,11 +1,14 @@
 package com.lkw.client.Utils;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * @author mazouri
  * @create 2021-05-05 21:00
  */
+@Data
 public class Message implements Serializable {
 	public int type;
 	public String message;
