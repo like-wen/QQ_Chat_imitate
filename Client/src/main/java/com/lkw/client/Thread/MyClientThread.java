@@ -85,7 +85,6 @@ public class MyClientThread implements Runnable {
 					 else {
 						msg = new Message(MSG_GROUP, username,"all",sendMsg);
 					}
-
 					byte[] bytes1 = new byte[0];
 					try {
 						bytes1 = Utils.encode(msg);
@@ -127,7 +126,7 @@ public class MyClientThread implements Runnable {
 				}
 			};
 			Timer timer=new Timer();
-			timer.scheduleAtFixedRate(timerTask,500l,3000l);//1秒后,每隔3秒运行
+			timer.scheduleAtFixedRate(timerTask,500l,3000l);//0.5秒后开始,每隔3秒运行
 
 
 
@@ -152,23 +151,16 @@ public class MyClientThread implements Runnable {
 
 								switch (message.getType()){
 									case MSG_GetFileList://收到文件列表更新信息
-										System.out.println("客户端收到更新消息"+message.message);
 										String[] fileNameList = message.message.split(";");//分割成字符串数组
-										for (int i = 0; i < fileNameList.length; i++) {//测试输出
-											System.out.println(fileNameList[i]);
-										}
 										if (fileNameList.length!=fileNum) {
-
-											System.out.println("判断更新");
 											Platform.runLater(()->{//保护跨线程操作UI组件
-
+												//清理文件列表
 											fileItems.clear();
 											for (int i = 0; i < fileNameList.length; i++) {
-												fileItems.add(fileNameList[i]);
+												fileItems.add(fileNameList[i]);//添加文件列表
 											}
 
 											});
-
 											fileNum=fileNameList.length;
 										}
 										break;
