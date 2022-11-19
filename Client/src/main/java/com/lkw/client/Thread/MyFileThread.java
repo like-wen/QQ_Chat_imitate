@@ -1,6 +1,5 @@
 package com.lkw.client.Thread;
 
-import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -28,7 +27,7 @@ public class MyFileThread implements Runnable {
 	private Button sendFileBtn;
 	private TextArea filePathArea;
 
-	private ListView<String> listFile;
+	private ListView<String> fileList;
 	private DataOutputStream writerFile;
 	private FileInputStream fileInputStream;
 
@@ -52,12 +51,12 @@ public class MyFileThread implements Runnable {
 
 
 
-	public MyFileThread(Button sendFileBtn, Button acceptAreaFileBtn, TextArea filePathArea, ListView<String> listFile, Button selectFileBtn, Text toolTips) {
+	public MyFileThread(Button sendFileBtn, Button acceptAreaFileBtn, TextArea filePathArea, ListView<String> fileList, Button selectFileBtn, Text toolTips) {
 		super();
 		this.filePathArea = filePathArea;
 		this.sendFileBtn = sendFileBtn;
 		this.acceptAreaFileBtn=acceptAreaFileBtn;
-		this.listFile=listFile;
+		this.fileList=fileList;
 		this.selectFileBtn=selectFileBtn;
 		this.toolTips = toolTips;
 	}
@@ -118,15 +117,10 @@ public class MyFileThread implements Runnable {
 
 		acceptAreaFileBtn.setOnAction(e->{
 			try {
-				String selectedItem = listFile.getSelectionModel().getSelectedItem();
+				String selectedItem = fileList.getSelectionModel().getSelectedItem();
 				System.out.println("获取的文件名是"+selectedItem);
 				writerFile.writeUTF("<get>"+selectedItem);
 				writerFile.flush();
-
-
-
-
-
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
 			}

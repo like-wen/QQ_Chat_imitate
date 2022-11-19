@@ -24,7 +24,7 @@
       <Button fx:id="acceptAreaFileBtn" layoutX="798.0" layoutY="497.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="108.0" text="接收文件"><font><Font size="16.0" /></font></Button>
 
 
-      <ListView fx:id="listFile" layoutX="684.0" layoutY="334.0" prefHeight="157.0" prefWidth="221.0">
+      <ListView fx:id="fileList" layoutX="684.0" layoutY="334.0" prefHeight="157.0" prefWidth="221.0">
 
       </ListView>
       <Button fx:id="selectFileBtn" layoutX="566.0" layoutY="335.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="108.0" text="选择文件">

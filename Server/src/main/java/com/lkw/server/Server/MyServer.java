@@ -153,9 +153,6 @@ public class MyServer implements Runnable {
 					//客户端是否发送信息
 
 						dealReadEvent(key);
-
-
-
 				}
 			}
 		}
@@ -205,16 +202,13 @@ public class MyServer implements Runnable {
 				ui.updateForConnect(msg.message);
 
 				// ui.addClients(msg.message);
-				getConnectedChannel(channel).forEach(
-						selectionKey -> {
+				getConnectedChannel(channel).forEach(selectionKey -> {
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
 					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.message + "已上线"), sc);
 				});
 				break;
 			case MSG_GROUP:
-				getConnectedChannel(channel).forEach(
-						selectionKey ->
-						{
+				getConnectedChannel(channel).forEach(selectionKey ->{
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
 							Message message = new Message(MSG_GROUP,msg.getSendUser(),"all", msg.message);
 							sendMsgToClient(message, sc);
@@ -227,8 +221,7 @@ public class MyServer implements Runnable {
 				AtomicBoolean flag = new AtomicBoolean(false);
 				getConnectedChannel(channel).stream()
 						.filter(sk -> s[0].equals(sk.attachment()))
-						.forEach(selectionKey ->
-						{
+						.forEach(selectionKey ->{
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
 					sendMsgToClient(new Message(MSG_PRIVATE,key.attachment() + "给你发送了一条消息: " + s[1]), sc);
 					flag.set(true);
@@ -240,8 +233,7 @@ public class MyServer implements Runnable {
 			case MSG_ONLINE:
 				ArrayList<String> onlineList = new ArrayList<>();
 				onlineList.add((String) key.attachment());
-				getConnectedChannel(channel).forEach(
-						selectionKey ->
+				getConnectedChannel(channel).forEach(selectionKey ->
 								onlineList.add((String) selectionKey.attachment()));
 				sendMsgToClient(new Message(onlineList.toString()), channel);
 
@@ -251,6 +243,23 @@ public class MyServer implements Runnable {
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
 					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.message), sc);
 				});
+				break;
+			case MSG_GetFileList:
+				log.info("发送文件更新信息");
+				File file = new File(System.getProperty("user.dir") + "\\MyFile\\");
+				File[] files = file.listFiles();
+
+				//拼接成string
+				String updateMsg="";
+				for (int i = 0; i < files.length-1; i++) {
+
+					updateMsg+=files[i].getName()+";";
+
+
+				}
+				updateMsg+=files[files.length-1].getName();
+				sendMsgToClient(new Message( MSG_GetFileList,"SYSTEM",msg.getGetUser(),updateMsg), channel);
+
 				break;
 			default:
 				break;
@@ -328,8 +337,8 @@ public class MyServer implements Runnable {
 			this.clientListView = clientListView;
 			clientListView.getSelectionModel().
 					selectedItemProperty().
-					addListener(ov->
-					{ 	selected.clear();
+					addListener(ov-> {
+						selected.clear();
 						for(String key: clientListView.getSelectionModel().getSelectedItems()) {
 							selected.add(key);
 						}

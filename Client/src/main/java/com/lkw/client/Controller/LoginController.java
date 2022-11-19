@@ -1,8 +1,7 @@
 package com.lkw.client.Controller;
 
 import com.lkw.client.Main;
-import com.lkw.client.Utils.Json2Object;
-import com.lkw.client.Utils.Object2Json;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -59,41 +58,30 @@ public class LoginController implements Initializable {
                PrintWriter pWriter = new PrintWriter(socket.getOutputStream());
 
                loginBtn.setOnAction(e->{
-                       String usernameText=username.getText();
-                   System.out.println(password);
-                       //形式
-                       //Todo 需要更改格式
-                       String json = Object2Json.creat(usernameText, "login")
-                               .addObject("password", password.getText())
-                               .buildJson();
-                   System.out.println(json);
-                       pWriter.write( json+ "\r\n");
-                       pWriter.flush();
+
+                   String usernameText=username.getText();
+                   String passwordText = password.getText();
+                   String msg=usernameText+":"+passwordText;
+                   System.out.println(msg);
+                   pWriter.write( msg+ "\r\n");
+                   pWriter.flush();
+
                });
 
                //发消息
                String json;
                //收消息
                while(true) {
-                   System.out.println("循环");
                    json = bReader.readLine();
-                   //if(message.equals())
                    System.out.println(json);
-                   Json2Object json2Object = new Json2Object(json);
-                   if(json2Object.getMode().equals("logged")){
-                       boolean b = json2Object.Json2logged();
-                       if(b){
-                           new Main();
-                           //关闭窗口
-                           Stage stage = (Stage)signUpBtn.getScene().getWindow();
-                           stage.close();
+                   if (json.equals("true")) {
+                       Platform.runLater(()->{
 
-                       }
-
-
-                   }else if(false){
-                       //TODO
-
+                       //关闭窗口
+                       Stage stage = (Stage)signUpBtn.getScene().getWindow();
+                       new Main(username.getText()).start(stage);
+                       return;
+                   });
                    }
                }
            } catch (UnknownHostException e) {

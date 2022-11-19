@@ -39,51 +39,51 @@ public class FileHandler implements Runnable{
     @Override
     public void run() {
         try {
-        System.out.println("启动fileHandler线程");
-        //获取地址
-        String remoteSocketAddress = socket.getRemoteSocketAddress().toString().substring(1);
-        System.out.println("服务器文件处理连接的地址为"+remoteSocketAddress);
+            System.out.println("启动fileHandler线程");
+            //获取地址
+            String remoteSocketAddress = socket.getRemoteSocketAddress().toString().substring(1);
+            System.out.println("服务器文件处理连接的地址为" + remoteSocketAddress);
 
-        writerFile = new DataOutputStream(socket.getOutputStream());
+            writerFile = new DataOutputStream(socket.getOutputStream());
 
-        dis = new DataInputStream(socket.getInputStream());
-            while (true){
-                    // 文件名和长度
-                    String fileName = dis.readUTF();
-                    if(matchStringByIndexOf(fileName,"<get>")){
-                        //响应获取文件
-                        System.out.println("响应");
-                        //截取文件名传入响应
-                        responseFile(fileName.substring(5));
-                    }
-                    long fileLength = dis.readLong();
-                    File directory = new File(System.getProperty("user.dir")+"\\MyFile");//指定目录
-                    if(!directory.exists()) {
-                        directory.mkdir();
-                    }
-                System.out.println("文件名"+fileName);
-                    File file = new File(directory.getAbsolutePath() + File.separatorChar + fileName);
-                    fos = new FileOutputStream(file);
+            dis = new DataInputStream(socket.getInputStream());
+            while (true) {
+                // 文件名和长度
+                String fileName = dis.readUTF();
+                if (matchStringByIndexOf(fileName, "<get>")) {
+                    //响应获取文件
+                    System.out.println("响应");
+                    //截取文件名传入响应
+                    responseFile(fileName.substring(5));
+                }
+                long fileLength = dis.readLong();
+                File directory = new File(System.getProperty("user.dir") + "\\MyFile");//指定目录
+                if (!directory.exists()) {
+                    directory.mkdir();
+                }
+                System.out.println("文件名" + fileName);
+                File file = new File(directory.getAbsolutePath() + File.separatorChar + fileName);
+                fos = new FileOutputStream(file);
 
-                    // 开始接收文件
-                    byte[] bytes = new byte[1024];//读取缓冲区
-                    int count=0;//计总数
-                    int length = 0;//读取长度
-                System.out.println("文件字节数"+fileLength);
-                    while((length = dis.read(bytes, 0, bytes.length)) != -1) {
-                        fos.write(bytes, 0, length);
-                        fos.flush();
-                        count+=length;//总计数增加
+                // 开始接收文件
+                byte[] bytes = new byte[1024];//读取缓冲区
+                int count = 0;//计总数
+                int length = 0;//读取长度
+                System.out.println("文件字节数" + fileLength);
+                while ((length = dis.read(bytes, 0, bytes.length)) != -1) {
+                    fos.write(bytes, 0, length);
+                    fos.flush();
+                    count += length;//总计数增加
 
-                        if(count==fileLength)
-                            break;
-                    }
-                    fos.close();
-                    System.out.println("======== 文件接收成功 [File Name：" + fileName + "] [Size：" + getFormatFileSize(fileLength) + "] ========");
+                    if (count == fileLength)
+                        break;
+                }
+                fos.close();
+                System.out.println("======== 文件接收成功 [File Name：" + fileName + "] [Size：" + getFormatFileSize(fileLength) + "] ========");
             }
-    }catch (IOException e){
-        System.out.println("文件传输失败");
-    }
+        }catch (IOException e) {
+            System.out.println("文件传输失败");
+        }
     }
 
     /**

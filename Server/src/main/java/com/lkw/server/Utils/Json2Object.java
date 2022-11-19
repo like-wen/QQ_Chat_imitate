@@ -23,8 +23,7 @@ public class Json2Object {
             return (String) this.data.get("text");
     }
 
-    public boolean Json2logged() {
-        //获取键"logged"对应的值
+    public boolean Json2logged() {        //获取键"logged"对应的值
         return (boolean) this.data.get("logged");
     }
 

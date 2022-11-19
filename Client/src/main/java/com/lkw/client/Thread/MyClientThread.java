@@ -1,17 +1,17 @@
 package com.lkw.client.Thread;
 
-import com.lkw.client.Utils.MyObjectOutputStream;
-import com.lkw.client.Utils.Object2Json;
 import com.tool.Message;
 import com.tool.Utils;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -20,7 +20,8 @@ import java.nio.channels.SocketChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.tool.FinalValue.*;
 
@@ -36,8 +37,6 @@ public class MyClientThread implements Runnable {
 	private Selector selector;
 	private SocketChannel socketChannel;
 	private String username;
-
-	private Socket socket;
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	private Button sendBtn;
 
@@ -45,34 +44,30 @@ public class MyClientThread implements Runnable {
 	private TextArea acceptArea;
 
 	private Text toolTips;
+	ObservableList<String> fileItems;
+
+	int fileNum=0;
 
 
 
 
-	public MyClientThread(Button sendBtn, TextArea sendArea, TextArea acceptArea, Text toolTips, String username) {
+
+	public MyClientThread(Button sendBtn, TextArea sendArea, TextArea acceptArea, Text toolTips, String username, ObservableList<String> fileItems) {
 		super();
 		this.sendBtn=sendBtn;
 		this.sendArea=sendArea;
 		this.acceptArea=acceptArea;
 		this.toolTips=toolTips;
 		this.username=username;
+		this.fileItems=fileItems;
+
 	}
+
+
 
 	@Override
 	public void run() {
-
-
 		try {
-			// socket = new Socket("127.0.0.1", 8888);
-			//socket的输入/输出,直接转换为对象
-
-			// ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream());
-
-			//socket的输入输出
-			// BufferedReader bReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			//
-			// PrintWriter pWriter = new PrintWriter(socket.getOutputStream());
-
 			//"发送"按钮的点击事件
 			sendBtn.setOnAction(e->{
 				String sendMsg=sendArea.getText();
@@ -86,7 +81,6 @@ public class MyClientThread implements Runnable {
 					boolean isPrivate = false;
 					if (isPrivate) {
 						 msg = new Message(MSG_PRIVATE, username, "", sendMsg);
-
 					}
 					 else {
 						msg = new Message(MSG_GROUP, username,"all",sendMsg);
@@ -99,73 +93,10 @@ public class MyClientThread implements Runnable {
 					} catch (IOException ioException) {
 						ioException.printStackTrace();
 					}
-
-
-
-
-					//形式
-					// String json = Object2Json.creat(username, "text").addObject("text", sendMsg).buildJson();
-					// // Todo 判定群发以及私发
-					// //暂时为群发
-					// Message message = new Message(1, sendMsg);
-					// //使用发送对象的流发送消息
-					// try {
-					// 	objectOut.writeObject(message);
-					// 	// objectOut.flush();
-					// } catch (IOException ioException) {
-					// 	ioException.printStackTrace();
-					// }
-
-					// pWriter.write( message + "\r\n");
-					// pWriter.flush();
 					sendArea.setText("");
 					acceptArea.appendText(username+" "+sdf.format(new Date())+"\n"+sendMsg+"\n");
 				}
 			});
-
-			//发消息
-			// String json;
-
-			// //收消息
-			// while(true) {
-			// 	// json = bReader.readLine();
-			// 	String msg = bReader.readLine();
-			// 	//解析json
-			// 	Json2Object json2Object = new Json2Object(msg);
-			// 	//判断mode
-			// 	if(json2Object.getType()==MSG_GROUP||json2Object.getType()==MSG_PRIVATE){
-			// 		String message = json2Object.getMessage();
-			// 		acceptArea.appendText(message);
-			// 		System.out.println("收到"+message);
-			// 	}else if(false){//其他情况
-			// 		//TODO 编写其他mode的
-			// 	}
-
-				//使用读取对象中的流 来获取消息
-				// while(true) {
-					// json = bReader.readLine();
-					// ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
-					// Message msg = (Message)objectIn.readObject();
-					// Thread.sleep(1000);
-					// if (msg.getType()==MSG_GROUP|| msg.getType()==MSG_PRIVATE||msg.getType()==MSG_SYSTEM)
-					// {
-					// 	String message = msg.getMessage();
-					// 	acceptArea.appendText(message);
-					// 	System.out.println(message);
-					// }else if(false){
-					// 	//TODO 编写其他type的
-					// }
-
-
-
-				// if(json2Object.getMode().equals("text")){
-				// 	String message = json2Object.Json2Text();
-				// 	acceptArea.appendText(message);
-				// 	System.out.println("收到"+message);
-				// }else if(false){//其他情况
-				//
-				// }
-
 					selector = Selector.open();
 					socketChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 8888));
 					socketChannel.configureBlocking(false);
@@ -174,28 +105,80 @@ public class MyClientThread implements Runnable {
 					Message message = new Message(MSG_NAME, username,"",username);
 					byte[] bytes = Utils.encode(message);
 
+					//登录
 					socketChannel.write(ByteBuffer.wrap(bytes));
+
+
+					//定时器
+			TimerTask timerTask=new TimerTask() {
+				@Override
+				public void run() {//定时更新文件列表
+
+					System.out.println("发送更新请求");
+					Message msg;
+					msg=new Message(MSG_GetFileList,username,username,username);
+					byte[] bytes1 = new byte[0];
+					try {
+						bytes1 = Utils.encode(msg);
+						socketChannel.write(ByteBuffer.wrap(bytes1));
+					} catch (IOException ioException) {
+						ioException.printStackTrace();
+					}
+				}
+			};
+			Timer timer=new Timer();
+			timer.scheduleAtFixedRate(timerTask,500l,3000l);//1秒后,每隔3秒运行
+
+
+
+
 					while (true) {
+						//阻塞,检测数据
 						selector.select();
+						//获取所有数据进行遍历
 						Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
 						while (iterator.hasNext()) {
 							SelectionKey key = iterator.next();
+							//移出已经检查的数据
 							iterator.remove();
+							log.info(String.valueOf(message.message));
+							//如果可读
 							if (key.isReadable()) {
+								//获取socket通道->字节缓冲区->String数据
 								SocketChannel sc = (SocketChannel) key.channel();
 								ByteBuffer buffer = ByteBuffer.allocate(1024);
 								sc.read(buffer);
 								message = Utils.decode(buffer.array());
-								log. info(String.valueOf(message.message));
 
-								acceptArea.appendText(message.getSendUser()+" "+sdf.format(new Date())+"\n"+message.getMessage()+"\n");
+								switch (message.getType()){
+									case MSG_GetFileList://收到文件列表更新信息
+										System.out.println("客户端收到更新消息"+message.message);
+										String[] fileNameList = message.message.split(";");//分割成字符串数组
+										for (int i = 0; i < fileNameList.length; i++) {//测试输出
+											System.out.println(fileNameList[i]);
+										}
+										if (fileNameList.length!=fileNum) {
 
+											System.out.println("判断更新");
+											Platform.runLater(()->{//保护跨线程操作UI组件
 
+											fileItems.clear();
+											for (int i = 0; i < fileNameList.length; i++) {
+												fileItems.add(fileNameList[i]);
+											}
+
+											});
+
+											fileNum=fileNameList.length;
+										}
+										break;
+									default://文字消息
+										acceptArea.appendText(message.getSendUser()+" "+sdf.format(new Date())+"\n"+message.getMessage()+"\n");
+										break;
+								}
 							}
 						}
 					}
-
-
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

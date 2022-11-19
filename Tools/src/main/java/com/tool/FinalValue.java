@@ -26,15 +26,8 @@ public final class FinalValue {
 	 */
 	public static final int MSG_NAME = 4;
 	/**
-	 * 客户端请求发送文件
+	 * 客户端请求更新文件列表
 	 */
-	public static final int MSG_SentFile = 5;
-	/**
-	 * 客户端请求读取文件
-	 */
-	public static final int MSG_GetFile = 6;
-	/**
-	 * 文件消息
-	 */
-	public static final int MSG_File = 7;
+	public static final int MSG_GetFileList = 6;
+
 }

@@ -1,5 +1,6 @@
 package com.lkw.client;
 
+import com.lkw.client.Controller.JavafxController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +13,11 @@ import java.util.Objects;
 
 
 public class Main extends Application {
+    private String username;
+    public Main(String username) {
+        this.username=username;
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -20,15 +26,19 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         Parent root = null;
         try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/main.fxml")));
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main.fxml"));
+            root = loader.load();
+            JavafxController controller = loader.getController();
+            controller.init(username);
+
             primaryStage.setTitle("QQ");
             primaryStage.getIcons().add(new Image("/QQ.png"));
             primaryStage.setScene(new Scene(root));
-            primaryStage.show();
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }

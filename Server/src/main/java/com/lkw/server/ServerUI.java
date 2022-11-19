@@ -1,6 +1,8 @@
 package com.lkw.server;
 
+import com.lkw.server.FileServer.FindFile;
 import com.lkw.server.FileServer.MyFileServer;
+import com.lkw.server.Server.LoginServer;
 import com.lkw.server.Server.MyServer;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -15,10 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Set;
-
 public class ServerUI extends Application{
 
 	TextArea receivedMsgArea = new TextArea();
@@ -26,9 +24,16 @@ public class ServerUI extends Application{
 	TextField portText = new TextField();
 	TextArea sendMsgArea = new TextArea();
 	TextField statusText = new TextField();
-	Button sendButton = new Button(" Send");
+	Button sendButton = new Button(" 发送");
 	ObservableList<String> clients = FXCollections.observableArrayList();
 	ListView<String> clientListView = new ListView<>(clients);
+
+
+	ObservableList<String> fileList = FXCollections.observableArrayList();
+	ListView<String> fileListView = new ListView<>(fileList);
+
+
+
 
 	public void start(Stage primaryStage) throws Exception {
 
@@ -37,11 +42,11 @@ public class ServerUI extends Application{
 		rightPane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
 		rightPane.setHgap(5.5);
 		rightPane.setVgap(5.5);
-		rightPane.add(new Label("Received Message:"), 0, 0);
+		rightPane.add(new Label("接收数据:"), 0, 0);
 		receivedMsgArea.setWrapText(true);
 		receivedMsgArea.setEditable(false);
 		receivedMsgArea.setMaxWidth(350);
-		receivedMsgArea.setPrefHeight(410);
+		receivedMsgArea.setPrefHeight(400);
 		rightPane.add(receivedMsgArea, 0, 1);
 
 		//左边 IPAdress+Port
@@ -61,13 +66,13 @@ public class ServerUI extends Application{
 		leftPane2.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
 		leftPane2.setHgap(5.5);
 		leftPane2.setVgap(5.5);
-		leftPane2.add(new Label("Choose Client:"), 0, 0);
+		leftPane2.add(new Label("已上线用户"), 0, 0);
 		clientListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		clientListView.setMaxHeight(80);
 		clientListView.setMaxWidth(275);
 		leftPane2.add(clientListView, 0, 1);
 		//左边 Send Message
-		leftPane2.add(new Label("Send Message:"), 0, 2);
+		leftPane2.add(new Label("发送消息:"), 0, 2);
 		sendMsgArea.setMaxHeight(150);
 		sendMsgArea.setMaxWidth(275);
 		sendMsgArea.setWrapText(true);
@@ -82,11 +87,25 @@ public class ServerUI extends Application{
 		leftPane3.add(statusText, 0, 0);
 		leftPane3.add(sendButton, 1, 0);
 
+		//文件的Pane
+		GridPane filePane=new GridPane();
+		filePane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
+		filePane.setHgap(5.5);
+		filePane.setVgap(5.5);
+		filePane.add(new Label("云文件"), 0, 0);
+		fileListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		fileListView.setMaxHeight(410);
+		fileListView.setMaxWidth(200);
+		filePane.add(fileListView,0,1);
+
+
+
+
 		//组合
 		VBox vBox = new VBox();
 		vBox.getChildren().addAll(leftPane1, leftPane2, leftPane3);
 		HBox hBox = new HBox();
-		hBox.getChildren().addAll(vBox, rightPane);
+		hBox.getChildren().addAll(vBox, rightPane,filePane);
 
 		Scene scene = new Scene(hBox);
 		primaryStage.setTitle("server");
@@ -99,10 +118,13 @@ public class ServerUI extends Application{
             }
         });
 
+		new Thread(new LoginServer()).start();
 		//启动server线程
 		new Thread(new MyServer(ipText, portText, sendMsgArea, statusText, sendButton, receivedMsgArea, clients, clientListView)).start();
 		//缝合进的文件server线程
-		// new Thread(new MyFileServer()).start();
+		new Thread(new MyFileServer()).start();
+		//文件更新线程
+		new Thread(new FindFile(fileList)).start();
 		primaryStage.show();
 	}
 }
