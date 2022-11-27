@@ -2,6 +2,7 @@ package com.lkw.server;
 
 import com.lkw.server.FileServer.FindFile;
 import com.lkw.server.FileServer.MyFileServer;
+import com.lkw.server.FileServer.ThreadPoolManager;
 import com.lkw.server.Server.LoginServer;
 import com.lkw.server.Server.MyServer;
 import javafx.application.Application;
@@ -122,9 +123,9 @@ public class ServerUI extends Application{
 		//启动server线程
 		new Thread(new MyServer(ipText, portText, sendMsgArea, statusText, sendButton, receivedMsgArea, clients, clientListView)).start();
 		//缝合进的文件server线程
-		new Thread(new MyFileServer()).start();
+		ThreadPoolManager.getFileServerExecutor().submit(new MyFileServer());
 		//文件更新线程
-		new Thread(new FindFile(fileList)).start();
+		ThreadPoolManager.getFileServerExecutor().submit(new FindFile(fileList));
 		primaryStage.show();
 	}
 }
