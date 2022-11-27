@@ -4,8 +4,9 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 
 import java.io.File;
+import java.util.concurrent.Callable;
 
-public class FindFile implements Runnable{
+public class FindFile implements Callable {
     ObservableList<String> fileList;
 
     public FindFile(ObservableList<String> fileList) {
@@ -14,7 +15,7 @@ public class FindFile implements Runnable{
     }
 
     @Override
-    public void run() {
+    public String call() {//未知原因不设置返回也通过了检查
         while (true) {
             Platform.runLater(() -> {
                 File file = new File(System.getProperty("user.dir") + "\\MyFile\\");
@@ -32,3 +33,4 @@ public class FindFile implements Runnable{
         }
     }
 }
+
