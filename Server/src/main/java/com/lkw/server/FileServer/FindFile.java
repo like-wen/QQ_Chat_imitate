@@ -15,7 +15,7 @@ public class FindFile implements Callable {
     }
 
     @Override
-    public String call() {//未知原因不设置返回也通过了检查
+    public String call() {//未知原因不设置返回值也通过了检查
         while (true) {
             Platform.runLater(() -> {
                 File file = new File(System.getProperty("user.dir") + "\\MyFile\\");
