@@ -6,8 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
-public class MyFileServer implements Runnable{
+public class MyFileServer implements Callable {
 
     public static final int PORT = 9998;
 
@@ -20,8 +21,7 @@ public class MyFileServer implements Runnable{
     }
 
     @Override
-    public void run() {
-
+    public String call() {
         ServerSocket server;
         Socket socket;
         try {
@@ -37,5 +37,6 @@ public class MyFileServer implements Runnable{
             // TODO 自动生成的 catch 块
             e.printStackTrace();
         }
+        return "MyFileServer线程正常执行..." + Thread.currentThread().getName();
     }
 }
