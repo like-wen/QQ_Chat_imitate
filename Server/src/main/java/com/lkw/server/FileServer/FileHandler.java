@@ -33,7 +33,6 @@ public class FileHandler implements Runnable{
         super();
         this.socket=socket;
         this.map=map;
-
     }
 
     @Override
@@ -55,6 +54,7 @@ public class FileHandler implements Runnable{
                     System.out.println("响应");
                     //截取文件名传入响应
                     responseFile(fileName.substring(5));
+                    continue;
                 }
                 long fileLength = dis.readLong();
                 File directory = new File(System.getProperty("user.dir") + "\\MyFile");//指定目录

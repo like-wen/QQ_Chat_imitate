@@ -58,16 +58,35 @@ public class LoginController implements Initializable {
                PrintWriter pWriter = new PrintWriter(socket.getOutputStream());
 
                loginBtn.setOnAction(e->{
+                   if(!selectBool.isSelected())
+                       tips.setText("请阅读并同意协议");
+                   else {
 
-                   String usernameText=username.getText();
-                   String passwordText = password.getText();
-                   String msg=usernameText+":"+passwordText;
-                   System.out.println(msg);
-                   pWriter.write( msg+ "\r\n");
-                   pWriter.flush();
+
+                       String usernameText = username.getText();
+                       String passwordText = password.getText();
+                       String msg = "login:"+usernameText + ":" + passwordText;
+                       System.out.println(msg);
+                       pWriter.write(msg + "\r\n");
+                       pWriter.flush();
+                   }
+
 
                });
 
+
+               signUpBtn.setOnAction(e->{
+                   if(!selectBool.isSelected())
+                       tips.setText("请阅读并同意协议");
+                   else {
+                       String usernameText = username.getText();
+                       String passwordText = password.getText();
+                       String msg = "signUp:"+usernameText + ":" + passwordText;
+                       System.out.println(msg);
+                       pWriter.write(msg + "\r\n");
+                       pWriter.flush();
+                   }
+               });
                //发消息
                String json;
                //收消息
@@ -76,12 +95,19 @@ public class LoginController implements Initializable {
                    System.out.println(json);
                    if (json.equals("true")) {
                        Platform.runLater(()->{
-
                        //关闭窗口
                        Stage stage = (Stage)signUpBtn.getScene().getWindow();
                        new Main(username.getText()).start(stage);
                        return;
                    });
+                   }else if(json.equals("false")){
+                       Platform.runLater(()->{
+                           tips.setText("用户名或密码错误");
+                       });
+                   }else if(json.equals("true_signUp")){
+                       Platform.runLater(()->{
+                           tips.setText("注册成功");
+                       });
                    }
                }
            } catch (UnknownHostException e) {
@@ -90,5 +116,9 @@ public class LoginController implements Initializable {
                e.printStackTrace();
            }
        }
+
+
+
+
    }
 }

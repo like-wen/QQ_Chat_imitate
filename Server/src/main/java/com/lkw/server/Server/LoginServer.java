@@ -1,12 +1,10 @@
 package com.lkw.server.Server;
 
-import com.lkw.server.FileServer.FileHandler;
+import com.lkw.server.Utils.MybatisPlusController;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
 
 public class LoginServer implements Runnable {
 
@@ -37,10 +35,12 @@ public class LoginServer implements Runnable {
 
     public class LoginHandler implements Runnable{
         Socket socket;
+        MybatisPlusController mybatisPlusController=new MybatisPlusController();
         public LoginHandler(Socket socket) {
             this.socket=socket;
 
         }
+
 
         @Override
         public void run() {
@@ -55,13 +55,21 @@ public class LoginServer implements Runnable {
                     str = bReader.readLine();
                     System.out.println(str);
                     String[] strs = str.split(":");
+                    String response;
+                    if (strs[1]!=""&&strs[2]!="") {
+                        response= mybatisPlusController.loginOrSignUp(strs[0], strs[1], strs[2]);
+                    } else {
+                        response="false";
+
+                    }
 
 
-                    System.out.println(strs[0]+strs[1]);
-                    Boolean b = checkLogin(strs[0], strs[1]);
-                    System.out.println(b);
-                    pWriter.write(b.toString()+"\n");
-                    pWriter.flush();
+                        System.out.println(strs[0] + strs[1] + strs[2]);
+
+
+                        System.out.println(response);
+                        pWriter.write(response.toString() + "\n");
+                        pWriter.flush();
                 }
 
 
@@ -70,13 +78,8 @@ public class LoginServer implements Runnable {
 
 
 
+
             }catch (Exception e){}
-        }
-
-        private Boolean checkLogin(String username,String password) {
-            //TODO 数据库查询
-            return true;
-
         }
 
     }
