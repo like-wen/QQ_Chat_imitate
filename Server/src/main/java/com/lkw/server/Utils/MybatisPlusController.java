@@ -67,10 +67,12 @@ public class MybatisPlusController {
             FileMapper mapper = session.getMapper(FileMapper.class);
             //查询出对象
             QueryWrapper<File> fileQueryWrapper = new QueryWrapper<>();
-            fileQueryWrapper.eq("filename", fileName);
+            fileQueryWrapper.eq("file_name", fileName);
             File file = mapper.selectOne(fileQueryWrapper);
             //对象赋值
-            file.setDownloadCount(file.getDownloadCount() + 1);
+            file.setDownloadCount(file.getDownloadCount() + 1L);
+            System.out.println(file.getDownloadCount());
+
             //更新对象
             mapper.updateById(file);
 
@@ -85,7 +87,9 @@ public class MybatisPlusController {
         TransactionFactory transactionFactory = new JdbcTransactionFactory();
         Environment environment = new Environment("Production", transactionFactory, dataSource);
         MybatisConfiguration configuration = new MybatisConfiguration(environment);
+        //
         configuration.addMapper(UserMapper.class);
+        configuration.addMapper(FileMapper.class);
         configuration.setLogImpl(StdOutImpl.class);
         return new MybatisSqlSessionFactoryBuilder().build(configuration);
     }

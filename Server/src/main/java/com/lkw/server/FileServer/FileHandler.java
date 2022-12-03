@@ -1,5 +1,7 @@
 package com.lkw.server.FileServer;
 
+import com.lkw.server.Utils.MybatisPlusController;
+
 import java.io.*;
 import java.math.RoundingMode;
 import java.net.Socket;
@@ -17,6 +19,10 @@ public class FileHandler implements Runnable{
 
     private DataOutputStream writerFile;
     private FileInputStream fileInputStream;
+
+    private MybatisPlusController mybatisPlusController=new MybatisPlusController();
+
+
 
 
     private static DecimalFormat df = null;
@@ -56,6 +62,8 @@ public class FileHandler implements Runnable{
                     responseFile(fileName.substring(5));
                     continue;
                 }
+                //数据库更新
+                mybatisPlusController.fileAdd(fileName,"SYSTEM");
                 long fileLength = dis.readLong();
                 File directory = new File(System.getProperty("user.dir") + "\\MyFile");//指定目录
                 if (!directory.exists()) {
@@ -74,7 +82,6 @@ public class FileHandler implements Runnable{
                     fos.write(bytes, 0, length);
                     fos.flush();
                     count += length;//总计数增加
-
                     if (count == fileLength)
                         break;
                 }
@@ -96,11 +103,12 @@ public class FileHandler implements Runnable{
         try {
             fileInputStream = new FileInputStream(file);
             //传输文件名和长度
-
             writerFile.writeUTF(file.getName());
             writerFile.flush();
             writerFile.writeLong(file.length());
             writerFile.flush();
+            //更新数据库
+            mybatisPlusController.fileUpdate(file.getName());
             //传输文件
             byte[] bytes = new byte[1024];
             int length = 0;

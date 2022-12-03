@@ -21,6 +21,7 @@ public class File implements Serializable {
     /**
      * 文件名
      */
+    @TableId(type = IdType.AUTO)
     private String fileName;
 
     /**
