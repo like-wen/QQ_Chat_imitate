@@ -9,20 +9,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="登录,注册完成">
+    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="客户端消息收发变为nio&#10;   --shaw">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/test/java/com/lkw/client/ClientApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/test/java/com/lkw/client/ClientApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/LoginController$MyLoginThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/LoginController$MyLoginThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/LoginController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ClientFile/FileHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ClientFile/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ClientFile/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyFile/QQ.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FileHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FileHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/test/java/com/lkw/client/ClientApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/javafxController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/javafxController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/classes/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/test-classes/com/lkw/client/ClientApplicationTests.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/entity/File.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/entity/File.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/fileHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/fileHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer$LoginHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer$LoginHandler.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,27 +67,6 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "jdk.selected.JAVA_MODULE": "1.8",
-    "last_opened_file_path": "D:/work/javacode/QQ_Chat/MyFile",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "spring.configuration.checksum": "587c446a63103530d5d08b0cda6169ec"
-  },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
-    ]
-  }
-}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.lkw.server" />
@@ -120,17 +99,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Application.Login">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.lkw.client.Login" />
       <module name="Client" />
@@ -205,6 +173,17 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -287,7 +266,7 @@
       <workItem from="1668593095422" duration="42134000" />
       <workItem from="1668760562119" duration="19375000" />
       <workItem from="1668840851282" duration="11086000" />
-      <workItem from="1670054093917" duration="14218000" />
+      <workItem from="1670054093917" duration="9059000" />
     </task>
     <task id="LOCAL-00001" summary="基础代码">
       <created>1663814396212</created>
@@ -408,14 +387,7 @@
       <option name="project" value="LOCAL" />
       <updated>1668667328814</updated>
     </task>
-    <task id="LOCAL-00018" summary="登录,注册完成">
-      <created>1670063433663</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1670063433663</updated>
-    </task>
-    <option name="localTasksCounter" value="19" />
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -454,6 +426,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
@@ -472,8 +445,7 @@
     <MESSAGE value="服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw" />
     <MESSAGE value="客户端部分逻辑修改&#10;   --shaw" />
     <MESSAGE value="客户端修改输入输出流&#10;   --shaw" />
-    <MESSAGE value="登录,注册完成" />
-    <option name="LAST_COMMIT_MESSAGE" value="登录,注册完成" />
+    <option name="LAST_COMMIT_MESSAGE" value="客户端修改输入输出流&#10;   --shaw" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -495,6 +467,11 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
+          <line>197</line>
+          <option name="timeStamp" value="94" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
           <line>246</line>
           <option name="timeStamp" value="97" />
         </line-breakpoint>
@@ -505,13 +482,31 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>
+          <line>24</line>
+          <option name="timeStamp" value="101" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>
           <line>46</line>
           <option name="timeStamp" value="103" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FileHandler.java</url>
-          <line>57</line>
-          <option name="timeStamp" value="105" />
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>
+          <line>45</line>
+          <properties class="com.lkw.server.Server.LoginServer.LoginHandler" method="run">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="102" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>
+          <line>38</line>
+          <properties class="com.lkw.server.Server.LoginServer.LoginHandler">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="104" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

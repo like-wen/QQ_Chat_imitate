@@ -1,0 +1,582 @@
+Index: Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.lkw.server.Utils;\r\n\r\nimport com.baomidou.mybatisplus.core.MybatisConfiguration;\r\nimport com.baomidou.mybatisplus.core.MybatisSqlSessionFactoryBuilder;\r\nimport com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;\r\nimport com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;\r\nimport com.lkw.server.entity.File;\r\nimport com.lkw.server.entity.User;\r\nimport com.lkw.server.mapper.FileMapper;\r\nimport com.lkw.server.mapper.UserMapper;\r\nimport org.apache.ibatis.logging.stdout.StdOutImpl;\r\nimport org.apache.ibatis.mapping.Environment;\r\nimport org.apache.ibatis.session.SqlSession;\r\nimport org.apache.ibatis.session.SqlSessionFactory;\r\nimport org.apache.ibatis.transaction.TransactionFactory;\r\nimport org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;\r\nimport org.springframework.jdbc.datasource.SimpleDriverDataSource;\r\n\r\nimport javax.sql.DataSource;\r\nimport java.util.Date;\r\n\r\npublic class MybatisPlusController {\r\n\r\n    private static SqlSessionFactory sqlSessionFactory = initSqlSessionFactory();\r\n\r\n\r\n\r\n\r\n    public String loginOrSignUp(String mode,String name,String password) {\r\n        //初始化\r\n        try (SqlSession session = sqlSessionFactory.openSession(true)) {\r\n            //创建mapper对象\r\n            UserMapper mapper = session.getMapper(UserMapper.class);\r\n            if(mode.equals(\"login\")) {\r\n                QueryWrapper<User> queryWrapper = new QueryWrapper<>();\r\n                queryWrapper.eq(\"name\", name);\r\n                User user = mapper.selectOne(queryWrapper);\r\n                if (user != null) {//未找到,尝试注册\r\n                    if (user.getPassword().equals(password)) {//找到\r\n                        user.setOnlineTime(new Date());\r\n                        mapper.updateById(user);\r\n                        return \"true\";\r\n                    } else\r\n                        return \"false\";\r\n                }else\r\n                    return \"false\";\r\n            } else if (mode.equals(\"signUp\")) {\r\n                User user1 = new User(null,name,password,new Date(),new Date());\r\n                mapper.insert(user1);\r\n                return \"true_signUp\";\r\n\r\n            }else return \"false\";\r\n        }\r\n    }\r\n    public void fileAdd(String fileName,String username){\r\n        try (SqlSession session = sqlSessionFactory.openSession(true)) {\r\n            //创建mapper对象\r\n            FileMapper mapper = session.getMapper(FileMapper.class);\r\n            File file=new File(fileName,0L,username,new Date());\r\n            mapper.insert(file);\r\n        }\r\n    }\r\n\r\n    public void fileUpdate(String fileName) {\r\n        try (SqlSession session = sqlSessionFactory.openSession(true)) {\r\n            //创建mapper对象\r\n            FileMapper mapper = session.getMapper(FileMapper.class);\r\n            //查询出对象\r\n            QueryWrapper<File> fileQueryWrapper = new QueryWrapper<>();\r\n            fileQueryWrapper.eq(\"filename\", fileName);\r\n            File file = mapper.selectOne(fileQueryWrapper);\r\n            //对象赋值\r\n            file.setDownloadCount(file.getDownloadCount() + 1);\r\n            //更新对象\r\n            mapper.updateById(file);\r\n\r\n\r\n        }\r\n    }\r\n\r\n\r\n    //工厂方法\r\n    public static SqlSessionFactory initSqlSessionFactory() {\r\n        DataSource dataSource = dataSource();\r\n        TransactionFactory transactionFactory = new JdbcTransactionFactory();\r\n        Environment environment = new Environment(\"Production\", transactionFactory, dataSource);\r\n        MybatisConfiguration configuration = new MybatisConfiguration(environment);\r\n        configuration.addMapper(UserMapper.class);\r\n        configuration.setLogImpl(StdOutImpl.class);\r\n        return new MybatisSqlSessionFactoryBuilder().build(configuration);\r\n    }\r\n\r\n    //连接进行\r\n    public static DataSource dataSource() {\r\n        SimpleDriverDataSource dataSource = new SimpleDriverDataSource();\r\n        dataSource.setDriverClass(com.mysql.cj.jdbc.Driver.class);\r\n        dataSource.setUrl(\"jdbc:mysql://localhost:3306/course?serverTimezone=GMT%2B8\");\r\n        dataSource.setUsername(\"root\");\r\n        dataSource.setPassword(\"148963\");\r\n        return dataSource;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java b/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java
+--- a/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java	(revision 75edc616ed712a0f8dc2cf1f861937403565265f)
++++ b/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java	(date 1670070883138)
+@@ -94,9 +94,9 @@
+     public static DataSource dataSource() {
+         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+         dataSource.setDriverClass(com.mysql.cj.jdbc.Driver.class);
+-        dataSource.setUrl("jdbc:mysql://localhost:3306/course?serverTimezone=GMT%2B8");
++        dataSource.setUrl("jdbc:mysql://localhost:3306/network?serverTimezone=GMT%2B8");
+         dataSource.setUsername("root");
+-        dataSource.setPassword("148963");
++        dataSource.setPassword("*strawberry");
+         return dataSource;
+     }
+ }
+Index: Client/src/main/java/com/lkw/client/Thread/MyClientThread.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.lkw.client.Thread;\r\n\r\nimport com.tool.Message;\r\nimport com.tool.Utils;\r\nimport javafx.application.Platform;\r\nimport javafx.collections.ObservableList;\r\nimport javafx.scene.control.Button;\r\nimport javafx.scene.control.ListView;\r\nimport javafx.scene.control.TextArea;\r\nimport javafx.scene.text.Text;\r\nimport lombok.extern.slf4j.Slf4j;\r\n\r\nimport java.io.*;\r\nimport java.net.InetSocketAddress;\r\nimport java.net.UnknownHostException;\r\nimport java.nio.ByteBuffer;\r\nimport java.nio.channels.SelectionKey;\r\nimport java.nio.channels.Selector;\r\nimport java.nio.channels.SocketChannel;\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.Date;\r\nimport java.util.Iterator;\r\nimport java.util.Timer;\r\nimport java.util.TimerTask;\r\n\r\nimport static com.tool.FinalValue.*;\r\n\r\n\r\n/**\r\n * 客户端\r\n * @author 花大侠\r\n *\r\n */\r\n@Slf4j\r\npublic class MyClientThread implements Runnable {\r\n\r\n\tprivate Selector selector;\r\n\tprivate SocketChannel socketChannel;\r\n\tprivate String username;\r\n\tSimpleDateFormat sdf = new SimpleDateFormat(\"yyyy/MM/dd HH:mm:ss\");\r\n\tprivate Button sendBtn;\r\n\r\n\tprivate TextArea sendArea;\r\n\tprivate TextArea acceptArea;\r\n\r\n\tprivate Text toolTips;\r\n\tObservableList<String> fileItems;\r\n\r\n\tint fileNum=0;\r\n\r\n\r\n\r\n\r\n\r\n\tpublic MyClientThread(Button sendBtn, TextArea sendArea, TextArea acceptArea, Text toolTips, String username, ObservableList<String> fileItems) {\r\n\t\tsuper();\r\n\t\tthis.sendBtn=sendBtn;\r\n\t\tthis.sendArea=sendArea;\r\n\t\tthis.acceptArea=acceptArea;\r\n\t\tthis.toolTips=toolTips;\r\n\t\tthis.username=username;\r\n\t\tthis.fileItems=fileItems;\r\n\r\n\t}\r\n\r\n\r\n\r\n\t@Override\r\n\tpublic void run() {\r\n\t\ttry {\r\n\t\t\t//\"发送\"按钮的点击事件\r\n\t\t\tsendBtn.setOnAction(e->{\r\n\t\t\t\tString sendMsg=sendArea.getText();\r\n\t\t\t\tif(sendMsg.equals(\"\")){\r\n\t\t\t\t\ttoolTips.setText(\"没有内容\");\r\n\t\t\t\t}else {\r\n\r\n\t\t\t\t\t//Todo 判断是群发 还是 私发\r\n\r\n\t\t\t\t\tMessage msg;\r\n\t\t\t\t\tboolean isPrivate = false;\r\n\t\t\t\t\tif (isPrivate) {\r\n\t\t\t\t\t\t msg = new Message(MSG_PRIVATE, username, \"\", sendMsg);\r\n\t\t\t\t\t}\r\n\t\t\t\t\t else {\r\n\t\t\t\t\t\tmsg = new Message(MSG_GROUP, username,\"all\",sendMsg);\r\n\t\t\t\t\t}\r\n\t\t\t\t\tbyte[] bytes1 = new byte[0];\r\n\t\t\t\t\ttry {\r\n\t\t\t\t\t\tbytes1 = Utils.encode(msg);\r\n\t\t\t\t\t\tsocketChannel.write(ByteBuffer.wrap(bytes1));\r\n\t\t\t\t\t} catch (IOException ioException) {\r\n\t\t\t\t\t\tioException.printStackTrace();\r\n\t\t\t\t\t}\r\n\t\t\t\t\tsendArea.setText(\"\");\r\n\t\t\t\t\tacceptArea.appendText(username+\" \"+sdf.format(new Date())+\"\\n\"+sendMsg+\"\\n\");\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t\t\t\tselector = Selector.open();\r\n\t\t\t\t\tsocketChannel = SocketChannel.open(new InetSocketAddress(\"127.0.0.1\", 8888));\r\n\t\t\t\t\tsocketChannel.configureBlocking(false);\r\n\t\t\t\t\tsocketChannel.register(selector, SelectionKey.OP_READ);\r\n\r\n\t\t\t\t\tMessage message = new Message(MSG_NAME, username,\"\",username);\r\n\t\t\t\t\tbyte[] bytes = Utils.encode(message);\r\n\r\n\t\t\t\t\t//登录\r\n\t\t\t\t\tsocketChannel.write(ByteBuffer.wrap(bytes));\r\n\r\n\r\n\t\t\t\t\t//定时器\r\n\t\t\tTimerTask timerTask=new TimerTask() {\r\n\t\t\t\t@Override\r\n\t\t\t\tpublic void run() {//定时更新文件列表\r\n\r\n\t\t\t\t\tSystem.out.println(\"发送更新请求\");\r\n\t\t\t\t\tMessage msg;\r\n\t\t\t\t\tmsg=new Message(MSG_GetFileList,username,username,username);\r\n\t\t\t\t\tbyte[] bytes1 = new byte[0];\r\n\t\t\t\t\ttry {\r\n\t\t\t\t\t\tbytes1 = Utils.encode(msg);\r\n\t\t\t\t\t\tsocketChannel.write(ByteBuffer.wrap(bytes1));\r\n\t\t\t\t\t} catch (IOException ioException) {\r\n\t\t\t\t\t\tioException.printStackTrace();\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t};\r\n\t\t\tTimer timer=new Timer();\r\n\t\t\ttimer.scheduleAtFixedRate(timerTask,500l,3000l);//0.5秒后开始,每隔3秒运行\r\n\r\n\r\n\r\n\r\n\t\t\t\t\twhile (true) {\r\n\t\t\t\t\t\t//阻塞,检测数据\r\n\t\t\t\t\t\tselector.select();\r\n\t\t\t\t\t\t//获取所有数据进行遍历\r\n\t\t\t\t\t\tIterator<SelectionKey> iterator = selector.selectedKeys().iterator();\r\n\t\t\t\t\t\twhile (iterator.hasNext()) {\r\n\t\t\t\t\t\t\tSelectionKey key = iterator.next();\r\n\t\t\t\t\t\t\t//移出已经检查的数据\r\n\t\t\t\t\t\t\titerator.remove();\r\n\t\t\t\t\t\t\tlog.info(String.valueOf(message.message));\r\n\t\t\t\t\t\t\t//如果可读\r\n\t\t\t\t\t\t\tif (key.isReadable()) {\r\n\t\t\t\t\t\t\t\t//获取socket通道->字节缓冲区->String数据\r\n\t\t\t\t\t\t\t\tSocketChannel sc = (SocketChannel) key.channel();\r\n\t\t\t\t\t\t\t\tByteBuffer buffer = ByteBuffer.allocate(1024);\r\n\t\t\t\t\t\t\t\tsc.read(buffer);\r\n\t\t\t\t\t\t\t\tmessage = Utils.decode(buffer.array());\r\n\r\n\t\t\t\t\t\t\t\tswitch (message.getType()){\r\n\t\t\t\t\t\t\t\t\tcase MSG_GetFileList://收到文件列表更新信息\r\n\t\t\t\t\t\t\t\t\t\tString[] fileNameList = message.message.split(\";\");//分割成字符串数组\r\n\t\t\t\t\t\t\t\t\t\tif (fileNameList.length!=fileNum) {\r\n\t\t\t\t\t\t\t\t\t\t\tPlatform.runLater(()->{//保护跨线程操作UI组件\r\n\t\t\t\t\t\t\t\t\t\t\t\t//清理文件列表\r\n\t\t\t\t\t\t\t\t\t\t\tfileItems.clear();\r\n\t\t\t\t\t\t\t\t\t\t\tfor (int i = 0; i < fileNameList.length; i++) {\r\n\t\t\t\t\t\t\t\t\t\t\t\tfileItems.add(fileNameList[i]);//添加文件列表\r\n\t\t\t\t\t\t\t\t\t\t\t}\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t});\r\n\t\t\t\t\t\t\t\t\t\t\tfileNum=fileNameList.length;\r\n\t\t\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t\t\tdefault://文字消息\r\n\t\t\t\t\t\t\t\t\t\tacceptArea.appendText(message.getSendUser()+\" \"+sdf.format(new Date())+\"\\n\"+message.getMessage()+\"\\n\");\r\n\t\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t} catch (UnknownHostException e) {\r\n\t\t\te.printStackTrace();\r\n\t\t} catch (IOException e) {\r\n\t\t\te.printStackTrace();\r\n\t\t} catch (Exception e) {\r\n\t\t\te.printStackTrace();\r\n\t\t}\r\n\t}\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java b/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java
+--- a/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java	(revision 75edc616ed712a0f8dc2cf1f861937403565265f)
++++ b/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java	(date 1670125270370)
+@@ -4,10 +4,20 @@
+ import com.tool.Utils;
+ import javafx.application.Platform;
+ import javafx.collections.ObservableList;
++import javafx.geometry.Insets;
+ import javafx.scene.control.Button;
++import javafx.scene.control.Label;
+ import javafx.scene.control.ListView;
+ import javafx.scene.control.TextArea;
++import javafx.scene.image.Image;
++import javafx.scene.image.ImageView;
++import javafx.scene.layout.AnchorPane;
++import javafx.scene.layout.FlowPane;
++import javafx.scene.layout.VBox;
++import javafx.scene.paint.Color;
++import javafx.scene.text.Font;
+ import javafx.scene.text.Text;
++import javafx.scene.text.TextAlignment;
+ import lombok.extern.slf4j.Slf4j;
+ 
+ import java.io.*;
+@@ -41,26 +51,113 @@
+ 	private Button sendBtn;
+ 
+ 	private TextArea sendArea;
+-	private TextArea acceptArea;
++
++	private VBox vBox;
+ 
+ 	private Text toolTips;
+ 	ObservableList<String> fileItems;
+ 
+ 	int fileNum=0;
+ 
++	void showMsg(String name,String msg,String time) {
++		AnchorPane an = new AnchorPane();
++		an.setPrefWidth(891);
++
++
++		Label nameL = new Label(name);
++		nameL.setFont(new Font(13));
++		nameL.setTextAlignment(TextAlignment.RIGHT);
++		nameL.setMaxWidth(400);
++		nameL.setTextFill(Color.web("#0000cd"));
++
++		Label msgL = new Label(msg);
++		msgL.setFont(new Font(18));
++		msgL.setStyle("-fx-background-color: #fff12f");
++		msgL.setPadding(new Insets(5, 10, 5, 10));
++		msgL.setWrapText(true);
++		msgL.setMaxWidth(400);
++
++		an.getChildren().addAll(nameL,msgL);
+ 
+ 
++		AnchorPane.setRightAnchor(nameL, 46.0);
++		AnchorPane.setTopAnchor(nameL, 15.0);
+ 
++		AnchorPane.setRightAnchor(msgL, 46.0);
++		AnchorPane.setTopAnchor(msgL, 45.0);
+ 
+-	public MyClientThread(Button sendBtn, TextArea sendArea, TextArea acceptArea, Text toolTips, String username, ObservableList<String> fileItems) {
++		AnchorPane timePane = new AnchorPane();
++		Label timeL = new Label(time);
++		timeL.setFont(new Font(8));
++		timeL.setTextAlignment(TextAlignment.RIGHT);
++		timeL.setMaxWidth(100);
++		timeL.setTextFill(Color.web("#1c1c1c"));
++		timePane.setPrefWidth(891.0);
++		timePane.getChildren().add(timeL);
++		AnchorPane.setRightAnchor(timeL, 48.0);
++		AnchorPane.setBottomAnchor(timeL,2.0);
++
++
++		vBox.getChildren().addAll(an,timePane);
++	}
++	void showReceiveMsg(String name,String msg,String time){
++
++		AnchorPane an = new AnchorPane();
++		an.setPrefWidth(891);
++
++
++		Label nameL = new Label(name);
++		nameL.setFont(new Font(13));
++		nameL.setTextAlignment(TextAlignment.LEFT);
++		nameL.setMaxWidth(400);
++		if("SYSTEM".equals(name))
++			nameL.setTextFill(Color.web("#b22222"));
++		else
++			nameL.setTextFill(Color.web("#8f4789"));
++
++
++		Label msgL = new Label(msg);
++		msgL.setFont(new Font(18));
++		msgL.setStyle("-fx-background-color: #ff137f");
++		msgL.setPadding(new Insets(5, 10, 5, 10));
++		msgL.setWrapText(true);
++		msgL.setMaxWidth(400);
++
++		an.getChildren().addAll(nameL,msgL);
++
++
++
++		AnchorPane.setLeftAnchor(nameL, 26.0);
++		AnchorPane.setTopAnchor(nameL, 15.0);
++
++		AnchorPane.setLeftAnchor(msgL, 26.0);
++		AnchorPane.setTopAnchor(msgL, 45.0);
++
++		AnchorPane timePane = new AnchorPane();
++		Label timeL = new Label(time);
++		timeL.setFont(new Font(8));
++		timeL.setTextAlignment(TextAlignment.LEFT);
++		timeL.setMaxWidth(100);
++		timeL.setTextFill(Color.web("#1c1c1c"));
++		timePane.setPrefWidth(891.0);
++		timePane.getChildren().add(timeL);
++		AnchorPane.setLeftAnchor(timeL, 28.0);
++		AnchorPane.setBottomAnchor(timeL,2.0);
++
++
++		vBox.getChildren().addAll(an,timePane);
++	}
++
++
++	public MyClientThread(Button sendBtn, TextArea sendArea, Text toolTips, String username, ObservableList<String> fileItems,VBox vBox) {
+ 		super();
+ 		this.sendBtn=sendBtn;
+ 		this.sendArea=sendArea;
+-		this.acceptArea=acceptArea;
++
+ 		this.toolTips=toolTips;
+ 		this.username=username;
+ 		this.fileItems=fileItems;
+-
++		this.vBox=vBox;
+ 	}
+ 
+ 
+@@ -93,7 +190,11 @@
+ 						ioException.printStackTrace();
+ 					}
+ 					sendArea.setText("");
+-					acceptArea.appendText(username+" "+sdf.format(new Date())+"\n"+sendMsg+"\n");
++
++
++					// acceptArea.appendText(username+" "+sdf.format(new Date())+"\n"+sendMsg+"\n");
++					showMsg(username,sendMsg,sdf.format(new Date()));
++
+ 				}
+ 			});
+ 					selector = Selector.open();
+@@ -165,7 +266,12 @@
+ 										}
+ 										break;
+ 									default://文字消息
+-										acceptArea.appendText(message.getSendUser()+" "+sdf.format(new Date())+"\n"+message.getMessage()+"\n");
++										// acceptArea.appendText(message.getSendUser()+" "+sdf.format(new Date())+"\n"+message.getMessage()+"\n");
++										Message finalMessage = message;
++										Platform.runLater(()->{
++											showReceiveMsg(finalMessage.getSendUser(), finalMessage.getMessage(),sdf.format(new Date()));
++										});
++
+ 										break;
+ 								}
+ 							}
+Index: Client/src/main/resources/main.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.control.Button?>\r\n<?import javafx.scene.control.ListView?>\r\n<?import javafx.scene.control.TextArea?>\r\n<?import javafx.scene.layout.AnchorPane?>\r\n<?import javafx.scene.text.Font?>\r\n<?import javafx.scene.text.Text?>\r\n\r\n<AnchorPane fx:id=\"myPane\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"606.0\" prefWidth=\"914.0\" xmlns=\"http://javafx.com/javafx/18\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"com.lkw.client.Controller.JavafxController\">\r\n   <children>\r\n      <TextArea fx:id=\"acceptArea\" layoutX=\"14.0\" layoutY=\"10.0\" prefHeight=\"316.0\" prefWidth=\"892.0\" style=\"-fx-background-color: backgroundColor;\" />\r\n\r\n      <Button fx:id=\"sendBtn\" layoutX=\"684.0\" layoutY=\"539.0\" mnemonicParsing=\"false\" prefHeight=\"35.0\" prefWidth=\"108.0\" text=\"发送\"><font><Font size=\"16.0\" /></font></Button>\r\n\r\n      <Button fx:id=\"sendFileBtn\" layoutX=\"684.0\" layoutY=\"497.0\" mnemonicParsing=\"false\" prefHeight=\"35.0\" prefWidth=\"108.0\" text=\"发送文件\"><font><Font size=\"16.0\" /></font></Button>\r\n\r\n      <TextArea fx:id=\"filePathArea\" layoutX=\"14.0\" layoutY=\"334.0\" prefHeight=\"15.0\" prefWidth=\"547.0\" />\r\n\r\n      <TextArea fx:id=\"sendArea\" layoutX=\"14.0\" layoutY=\"379.0\" prefHeight=\"196.0\" prefWidth=\"660.0\" />\r\n\r\n      <Text fx:id=\"toolTips\" layoutX=\"14.0\" layoutY=\"594.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" />\r\n\r\n      <Button fx:id=\"acceptAreaFileBtn\" layoutX=\"798.0\" layoutY=\"497.0\" mnemonicParsing=\"false\" prefHeight=\"35.0\" prefWidth=\"108.0\" text=\"接收文件\"><font><Font size=\"16.0\" /></font></Button>\r\n\r\n\r\n      <ListView fx:id=\"fileList\" layoutX=\"684.0\" layoutY=\"334.0\" prefHeight=\"157.0\" prefWidth=\"221.0\">\r\n\r\n      </ListView>\r\n      <Button fx:id=\"selectFileBtn\" layoutX=\"566.0\" layoutY=\"335.0\" mnemonicParsing=\"false\" prefHeight=\"35.0\" prefWidth=\"108.0\" text=\"选择文件\">\r\n         <font>\r\n            <Font size=\"16.0\" />\r\n         </font>\r\n      </Button>\r\n\r\n   </children>\r\n</AnchorPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/src/main/resources/main.fxml b/Client/src/main/resources/main.fxml
+--- a/Client/src/main/resources/main.fxml	(revision 75edc616ed712a0f8dc2cf1f861937403565265f)
++++ b/Client/src/main/resources/main.fxml	(date 1670120798440)
+@@ -2,14 +2,15 @@
+ 
+ <?import javafx.scene.control.Button?>
+ <?import javafx.scene.control.ListView?>
++<?import javafx.scene.control.ScrollPane?>
+ <?import javafx.scene.control.TextArea?>
+ <?import javafx.scene.layout.AnchorPane?>
++<?import javafx.scene.layout.VBox?>
+ <?import javafx.scene.text.Font?>
+ <?import javafx.scene.text.Text?>
+ 
+ <AnchorPane fx:id="myPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="606.0" prefWidth="914.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lkw.client.Controller.JavafxController">
+    <children>
+-      <TextArea fx:id="acceptArea" layoutX="14.0" layoutY="10.0" prefHeight="316.0" prefWidth="892.0" style="-fx-background-color: backgroundColor;" />
+ 
+       <Button fx:id="sendBtn" layoutX="684.0" layoutY="539.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="108.0" text="发送"><font><Font size="16.0" /></font></Button>
+ 
+@@ -32,6 +33,11 @@
+             <Font size="16.0" />
+          </font>
+       </Button>
++      <ScrollPane hbarPolicy="NEVER" layoutX="14.0" layoutY="14.0" prefHeight="315.0" prefWidth="891.0" style="-fx-background-color: white;" vbarPolicy="ALWAYS">
++         <content>
++            <VBox fx:id="msgVbox" disable="true" />
++         </content>
++      </ScrollPane>
+ 
+    </children>
+ </AnchorPane>
+Index: Client/src/main/java/com/lkw/client/Controller/JavafxController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.lkw.client.Controller;\r\n\r\nimport com.lkw.client.Thread.MyClientThread;\r\nimport com.lkw.client.Thread.MyFileThread;\r\nimport javafx.application.Platform;\r\nimport javafx.collections.ObservableList;\r\nimport javafx.fxml.FXML;\r\nimport javafx.scene.control.Button;\r\nimport javafx.scene.control.ListView;\r\nimport javafx.scene.control.TextArea;\r\nimport javafx.scene.text.Text;\r\n\r\n\r\npublic class JavafxController  {\r\n\r\n    @FXML\r\n    private Button selectFileBtn;\r\n    @FXML\r\n    private ListView<String> fileList=new ListView<>();\r\n\r\n    private ObservableList<String> fileItems;\r\n\r\n    @FXML\r\n    private ListView<String> userList=new ListView<>();\r\n\r\n    private ObservableList<String> userItems;\r\n\r\n\r\n\r\n\r\n\r\n    @FXML\r\n    private Button sendBtn;\r\n\r\n    @FXML\r\n    private Button sendFileBtn;\r\n\r\n\r\n    @FXML\r\n    private Button acceptAreaFileBtn;\r\n\r\n    @FXML\r\n    private TextArea sendArea;\r\n\r\n    @FXML\r\n    private TextArea acceptArea;\r\n\r\n    @FXML\r\n    private TextArea filePathArea;\r\n\r\n    @FXML\r\n    private Text toolTips;\r\n\r\n\r\n\r\n    public void init(String username) {\r\n\r\n        //添加文件列表 示例\r\n        fileItems = fileList.getItems();\r\n\r\n\r\n        userItems=userList.getItems();\r\n        userItems.add(\"\");\r\n\r\n\r\n        sendArea.setText(\"\");\r\n        //初始化\r\n        //可以继承一个监听接口\r\n        Platform.runLater(() -> {\r\n        //其他线程调用组件,可以用这个进行保护\r\n            new Thread(new MyClientThread(sendBtn,sendArea,acceptArea,toolTips, username,fileItems)).start();\r\n            new Thread(new MyFileThread(sendFileBtn,acceptAreaFileBtn,filePathArea,fileList,selectFileBtn,toolTips)).start();\r\n        });\r\n    }\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/src/main/java/com/lkw/client/Controller/JavafxController.java b/Client/src/main/java/com/lkw/client/Controller/JavafxController.java
+--- a/Client/src/main/java/com/lkw/client/Controller/JavafxController.java	(revision 75edc616ed712a0f8dc2cf1f861937403565265f)
++++ b/Client/src/main/java/com/lkw/client/Controller/JavafxController.java	(date 1670125270298)
+@@ -8,6 +8,7 @@
+ import javafx.scene.control.Button;
+ import javafx.scene.control.ListView;
+ import javafx.scene.control.TextArea;
++import javafx.scene.layout.VBox;
+ import javafx.scene.text.Text;
+ 
+ 
+@@ -34,16 +35,14 @@
+ 
+     @FXML
+     private Button sendFileBtn;
+-
+-
+     @FXML
+     private Button acceptAreaFileBtn;
+ 
+     @FXML
+     private TextArea sendArea;
+ 
+-    @FXML
+-    private TextArea acceptArea;
++    // @FXML
++    // private TextArea acceptArea;
+ 
+     @FXML
+     private TextArea filePathArea;
+@@ -51,6 +50,8 @@
+     @FXML
+     private Text toolTips;
+ 
++    @FXML
++    private VBox msgVbox;
+ 
+ 
+     public void init(String username) {
+@@ -63,12 +64,11 @@
+         userItems.add("");
+ 
+ 
+-        sendArea.setText("");
+         //初始化
+         //可以继承一个监听接口
+         Platform.runLater(() -> {
+         //其他线程调用组件,可以用这个进行保护
+-            new Thread(new MyClientThread(sendBtn,sendArea,acceptArea,toolTips, username,fileItems)).start();
++            new Thread(new MyClientThread(sendBtn,sendArea,toolTips, username,fileItems,msgVbox)).start();
+             new Thread(new MyFileThread(sendFileBtn,acceptAreaFileBtn,filePathArea,fileList,selectFileBtn,toolTips)).start();
+         });
+     }
+Index: Client/src/test/java/com/lkw/client/ClientApplicationTests.java
+===================================================================
+diff --git a/Client/src/test/java/com/lkw/client/ClientApplicationTests.java b/Client/src/test/java/com/lkw/client/ClientApplicationTests.java
+deleted file mode 100644
+--- a/Client/src/test/java/com/lkw/client/ClientApplicationTests.java	(revision 75edc616ed712a0f8dc2cf1f861937403565265f)
++++ /dev/null	(revision 75edc616ed712a0f8dc2cf1f861937403565265f)
+@@ -1,13 +0,0 @@
+-package com.lkw.client;
+-
+-import org.junit.jupiter.api.Test;
+-import org.springframework.boot.test.context.SpringBootTest;
+-
+-@SpringBootTest
+-class ClientApplicationTests {
+-
+-    @Test
+-    void contextLoads() {
+-    }
+-
+-}
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ArtifactsWorkspaceSettings\">\r\n    <artifacts-to-build>\r\n      <artifact name=\"Client:jar\" />\r\n    </artifacts-to-build>\r\n  </component>\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"3cea0fed-dc54-4249-a389-a55d229ef605\" name=\"Changes\" comment=\"mybatis-plus初始配置\">\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/dataSources.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/mybatisx/templates.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/Server/src/main/java/com/lkw/server/entity/File.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/Server/src/main/java/com/lkw/server/entity/User.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/Server/src/main/java/com/lkw/server/mapper/FileMapper.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/Server/src/main/java/com/lkw/server/mapper/UserMapper.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/Server/src/main/resources/mapper/FileMapper.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/Server/src/main/resources/mapper/UserMapper.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/Main.class\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/MyClientThread.class\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/MyFileServer.class\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/ServerUI$1.class\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/ServerUI.class\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/fileHandler.class\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/shelved.patch\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35__Changes_.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/pom.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/pom.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/LoginController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/LoginController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/pom.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/pom.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FileHandler.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FileHandler.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/resources/application.yml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/FindFile.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/FindFile.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/MyFileServer.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/MyFileServer.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/fileHandler.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/fileHandler.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer$LoginHandler.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer$LoginHandler.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI$1.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI$1.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI.class\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Pull.Settings\">\r\n    <option name=\"OPTIONS\">\r\n      <set>\r\n        <option value=\"REBASE\" />\r\n      </set>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n    <option name=\"RESET_MODE\" value=\"HARD\" />\r\n  </component>\r\n  <component name=\"GitSEFilterConfiguration\">\r\n    <file-type-list>\r\n      <filtered-out-file-type name=\"LOCAL_BRANCH\" />\r\n      <filtered-out-file-type name=\"REMOTE_BRANCH\" />\r\n      <filtered-out-file-type name=\"TAG\" />\r\n      <filtered-out-file-type name=\"COMMIT_BY_MESSAGE\" />\r\n    </file-type-list>\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProblemsViewState\">\r\n    <option name=\"selectedTabId\" value=\"CurrentFile\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2F6M1wAhtbG0LxT4tE4zrIoP6u8\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RequestMappingsPanelOrder0\": \"0\",\r\n    \"RequestMappingsPanelOrder1\": \"1\",\r\n    \"RequestMappingsPanelWidth0\": \"75\",\r\n    \"RequestMappingsPanelWidth1\": \"75\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"WebServerToolWindowFactoryState\": \"false\",\r\n    \"jdk.selected.JAVA_MODULE\": \"1.8\",\r\n    \"last_opened_file_path\": \"D:/work/javacode/QQ_Chat/MyFile\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"spring.configuration.checksum\": \"587c446a63103530d5d08b0cda6169ec\"\r\n  },\r\n  \"keyToStringList\": {\r\n    \"DatabaseDriversLRU\": [\r\n      \"mysql\"\r\n    ]\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CreateClassDialog.RecentsKey\">\r\n      <recent name=\"com.lkw.server\" />\r\n      <recent name=\"com.lkw.client.Controller\" />\r\n    </key>\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"D:\\work\\javacode\\QQ_Chat\\MyFile\" />\r\n      <recent name=\"D:\\CodeOfJava\\NetWorkSubject\\QQ_Chat_imitate\\Tools\\src\\main\\java\" />\r\n      <recent name=\"D:\\CodeOfJava\\NetWorkSubject\\QQ_Chat_imitate\\Server\\src\\main\\java\\com\\lkw\\server\\Utils\" />\r\n      <recent name=\"D:\\work\\javacode\\QQ_Chat\\Server\\src\\main\\java\\com\\lkw\\server\" />\r\n      <recent name=\"D:\\work\\javacode\\QQ_Chat\\Server\\src\\test\\java\\com\\lkw\\server\" />\r\n    </key>\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"D:\\work\\javacode\\QQ_Chat\\src\\main\\resources\" />\r\n      <recent name=\"D:\\work\\javacode\\QQ_Chat\\src\\main\\java\\org\\lkw\" />\r\n    </key>\r\n    <key name=\"CopyClassDialog.RECENTS_KEY\">\r\n      <recent name=\"com.lkw.server.Server\" />\r\n      <recent name=\"com.lkw.client\" />\r\n      <recent name=\"com.lkw.client.Client\" />\r\n      <recent name=\"com.lkw.server\" />\r\n      <recent name=\"com.lkw.client.Controller\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunDashboard\">\r\n    <option name=\"configurationTypes\">\r\n      <set>\r\n        <option value=\"SpringBootApplicationConfigurationType\" />\r\n      </set>\r\n    </option>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Application.Login\">\r\n    <configuration default=\"true\" type=\"ArquillianJUnit\" factoryName=\"\" nameIsGenerated=\"true\">\r\n      <option name=\"arquillianRunConfiguration\">\r\n        <value>\r\n          <option name=\"containerStateName\" value=\"\" />\r\n        </value>\r\n      </option>\r\n      <option name=\"TEST_OBJECT\" value=\"class\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"Login\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.lkw.client.Login\" />\r\n      <module name=\"Client\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.lkw.client.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" singleton=\"false\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.lkw.client.Main\" />\r\n      <module name=\"Client\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.lkw.client.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"NioClient (1)\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.lkw.server.Server.NioClient\" />\r\n      <module name=\"Server\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.lkw.server.Server.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"NioClient\" type=\"Application\" factoryName=\"Application\" singleton=\"false\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.lkw.server.Server.NioClient\" />\r\n      <module name=\"Server\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.lkw.server.Server.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"ServerUI\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.lkw.server.ServerUI\" />\r\n      <module name=\"Server\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.lkw.server.Server.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"test\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.lkw.test\" />\r\n      <module name=\"Server\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.lkw.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"ClientApplication\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\">\r\n      <module name=\"Client\" />\r\n      <option name=\"SPRING_BOOT_MAIN_CLASS\" value=\"com.lkw.client.ClientApplication\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"ServerApplication\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\">\r\n      <module name=\"Server\" />\r\n      <option name=\"SPRING_BOOT_MAIN_CLASS\" value=\"com.lkw.server.ServerApplication\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"Application.NioClient\" />\r\n      <item itemvalue=\"Application.test\" />\r\n      <item itemvalue=\"Application.Login\" />\r\n      <item itemvalue=\"Application.Main\" />\r\n      <item itemvalue=\"Application.NioClient (1)\" />\r\n      <item itemvalue=\"Application.ServerUI\" />\r\n      <item itemvalue=\"Spring Boot.ClientApplication\" />\r\n      <item itemvalue=\"Spring Boot.ServerApplication\" />\r\n    </list>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Login\" />\r\n        <item itemvalue=\"Application.ServerUI\" />\r\n        <item itemvalue=\"Application.Main\" />\r\n        <item itemvalue=\"Application.test\" />\r\n        <item itemvalue=\"Application.NioClient (1)\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"3cea0fed-dc54-4249-a389-a55d229ef605\" name=\"Changes\" comment=\"\" />\r\n      <created>1663807871194</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1663807871194</updated>\r\n      <workItem from=\"1663807873290\" duration=\"6592000\" />\r\n      <workItem from=\"1663849790758\" duration=\"396000\" />\r\n      <workItem from=\"1663944857158\" duration=\"615000\" />\r\n      <workItem from=\"1663984770061\" duration=\"2267000\" />\r\n      <workItem from=\"1664082197102\" duration=\"953000\" />\r\n      <workItem from=\"1664366066395\" duration=\"2760000\" />\r\n      <workItem from=\"1665047611842\" duration=\"9325000\" />\r\n      <workItem from=\"1665066580048\" duration=\"153000\" />\r\n      <workItem from=\"1665066770623\" duration=\"804000\" />\r\n      <workItem from=\"1665574539989\" duration=\"396000\" />\r\n      <workItem from=\"1665803686964\" duration=\"7484000\" />\r\n      <workItem from=\"1665850707539\" duration=\"31000\" />\r\n      <workItem from=\"1665919383861\" duration=\"31351000\" />\r\n      <workItem from=\"1666018389675\" duration=\"5451000\" />\r\n      <workItem from=\"1666149982164\" duration=\"1285000\" />\r\n      <workItem from=\"1666242310918\" duration=\"955000\" />\r\n      <workItem from=\"1666246288076\" duration=\"6000\" />\r\n      <workItem from=\"1666264228301\" duration=\"322000\" />\r\n      <workItem from=\"1666265729704\" duration=\"3930000\" />\r\n      <workItem from=\"1666779287165\" duration=\"286000\" />\r\n      <workItem from=\"1666779597701\" duration=\"8670000\" />\r\n      <workItem from=\"1667202209829\" duration=\"1873000\" />\r\n      <workItem from=\"1667277759604\" duration=\"59000\" />\r\n      <workItem from=\"1667383971848\" duration=\"1316000\" />\r\n      <workItem from=\"1667390177544\" duration=\"702000\" />\r\n      <workItem from=\"1667395638524\" duration=\"3114000\" />\r\n      <workItem from=\"1667440465482\" duration=\"233000\" />\r\n      <workItem from=\"1667443928735\" duration=\"12310000\" />\r\n      <workItem from=\"1667523540428\" duration=\"8000\" />\r\n      <workItem from=\"1667559726989\" duration=\"12000\" />\r\n      <workItem from=\"1667612398360\" duration=\"12160000\" />\r\n      <workItem from=\"1668337106312\" duration=\"47837000\" />\r\n      <workItem from=\"1668581099009\" duration=\"22000\" />\r\n      <workItem from=\"1668593095422\" duration=\"42134000\" />\r\n      <workItem from=\"1668760562119\" duration=\"19375000\" />\r\n      <workItem from=\"1668840851282\" duration=\"11086000\" />\r\n      <workItem from=\"1670054093917\" duration=\"9059000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"基础代码\">\r\n      <created>1663814396212</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1663814396212</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"添加javafx图形界面,能打开,但是不能用\">\r\n      <created>1663988018847</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1663988018847</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"添加springboot,&#10;页面跳转逻辑完成\">\r\n      <created>1665065496855</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665065496855</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"添加springboot,&#10;页面跳转逻辑完成\">\r\n      <created>1665066371601</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665066371601</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"添加springboot,&#10;页面跳转逻辑完成\">\r\n      <created>1665066810364</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665066810364</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"添加部分页面逻辑\">\r\n      <created>1665831271079</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665831271079</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00007\" summary=\"添加socket,但是比较乱\">\r\n      <created>1666779434975</created>\r\n      <option name=\"number\" value=\"00007\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1666779434975</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00008\" summary=\"添加socket,但是比较乱\">\r\n      <created>1666779610566</created>\r\n      <option name=\"number\" value=\"00008\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00008\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1666779610566</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00009\" summary=\"添加文件上传\">\r\n      <created>1667628373417</created>\r\n      <option name=\"number\" value=\"00009\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00009\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1667628373417</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00010\" summary=\"文件上传合并\">\r\n      <created>1667634073245</created>\r\n      <option name=\"number\" value=\"00010\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00010\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1667634073245</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00011\" summary=\"文件上传合并\">\r\n      <created>1667634118154</created>\r\n      <option name=\"number\" value=\"00011\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00011\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1667634118154</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00012\" summary=\"完成文件发送接收,文本发送修改为json传送,更好拓展\">\r\n      <created>1668407412346</created>\r\n      <option name=\"number\" value=\"00012\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00012\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1668407412346</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00013\" summary=\"完成文件发送接收,文本发送修改为json传送,更好拓展\">\r\n      <created>1668407457644</created>\r\n      <option name=\"number\" value=\"00013\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00013\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1668407457644</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00014\" summary=\"服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw\">\r\n      <created>1668608710096</created>\r\n      <option name=\"number\" value=\"00014\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00014\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1668608710096</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00015\" summary=\"服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw\">\r\n      <created>1668608759226</created>\r\n      <option name=\"number\" value=\"00015\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00015\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1668608759226</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00016\" summary=\"客户端部分逻辑修改&#10;   --shaw\">\r\n      <created>1668664700231</created>\r\n      <option name=\"number\" value=\"00016\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00016\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1668664700231</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00017\" summary=\"客户端修改输入输出流&#10;   --shaw\">\r\n      <created>1668667328814</created>\r\n      <option name=\"number\" value=\"00017\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00017\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1668667328814</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"18\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.History.Properties\">\r\n    <option name=\"COLUMN_ID_ORDER\">\r\n      <list>\r\n        <option value=\"Default.Root\" />\r\n        <option value=\"Default.Author\" />\r\n        <option value=\"Default.Date\" />\r\n        <option value=\"Default.Subject\" />\r\n        <option value=\"Space.CommitStatus\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"master\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <ignored-roots>\r\n      <path value=\"$PROJECT_DIR$/Client\" />\r\n      <path value=\"$PROJECT_DIR$/Server\" />\r\n      <path value=\"$PROJECT_DIR$\" />\r\n    </ignored-roots>\r\n    <MESSAGE value=\"基础代码\" />\r\n    <MESSAGE value=\"添加javafx图形界面,能打开,但是不能用\" />\r\n    <MESSAGE value=\"添加springboot,&#10;页面跳转逻辑完成\" />\r\n    <MESSAGE value=\"添加部分页面逻辑\" />\r\n    <MESSAGE value=\"添加socket,但是比较乱\" />\r\n    <MESSAGE value=\"添加文件上传\" />\r\n    <MESSAGE value=\"文件上传合并\" />\r\n    <MESSAGE value=\"完成文件发送接收,文本发送修改为json传送,更好拓展\" />\r\n    <MESSAGE value=\"服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw\" />\r\n    <MESSAGE value=\"客户端部分逻辑修改&#10;   --shaw\" />\r\n    <MESSAGE value=\"客户端修改输入输出流&#10;   --shaw\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"客户端修改输入输出流&#10;   --shaw\" />\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <breakpoints>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>\r\n          <line>285</line>\r\n          <option name=\"timeStamp\" value=\"56\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/io/ObjectInputStream.java</url>\r\n          <line>865</line>\r\n          <option name=\"timeStamp\" value=\"83\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>\r\n          <line>264</line>\r\n          <option name=\"timeStamp\" value=\"93\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>\r\n          <line>197</line>\r\n          <option name=\"timeStamp\" value=\"94\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>\r\n          <line>246</line>\r\n          <option name=\"timeStamp\" value=\"97\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>\r\n          <line>153</line>\r\n          <option name=\"timeStamp\" value=\"98\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>\r\n          <line>24</line>\r\n          <option name=\"timeStamp\" value=\"101\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>\r\n          <line>46</line>\r\n          <option name=\"timeStamp\" value=\"103\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-method\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>\r\n          <line>45</line>\r\n          <properties class=\"com.lkw.server.Server.LoginServer.LoginHandler\" method=\"run\">\r\n            <option name=\"EMULATED\" value=\"true\" />\r\n            <option name=\"WATCH_EXIT\" value=\"false\" />\r\n          </properties>\r\n          <option name=\"timeStamp\" value=\"102\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-method\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>\r\n          <line>38</line>\r\n          <properties class=\"com.lkw.server.Server.LoginServer.LoginHandler\" method=\"&lt;init&gt;\">\r\n            <option name=\"EMULATED\" value=\"true\" />\r\n            <option name=\"WATCH_EXIT\" value=\"false\" />\r\n          </properties>\r\n          <option name=\"timeStamp\" value=\"104\" />\r\n        </line-breakpoint>\r\n      </breakpoints>\r\n    </breakpoint-manager>\r\n    <pin-to-top-manager>\r\n      <pinned-members>\r\n        <PinnedItemInfo parentTag=\"com.tool.Message\" memberName=\"message\" />\r\n      </pinned-members>\r\n    </pin-to-top-manager>\r\n  </component>\r\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\r\n    <expand />\r\n    <select />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 75edc616ed712a0f8dc2cf1f861937403565265f)
++++ b/.idea/workspace.xml	(date 1670125302175)
+@@ -9,38 +9,21 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="mybatis-plus初始配置">
+-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/mybatisx/templates.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/entity/File.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/entity/User.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/mapper/FileMapper.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/mapper/UserMapper.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/Server/src/main/resources/mapper/FileMapper.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/Server/src/main/resources/mapper/UserMapper.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/Main.class" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/MyClientThread.class" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/MyFileServer.class" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/ServerUI$1.class" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/ServerUI.class" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/fileHandler.class" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35_[Changes]/shelved.patch" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_11_18_10_35__Changes_.xml" beforeDir="false" />
++    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="客户端消息收发变为nio&#10;   --shaw">
++      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/Client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/pom.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/LoginController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pom.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FileHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FileHandler.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/resources/application.yml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/FindFile.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/FindFile.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/MyFileServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/MyFileServer.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/fileHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/fileHandler.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer$LoginHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer$LoginHandler.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI$1.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/src/test/java/com/lkw/client/ClientApplicationTests.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/LoginController$MyLoginThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/LoginController$MyLoginThread.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/LoginController.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread$1.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/classes/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/main.fxml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/test-classes/com/lkw/client/ClientApplicationTests.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -85,27 +68,12 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "RequestMappingsPanelOrder0": "0",
+-    "RequestMappingsPanelOrder1": "1",
+-    "RequestMappingsPanelWidth0": "75",
+-    "RequestMappingsPanelWidth1": "75",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "WebServerToolWindowFactoryState": "false",
+-    "jdk.selected.JAVA_MODULE": "1.8",
+-    "last_opened_file_path": "D:/work/javacode/QQ_Chat/MyFile",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "spring.configuration.checksum": "587c446a63103530d5d08b0cda6169ec"
+-  },
+-  "keyToStringList": {
+-    "DatabaseDriversLRU": [
+-      "mysql"
+-    ]
+-  }
+-}]]></component>
++  <component name="PropertiesComponent">
++    <property name="DatabaseDriversLRU" value="mysql" />
++    <property name="WebServerToolWindowFactoryState" value="false" />
++    <property name="aspect.path.notification.shown" value="true" />
++    <property name="vue.rearranger.settings.migration" value="true" />
++  </component>
+   <component name="RecentsManager">
+     <key name="CreateClassDialog.RecentsKey">
+       <recent name="com.lkw.server" />
+@@ -137,18 +105,7 @@
+       </set>
+     </option>
+   </component>
+-  <component name="RunManager" selected="Application.Login">
+-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+-      <option name="arquillianRunConfiguration">
+-        <value>
+-          <option name="containerStateName" value="" />
+-        </value>
+-      </option>
+-      <option name="TEST_OBJECT" value="class" />
+-      <method v="2">
+-        <option name="Make" enabled="true" />
+-      </method>
+-    </configuration>
++  <component name="RunManager" selected="Application.ServerUI">
+     <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+       <option name="MAIN_CLASS_NAME" value="com.lkw.client.Login" />
+       <module name="Client" />
+@@ -227,6 +184,17 @@
+         <option name="Make" enabled="true" />
+       </method>
+     </configuration>
++    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
++      <option name="arquillianRunConfiguration">
++        <value>
++          <option name="containerStateName" value="" />
++        </value>
++      </option>
++      <option name="TEST_OBJECT" value="class" />
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
+     <configuration name="ClientApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+       <module name="Client" />
+       <option name="SPRING_BOOT_MAIN_CLASS" value="com.lkw.client.ClientApplication" />
+@@ -465,6 +433,7 @@
+         </entry>
+       </map>
+     </option>
++    <option name="oldMeFiltersMigrated" value="true" />
+   </component>
+   <component name="VcsManagerConfiguration">
+     <ignored-roots>
+@@ -512,11 +481,6 @@
+           <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
+           <line>246</line>
+           <option name="timeStamp" value="97" />
+-        </line-breakpoint>
+-        <line-breakpoint enabled="true" type="java-line">
+-          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
+-          <line>153</line>
+-          <option name="timeStamp" value="98" />
+         </line-breakpoint>
+         <line-breakpoint enabled="true" type="java-line">
+           <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>
+@@ -528,6 +492,11 @@
+           <line>46</line>
+           <option name="timeStamp" value="103" />
+         </line-breakpoint>
++        <line-breakpoint enabled="true" type="java-line">
++          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
++          <line>234</line>
++          <option name="timeStamp" value="105" />
++        </line-breakpoint>
+         <line-breakpoint enabled="true" type="java-method">
+           <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>
+           <line>45</line>
+@@ -540,7 +509,7 @@
+         <line-breakpoint enabled="true" type="java-method">
+           <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>
+           <line>38</line>
+-          <properties class="com.lkw.server.Server.LoginServer.LoginHandler" method="&lt;init&gt;">
++          <properties class="com.lkw.server.Server.LoginServer.LoginHandler">
+             <option name="EMULATED" value="true" />
+             <option name="WATCH_EXIT" value="false" />
+           </properties>
+Index: .idea/dataSources.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"DataSourceManagerImpl\" format=\"xml\" multifile-model=\"true\">\r\n    <data-source source=\"LOCAL\" name=\"@localhost\" uuid=\"9b586c3a-b4bf-4eaf-aad5-1a82af58e034\">\r\n      <driver-ref>mysql.8</driver-ref>\r\n      <synchronize>true</synchronize>\r\n      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>\r\n      <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>\r\n      <working-dir>$ProjectFileDir$</working-dir>\r\n    </data-source>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/dataSources.xml b/.idea/dataSources.xml
+--- a/.idea/dataSources.xml	(revision 75edc616ed712a0f8dc2cf1f861937403565265f)
++++ b/.idea/dataSources.xml	(date 1670070882947)
+@@ -8,5 +8,12 @@
+       <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
+       <working-dir>$ProjectFileDir$</working-dir>
+     </data-source>
++    <data-source source="LOCAL" name="@localhost [2]" uuid="80d26d21-b52c-41f2-96e0-a6c6e7f09541">
++      <driver-ref>mysql.8</driver-ref>
++      <synchronize>true</synchronize>
++      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
++      <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
++      <working-dir>$ProjectFileDir$</working-dir>
++    </data-source>
+   </component>
+ </project>
+\ No newline at end of file
+Index: Client/target/classes/main.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.control.Button?>\r\n<?import javafx.scene.control.ListView?>\r\n<?import javafx.scene.control.TextArea?>\r\n<?import javafx.scene.layout.AnchorPane?>\r\n<?import javafx.scene.text.Font?>\r\n<?import javafx.scene.text.Text?>\r\n\r\n<AnchorPane fx:id=\"myPane\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"606.0\" prefWidth=\"914.0\" xmlns=\"http://javafx.com/javafx/18\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"com.lkw.client.Controller.JavafxController\">\r\n   <children>\r\n      <TextArea fx:id=\"acceptArea\" layoutX=\"14.0\" layoutY=\"10.0\" prefHeight=\"316.0\" prefWidth=\"892.0\" style=\"-fx-background-color: backgroundColor;\" />\r\n\r\n      <Button fx:id=\"sendBtn\" layoutX=\"684.0\" layoutY=\"539.0\" mnemonicParsing=\"false\" prefHeight=\"35.0\" prefWidth=\"108.0\" text=\"发送\"><font><Font size=\"16.0\" /></font></Button>\r\n\r\n      <Button fx:id=\"sendFileBtn\" layoutX=\"684.0\" layoutY=\"497.0\" mnemonicParsing=\"false\" prefHeight=\"35.0\" prefWidth=\"108.0\" text=\"发送文件\"><font><Font size=\"16.0\" /></font></Button>\r\n\r\n      <TextArea fx:id=\"filePathArea\" layoutX=\"14.0\" layoutY=\"334.0\" prefHeight=\"15.0\" prefWidth=\"547.0\" />\r\n\r\n      <TextArea fx:id=\"sendArea\" layoutX=\"14.0\" layoutY=\"379.0\" prefHeight=\"196.0\" prefWidth=\"660.0\" />\r\n\r\n      <Text fx:id=\"toolTips\" layoutX=\"14.0\" layoutY=\"594.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" />\r\n\r\n      <Button fx:id=\"acceptAreaFileBtn\" layoutX=\"798.0\" layoutY=\"497.0\" mnemonicParsing=\"false\" prefHeight=\"35.0\" prefWidth=\"108.0\" text=\"接收文件\"><font><Font size=\"16.0\" /></font></Button>\r\n\r\n\r\n      <ListView fx:id=\"fileList\" layoutX=\"684.0\" layoutY=\"334.0\" prefHeight=\"157.0\" prefWidth=\"221.0\">\r\n\r\n      </ListView>\r\n      <Button fx:id=\"selectFileBtn\" layoutX=\"566.0\" layoutY=\"335.0\" mnemonicParsing=\"false\" prefHeight=\"35.0\" prefWidth=\"108.0\" text=\"选择文件\">\r\n         <font>\r\n            <Font size=\"16.0\" />\r\n         </font>\r\n      </Button>\r\n\r\n   </children>\r\n</AnchorPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/target/classes/main.fxml b/Client/target/classes/main.fxml
+--- a/Client/target/classes/main.fxml	(revision 75edc616ed712a0f8dc2cf1f861937403565265f)
++++ b/Client/target/classes/main.fxml	(date 1670120798440)
+@@ -2,14 +2,15 @@
+ 
+ <?import javafx.scene.control.Button?>
+ <?import javafx.scene.control.ListView?>
++<?import javafx.scene.control.ScrollPane?>
+ <?import javafx.scene.control.TextArea?>
+ <?import javafx.scene.layout.AnchorPane?>
++<?import javafx.scene.layout.VBox?>
+ <?import javafx.scene.text.Font?>
+ <?import javafx.scene.text.Text?>
+ 
+ <AnchorPane fx:id="myPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="606.0" prefWidth="914.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lkw.client.Controller.JavafxController">
+    <children>
+-      <TextArea fx:id="acceptArea" layoutX="14.0" layoutY="10.0" prefHeight="316.0" prefWidth="892.0" style="-fx-background-color: backgroundColor;" />
+ 
+       <Button fx:id="sendBtn" layoutX="684.0" layoutY="539.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="108.0" text="发送"><font><Font size="16.0" /></font></Button>
+ 
+@@ -32,6 +33,11 @@
+             <Font size="16.0" />
+          </font>
+       </Button>
++      <ScrollPane hbarPolicy="NEVER" layoutX="14.0" layoutY="14.0" prefHeight="315.0" prefWidth="891.0" style="-fx-background-color: white;" vbarPolicy="ALWAYS">
++         <content>
++            <VBox fx:id="msgVbox" disable="true" />
++         </content>
++      </ScrollPane>
+ 
+    </children>
+ </AnchorPane>
+Index: Client/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n    <modelVersion>4.0.0</modelVersion>\r\n    <parent>\r\n        <artifactId>QQ_Chat</artifactId>\r\n        <groupId>org.lkw</groupId>\r\n        <version>1.0-SNAPSHOT</version>\r\n    </parent>\r\n    <groupId>com.lkw</groupId>\r\n    <artifactId>Client</artifactId>\r\n    <version>0.0.1-SNAPSHOT</version>\r\n    <name>Client</name>\r\n    <description>Client</description>\r\n    <properties>\r\n        <java.version>1.8</java.version>\r\n    </properties>    <dependencies>\r\n        <dependency>\r\n            <groupId>org.chat</groupId>\r\n            <artifactId>Tools</artifactId>\r\n            <version>1.0-SNAPSHOT</version>\r\n        </dependency>\r\n\r\n        <dependency>\r\n            <groupId>com.alibaba.fastjson2</groupId>\r\n            <artifactId>fastjson2</artifactId>\r\n            <version>2.0.19</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>com.fasterxml.jackson.core</groupId>\r\n            <artifactId>jackson-databind</artifactId>\r\n            <version>2.13.3</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.projectlombok</groupId>\r\n            <artifactId>lombok</artifactId>\r\n            <version>1.18.24</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.slf4j</groupId>\r\n            <artifactId>slf4j-simple</artifactId>\r\n            <version>1.7.25</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.slf4j</groupId>\r\n            <artifactId>slf4j-api</artifactId>\r\n            <version>1.7.25</version>\r\n        </dependency>\r\n\r\n        <dependency>\r\n            <groupId>ch.qos.logback</groupId>\r\n            <artifactId>logback-core</artifactId>\r\n            <version>1.2.3</version>\r\n        </dependency>\r\n\r\n\r\n    </dependencies>\r\n\r\n    <build>\r\n        <plugins>\r\n            <plugin>\r\n                <groupId>org.springframework.boot</groupId>\r\n                <artifactId>spring-boot-maven-plugin</artifactId>\r\n            </plugin>\r\n        </plugins>\r\n    </build>\r\n\r\n</project>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/pom.xml b/Client/pom.xml
+--- a/Client/pom.xml	(revision 75edc616ed712a0f8dc2cf1f861937403565265f)
++++ b/Client/pom.xml	(date 1670069787377)
+@@ -52,9 +52,15 @@
+             <artifactId>logback-core</artifactId>
+             <version>1.2.3</version>
+         </dependency>
++    <dependency>
++        <groupId>org.springframework.boot</groupId>
++        <artifactId>spring-boot-test</artifactId>
++        <version>2.7.4</version>
++        <scope>test</scope>
++    </dependency>
+ 
+ 
+-    </dependencies>
++</dependencies>
+ 
+     <build>
+         <plugins>
