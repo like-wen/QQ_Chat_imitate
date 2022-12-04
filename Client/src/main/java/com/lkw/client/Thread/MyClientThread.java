@@ -177,9 +177,9 @@ public class MyClientThread implements Runnable {
 					Message msg;
 					boolean isPrivate = false;
 					if (isPrivate) {
-						 msg = new Message(MSG_PRIVATE, username, "", sendMsg);
+						msg = new Message(MSG_PRIVATE, username, "", sendMsg);
 					}
-					 else {
+					else {
 						msg = new Message(MSG_GROUP, username,"all",sendMsg);
 					}
 					byte[] bytes1 = new byte[0];
@@ -197,19 +197,19 @@ public class MyClientThread implements Runnable {
 
 				}
 			});
-					selector = Selector.open();
-					socketChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 8888));
-					socketChannel.configureBlocking(false);
-					socketChannel.register(selector, SelectionKey.OP_READ);
+			selector = Selector.open();
+			socketChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 8888));
+			socketChannel.configureBlocking(false);
+			socketChannel.register(selector, SelectionKey.OP_READ);
 
-					Message message = new Message(MSG_NAME, username,"",username);
-					byte[] bytes = Utils.encode(message);
+			Message message = new Message(MSG_NAME, username,"",username);
+			byte[] bytes = Utils.encode(message);
 
-					//登录
-					socketChannel.write(ByteBuffer.wrap(bytes));
+			//登录
+			socketChannel.write(ByteBuffer.wrap(bytes));
 
 
-					//定时器
+			//定时器
 			TimerTask timerTask=new TimerTask() {
 				@Override
 				public void run() {//定时更新文件列表
@@ -223,7 +223,6 @@ public class MyClientThread implements Runnable {
 						socketChannel.write(ByteBuffer.wrap(bytes1));
 					} catch (IOException ioException) {
 						ioException.printStackTrace();
-
 					}
 				}
 			};
@@ -231,53 +230,51 @@ public class MyClientThread implements Runnable {
 			timer.scheduleAtFixedRate(timerTask,500l,3000l);//0.5秒后开始,每隔3秒运行
 
 
+			while (true) {
+				//阻塞,检测数据
+				selector.select();
+				//获取所有数据进行遍历
+				Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+				while (iterator.hasNext()) {
+					SelectionKey key = iterator.next();
+					//移出已经检查的数据
+					iterator.remove();
+					log.info(String.valueOf(message.message));
+					//如果可读
+					if (key.isReadable()) {
+						//获取socket通道->字节缓冲区->String数据
+						SocketChannel sc = (SocketChannel) key.channel();
+						ByteBuffer buffer = ByteBuffer.allocate(1024);
+						sc.read(buffer);
+						message = Utils.decode(buffer.array());
 
-
-					while (true) {
-						//阻塞,检测数据
-						selector.select();
-						//获取所有数据进行遍历
-						Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
-						while (iterator.hasNext()) {
-							SelectionKey key = iterator.next();
-							//移出已经检查的数据
-							iterator.remove();
-							log.info(String.valueOf(message.message));
-							//如果可读
-							if (key.isReadable()) {
-								//获取socket通道->字节缓冲区->String数据
-								SocketChannel sc = (SocketChannel) key.channel();
-								ByteBuffer buffer = ByteBuffer.allocate(1024);
-								sc.read(buffer);
-								message = Utils.decode(buffer.array());
-
-								switch (message.getType()){
-									case MSG_GetFileList://收到文件列表更新信息
-										String[] fileNameList = message.message.split(";");//分割成字符串数组
-										if (fileNameList.length!=fileNum) {
-											Platform.runLater(()->{//保护跨线程操作UI组件
-												//清理文件列表
-											fileItems.clear();
-											for (int i = 0; i < fileNameList.length; i++) {
-												fileItems.add(fileNameList[i]);//添加文件列表
-											}
-
-											});
-											fileNum=fileNameList.length;
+						switch (message.getType()){
+							case MSG_GetFileList://收到文件列表更新信息
+								String[] fileNameList = message.message.split(";");//分割成字符串数组
+								if (fileNameList.length!=fileNum) {
+									Platform.runLater(()->{//保护跨线程操作UI组件
+										//清理文件列表
+										fileItems.clear();
+										for (int i = 0; i < fileNameList.length; i++) {
+											fileItems.add(fileNameList[i]);//添加文件列表
 										}
-										break;
-									default://文字消息
-										// acceptArea.appendText(message.getSendUser()+" "+sdf.format(new Date())+"\n"+message.getMessage()+"\n");
-										Message finalMessage = message;
-										Platform.runLater(()->{
-											showReceiveMsg(finalMessage.getSendUser(), finalMessage.getMessage(),sdf.format(new Date()));
-										});
 
-										break;
+									});
+									fileNum=fileNameList.length;
 								}
-							}
+								break;
+							default://文字消息
+								// acceptArea.appendText(message.getSendUser()+" "+sdf.format(new Date())+"\n"+message.getMessage()+"\n");
+								Message finalMessage = message;
+								Platform.runLater(()->{
+									showReceiveMsg(finalMessage.getSendUser(), finalMessage.getMessage(),sdf.format(new Date()));
+								});
+
+								break;
 						}
 					}
+				}
+			}
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
