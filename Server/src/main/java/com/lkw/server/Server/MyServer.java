@@ -261,6 +261,10 @@ public class MyServer implements Runnable {
 				sendMsgToClient(new Message( MSG_GetFileList,"SYSTEM",msg.getGetUser(),updateMsg), channel);
 
 				break;
+			case MSG_PICTURE:
+
+				//todo:图片消息
+				break;
 			default:
 				break;
 		}

@@ -4,6 +4,7 @@ import com.tool.Message;
 import com.tool.Utils;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +12,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
@@ -18,6 +20,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -55,6 +59,7 @@ public class MyClientThread implements Runnable {
 	private VBox vBox;
 
 	private Text toolTips;
+	private ImageView ic;
 	ObservableList<String> fileItems;
 
 	int fileNum=0;
@@ -148,12 +153,60 @@ public class MyClientThread implements Runnable {
 		vBox.getChildren().addAll(an,timePane);
 	}
 
+	//todo: 展示图片
 
-	public MyClientThread(Button sendBtn, TextArea sendArea, Text toolTips, String username, ObservableList<String> fileItems,VBox vBox) {
+	void showPic(String name,File file,String time){
+		AnchorPane an = new AnchorPane();
+		an.setPrefWidth(891);
+
+
+		Label nameL = new Label(name);
+		nameL.setFont(new Font(13));
+		nameL.setTextAlignment(TextAlignment.RIGHT);
+		nameL.setMaxWidth(400);
+		nameL.setTextFill(Color.web("#0000cd"));
+
+
+		ImageView iv = new ImageView(new Image("/QQ.png"));
+		iv.setPreserveRatio(true);
+		double iWidth = iv.getImage().getWidth();
+		if(iWidth>891.0*0.4)
+		{
+			iv.setFitWidth(891.0*0.4);
+		}
+
+
+		an.getChildren().addAll(nameL,iv);
+
+
+		AnchorPane.setRightAnchor(nameL, 46.0);
+		AnchorPane.setTopAnchor(nameL, 15.0);
+
+		AnchorPane.setRightAnchor(iv, 46.0);
+		AnchorPane.setTopAnchor(iv, 45.0);
+
+		AnchorPane timePane = new AnchorPane();
+		Label timeL = new Label(time);
+		timeL.setFont(new Font(8));
+		timeL.setTextAlignment(TextAlignment.RIGHT);
+		timeL.setMaxWidth(100);
+		timeL.setTextFill(Color.web("#1c1c1c"));
+		timePane.setPrefWidth(891.0);
+		timePane.getChildren().add(timeL);
+		AnchorPane.setRightAnchor(timeL, 48.0);
+		AnchorPane.setBottomAnchor(timeL,2.0);
+
+
+		vBox.getChildren().addAll(an,timePane);
+	}
+	void showReceivePic(){
+
+	}
+	public MyClientThread(Button sendBtn, TextArea sendArea, Text toolTips, String username, ObservableList<String> fileItems,VBox vBox,ImageView ic) {
 		super();
 		this.sendBtn=sendBtn;
 		this.sendArea=sendArea;
-
+		this.ic=ic;
 		this.toolTips=toolTips;
 		this.username=username;
 		this.fileItems=fileItems;
@@ -165,6 +218,23 @@ public class MyClientThread implements Runnable {
 	@Override
 	public void run() {
 		try {
+
+			ic.setImage(new Image("/QQ.png"));
+			ic.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent mouseEvent) {
+					FileChooser fileChooser = new FileChooser();
+					fileChooser.setTitle("选择上传云端的文件");
+					fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+					FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("JPG & PNG Images","*.jpg","*.png","*.jpeg","*.gif");
+					fileChooser.getExtensionFilters().add(filter);
+					fileChooser.setSelectedExtensionFilter(filter);
+					File file = fileChooser.showOpenDialog(new Stage());
+					showPic(username,file,sdf.format(new Date()));
+				}
+			});
+
+
 			//"发送"按钮的点击事件
 			sendBtn.setOnAction(e->{
 				String sendMsg=sendArea.getText();
@@ -263,8 +333,11 @@ public class MyClientThread implements Runnable {
 									fileNum=fileNameList.length;
 								}
 								break;
+							case MSG_PICTURE:
+
+								break;
 							default://文字消息
-								// acceptArea.appendText(message.getSendUser()+" "+sdf.format(new Date())+"\n"+message.getMessage()+"\n");
+
 								Message finalMessage = message;
 								Platform.runLater(()->{
 									showReceiveMsg(finalMessage.getSendUser(), finalMessage.getMessage(),sdf.format(new Date()));

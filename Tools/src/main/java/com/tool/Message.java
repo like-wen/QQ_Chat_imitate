@@ -19,7 +19,7 @@ public class Message implements Serializable {
 	public String GetUser;
 
 	public String message;
-
+	//todo: 图片的二进制传播
 
 	public Message() {
 

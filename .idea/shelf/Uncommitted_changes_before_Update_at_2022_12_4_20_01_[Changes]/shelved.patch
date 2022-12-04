@@ -1,0 +1,617 @@
+Index: Server/src/main/java/com/lkw/server/ServerUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.lkw.server;\r\n\r\nimport com.lkw.server.FileServer.FindFile;\r\nimport com.lkw.server.FileServer.MyFileServer;\r\nimport com.lkw.server.FileServer.ThreadPoolManager;\r\nimport com.lkw.server.Server.LoginServer;\r\nimport com.lkw.server.Server.MyServer;\r\nimport javafx.application.Application;\r\nimport javafx.collections.FXCollections;\r\nimport javafx.collections.ObservableList;\r\nimport javafx.event.EventHandler;\r\nimport javafx.geometry.Insets;\r\nimport javafx.scene.Scene;\r\nimport javafx.scene.control.*;\r\nimport javafx.scene.layout.GridPane;\r\nimport javafx.scene.layout.HBox;\r\nimport javafx.scene.layout.VBox;\r\nimport javafx.stage.Stage;\r\nimport javafx.stage.WindowEvent;\r\n\r\npublic class ServerUI extends Application{\r\n\r\n\tTextArea receivedMsgArea = new TextArea();\r\n\tTextField ipText = new TextField();\r\n\tTextField portText = new TextField();\r\n\tTextArea sendMsgArea = new TextArea();\r\n\tTextField statusText = new TextField();\r\n\tButton sendButton = new Button(\" 发送\");\r\n\tObservableList<String> clients = FXCollections.observableArrayList();\r\n\tListView<String> clientListView = new ListView<>(clients);\r\n\r\n\r\n\tObservableList<String> fileList = FXCollections.observableArrayList();\r\n\tListView<String> fileListView = new ListView<>(fileList);\r\n\r\n\r\n\r\n\r\n\tpublic void start(Stage primaryStage) throws Exception {\r\n\r\n\t\t//右边 Received Message\r\n\t\tGridPane rightPane = new GridPane();\r\n\t\trightPane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));\r\n\t\trightPane.setHgap(5.5);\r\n\t\trightPane.setVgap(5.5);\r\n\t\trightPane.add(new Label(\"接收数据:\"), 0, 0);\r\n\t\treceivedMsgArea.setWrapText(true);\r\n\t\treceivedMsgArea.setEditable(false);\r\n\t\treceivedMsgArea.setMaxWidth(350);\r\n\t\treceivedMsgArea.setPrefHeight(400);\r\n\t\trightPane.add(receivedMsgArea, 0, 1);\r\n\r\n\t\t//左边 IPAdress+Port\r\n\t\tGridPane leftPane1 = new GridPane();\r\n\t\tleftPane1.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));\r\n\t\tleftPane1.setHgap(5.5);\r\n\t\tleftPane1.setVgap(5.5);\r\n\t\tleftPane1.add(new Label(\"IPAdress:\"), 0, 0);\r\n\t\tipText.setEditable(false);\r\n\t\tleftPane1.add(ipText, 1, 0);\r\n\t\tleftPane1.add(new Label(\"Port:\"), 0, 1);\r\n\t\tportText.setEditable(false);\r\n\t\tleftPane1.add(portText, 1, 1);\r\n\r\n\t\t//左边 Choose Client\r\n\t\tGridPane leftPane2 = new GridPane();\r\n\t\tleftPane2.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));\r\n\t\tleftPane2.setHgap(5.5);\r\n\t\tleftPane2.setVgap(5.5);\r\n\t\tleftPane2.add(new Label(\"已上线用户\"), 0, 0);\r\n\t\tclientListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);\r\n\t\tclientListView.setMaxHeight(80);\r\n\t\tclientListView.setMaxWidth(275);\r\n\t\tleftPane2.add(clientListView, 0, 1);\r\n\t\t//左边 Send Message\r\n\t\tleftPane2.add(new Label(\"发送消息:\"), 0, 2);\r\n\t\tsendMsgArea.setMaxHeight(150);\r\n\t\tsendMsgArea.setMaxWidth(275);\r\n\t\tsendMsgArea.setWrapText(true);\r\n\t\tleftPane2.add(sendMsgArea, 0, 3);\r\n\r\n\t\t//左边 Connect Status + button\r\n\t\tGridPane leftPane3 = new GridPane();\r\n\t\tleftPane3.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));\r\n\t\tleftPane3.setHgap(5.5);\r\n\t\tleftPane3.setVgap(5.5);\r\n\t\tstatusText.setEditable(false);\r\n\t\tleftPane3.add(statusText, 0, 0);\r\n\t\tleftPane3.add(sendButton, 1, 0);\r\n\r\n\t\t//文件的Pane\r\n\t\tGridPane filePane=new GridPane();\r\n\t\tfilePane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));\r\n\t\tfilePane.setHgap(5.5);\r\n\t\tfilePane.setVgap(5.5);\r\n\t\tfilePane.add(new Label(\"云文件\"), 0, 0);\r\n\t\tfileListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);\r\n\t\tfileListView.setMaxHeight(410);\r\n\t\tfileListView.setMaxWidth(200);\r\n\t\tfilePane.add(fileListView,0,1);\r\n\r\n\r\n\r\n\r\n\t\t//组合\r\n\t\tVBox vBox = new VBox();\r\n\t\tvBox.getChildren().addAll(leftPane1, leftPane2, leftPane3);\r\n\t\tHBox hBox = new HBox();\r\n\t\thBox.getChildren().addAll(vBox, rightPane,filePane);\r\n\r\n\t\tScene scene = new Scene(hBox);\r\n\t\tprimaryStage.setTitle(\"server\");\r\n\t\tprimaryStage.setScene(scene);\r\n\t\t//关闭UI线程时同时关闭各子线程\r\n\t\tprimaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {\r\n            @Override\r\n            public void handle(WindowEvent event) {\r\n                System.exit(0);\r\n            }\r\n        });\r\n\r\n\t\tnew Thread(new LoginServer()).start();\r\n\t\t//启动server线程\r\n\t\tnew Thread(new MyServer(ipText, portText, sendMsgArea, statusText, sendButton, receivedMsgArea, clients, clientListView)).start();\r\n\t\t//缝合进的文件server线程\r\n\t\tThreadPoolManager.getFileServerExecutor().submit(new MyFileServer());\r\n\t\t//文件更新线程\r\n\t\tThreadPoolManager.getFileServerExecutor().submit(new FindFile(fileList));\r\n\t\tprimaryStage.show();\r\n\t}\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Server/src/main/java/com/lkw/server/ServerUI.java b/Server/src/main/java/com/lkw/server/ServerUI.java
+--- a/Server/src/main/java/com/lkw/server/ServerUI.java	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ b/Server/src/main/java/com/lkw/server/ServerUI.java	(date 1670132399693)
+@@ -34,8 +34,9 @@
+ 	ListView<String> fileListView = new ListView<>(fileList);
+ 
+ 
+-
+-
++	public static void main(String[] args) {
++		launch(args);
++	}
+ 	public void start(Stage primaryStage) throws Exception {
+ 
+ 		//右边 Received Message
+Index: Server/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n    <parent>\r\n        <groupId>org.springframework.boot</groupId>\r\n        <artifactId>spring-boot-starter-parent</artifactId>\r\n        <version>2.7.4</version>\r\n        <relativePath/> <!-- lookup parent from repository -->\r\n    </parent>\r\n    <modelVersion>4.0.0</modelVersion>\r\n\r\n    <groupId>com.lkw</groupId>\r\n    <artifactId>Server</artifactId>\r\n    <version>0.0.1-SNAPSHOT</version>\r\n    <name>Server</name>\r\n    <description>Server</description>\r\n\r\n\r\n    <dependencies>\r\n\r\n\r\n\r\n        <dependency>\r\n            <groupId>org.chat</groupId>\r\n            <artifactId>Tools</artifactId>\r\n            <version>1.0-SNAPSHOT</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>com.alibaba.fastjson2</groupId>\r\n            <artifactId>fastjson2</artifactId>\r\n            <version>2.0.19</version>\r\n        </dependency>\r\n\r\n        <!-- 导入mybatis-plus相关依赖 -->\r\n        <dependency>\r\n            <groupId>com.baomidou</groupId>\r\n            <artifactId>mybatis-plus</artifactId>\r\n            <version>3.5.2</version>\r\n        </dependency>\r\n\r\n        <!-- 引入lombok -->\r\n        <dependency>\r\n            <groupId>org.projectlombok</groupId>\r\n            <artifactId>lombok</artifactId>\r\n            <version>1.18.24</version>\r\n            <scope>provided</scope>\r\n        </dependency>\r\n\r\n        <!-- 数据库驱动 -->\r\n        <dependency>\r\n            <groupId>mysql</groupId>\r\n            <artifactId>mysql-connector-java</artifactId>\r\n            <version>8.0.30</version>\r\n        </dependency>\r\n\r\n        <dependency>\r\n            <groupId>org.springframework</groupId>\r\n            <artifactId>spring-jdbc</artifactId>\r\n            <version>5.3.23</version>\r\n        </dependency>\r\n\r\n\r\n\r\n    </dependencies>\r\n\r\n    <build>\r\n        <plugins>\r\n            <plugin>\r\n                <groupId>org.springframework.boot</groupId>\r\n                <artifactId>spring-boot-maven-plugin</artifactId>\r\n            </plugin>\r\n        </plugins>\r\n    </build>\r\n\r\n</project>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Server/pom.xml b/Server/pom.xml
+--- a/Server/pom.xml	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ b/Server/pom.xml	(date 1670131683931)
+@@ -8,7 +8,7 @@
+         <relativePath/> <!-- lookup parent from repository -->
+     </parent>
+     <modelVersion>4.0.0</modelVersion>
+-
++<packaging>jar</packaging>
+     <groupId>com.lkw</groupId>
+     <artifactId>Server</artifactId>
+     <version>0.0.1-SNAPSHOT</version>
+Index: Server/src/main/java/com/lkw/server/Server/NioClient.java
+===================================================================
+diff --git a/Server/src/main/java/com/lkw/server/Server/NioClient.java b/Server/src/main/java/com/lkw/server/Server/NioClient.java
+deleted file mode 100644
+--- a/Server/src/main/java/com/lkw/server/Server/NioClient.java	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ /dev/null	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
+@@ -1,120 +0,0 @@
+-package com.lkw.server.Server;
+-
+-
+-
+-import com.tool.Message;
+-import com.tool.Utils;
+-import lombok.extern.slf4j.Slf4j;
+-
+-import java.io.IOException;
+-import java.net.InetSocketAddress;
+-import java.nio.ByteBuffer;
+-import java.nio.channels.SelectionKey;
+-import java.nio.channels.Selector;
+-import java.nio.channels.SocketChannel;
+-import java.util.Iterator;
+-import java.util.Scanner;
+-
+-import static com.tool.FinalValue.*;
+-
+-
+-/**
+- * @author mazouri
+- * @create 2021-04-29 12:02
+- */
+-@Slf4j
+-public class NioClient {
+-	private Selector selector;
+-	private SocketChannel socketChannel;
+-	private String username;
+-	private static Scanner input;
+-
+-	public NioClient() throws IOException {
+-		selector = Selector.open();
+-		socketChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 8888));
+-		socketChannel.configureBlocking(false);
+-		socketChannel.register(selector, SelectionKey.OP_READ);
+-		log. info("client启动完成......");
+-		log. info("请输入你的名字完成注册");
+-		input = new Scanner(System.in);
+-		username = input.next();
+-		log. info("欢迎{}来到聊天系统", username);
+-	}
+-
+-	public static void main(String[] args) throws IOException {
+-		System.out.println("tips: \n" +
+-				"1. 直接发送消息会发给当前的所有用户 \n" +
+-				"2. @用户名:消息  会私发给你要发送的用户 \n" +
+-				"3. 输入  查询在线用户  会显示当前的在线用户");
+-		NioClient client = new NioClient();
+-
+-		//启动一个子线程接受服务器发送过来的消息
+-		new Thread(() -> {
+-			try {
+-				client.acceptMessageFromServer();
+-			} catch (Exception e) {
+-				e.printStackTrace();
+-			}
+-		}, "receiveClientThread").start();
+-
+-		//调用sendMessageToServer,发送消息到服务端
+-		client.sendMessageToServer();
+-	}
+-
+-	/**
+-	 * 将消息发送到服务端
+-	 *
+-	 * @throws IOException
+-	 */
+-	private void sendMessageToServer() throws IOException {
+-		//先把用户名发给客户端
+-		Message message = new Message(MSG_NAME, username);
+-		byte[] bytes = Utils.encode(message);
+-
+-		socketChannel.write(ByteBuffer.wrap(bytes));
+-		while (input.hasNextLine()) {
+-			String msgStr = input.next();
+-
+-			Message msg;
+-			boolean isPrivate = msgStr.startsWith("@");
+-			if (isPrivate) {
+-				int idx = msgStr.indexOf(":");
+-				String targetName = msgStr.substring(1, idx);
+-				msgStr = msgStr.substring(idx + 1);
+-				msg = new Message(MSG_PRIVATE, targetName + "_" + msgStr);
+-			} else if ("查询在线用户".equals(msgStr)) {
+-				msg = new Message(MSG_ONLINE, "请求在线人数");
+-			} else {
+-				msg = new Message(MSG_GROUP, msgStr);
+-			}
+-
+-			byte[] bytes1 = Utils.encode(msg);
+-			socketChannel.write(ByteBuffer.wrap(bytes1));
+-		}
+-
+-		System.out.println("over1");
+-	}
+-
+-	/**
+-	 * 接受从服务器发送过来的消息
+-	 */
+-	private void acceptMessageFromServer() throws Exception {
+-		while (true) {
+-			selector.select();
+-			Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+-			while (iterator.hasNext()) {
+-				SelectionKey key = iterator.next();
+-				iterator.remove();
+-				if (key.isReadable()) {
+-					SocketChannel sc = (SocketChannel) key.channel();
+-					ByteBuffer buffer = ByteBuffer.allocate(1024);
+-					sc.read(buffer);
+-					Message message = Utils.decode(buffer.array());
+-					log. info(String.valueOf(message.message));
+-				}
+-			}
+-		}
+-
+-	}
+-}
+-
+Index: target/classes/main.fxml
+===================================================================
+diff --git a/target/classes/main.fxml b/target/classes/main.fxml
+deleted file mode 100644
+--- a/target/classes/main.fxml	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ /dev/null	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
+@@ -1,27 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-
+-<?import javafx.scene.control.Button?>
+-<?import javafx.scene.control.TextArea?>
+-<?import javafx.scene.layout.AnchorPane?>
+-<?import javafx.scene.shape.Rectangle?>
+-<?import javafx.scene.text.Font?>
+-<?import javafx.scene.web.WebView?>
+-
+-
+-<AnchorPane   maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="591.0" prefWidth="918.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+-   <children>
+-      <Button layoutX="755.0" layoutY="540.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="147.0" text="发送">
+-         <font>
+-            <Font size="16.0" />
+-         </font>
+-      </Button>
+-      <Button layoutX="755.0" layoutY="498.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="147.0" text="发送文件">
+-         <font>
+-            <Font size="16.0" />
+-         </font>
+-      </Button>
+-      <TextArea layoutX="14.0" layoutY="375.0" prefHeight="200.0" prefWidth="728.0" />
+-      <WebView layoutX="14.0" layoutY="14.0" prefHeight="347.0" prefWidth="890.0" />
+-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#03b0ff52" height="109.0" layoutX="755.0" layoutY="375.0" stroke="TRANSPARENT" strokeType="INSIDE" width="147.0" />
+-   </children>
+-</AnchorPane>
+Index: Server/target/classes/application.yml
+===================================================================
+diff --git a/Server/target/classes/application.yml b/Server/target/classes/application.yml
+deleted file mode 100644
+--- a/Server/target/classes/application.yml	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ /dev/null	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
+@@ -1,3 +0,0 @@
+-spring:
+-  application:
+-    name: Server
+\ No newline at end of file
+Index: Client/target/classes/META-INF/MANIFEST.MF
+===================================================================
+diff --git a/Client/target/classes/META-INF/MANIFEST.MF b/Client/target/classes/META-INF/MANIFEST.MF
+deleted file mode 100644
+--- a/Client/target/classes/META-INF/MANIFEST.MF	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ /dev/null	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
+@@ -1,3 +0,0 @@
+-Manifest-Version: 1.0
+-Main-Class: com.lkw.client.ClientApplication
+-
+Index: target/classes/login.fxml
+===================================================================
+diff --git a/target/classes/login.fxml b/target/classes/login.fxml
+deleted file mode 100644
+--- a/target/classes/login.fxml	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ /dev/null	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
+@@ -1,34 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-
+-<?import javafx.scene.control.Button?>
+-<?import javafx.scene.control.CheckBox?>
+-<?import javafx.scene.control.TextField?>
+-<?import javafx.scene.layout.AnchorPane?>
+-<?import javafx.scene.text.Font?>
+-
+-
+-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="294.0" prefWidth="506.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+-   <children>
+-      <TextField layoutX="91.0" layoutY="43.0">
+-         <font>
+-            <Font size="15.0" />
+-         </font>
+-      </TextField>
+-      <TextField layoutX="91.0" layoutY="111.0">
+-         <font>
+-            <Font size="15.0" />
+-         </font>
+-      </TextField>
+-      <Button layoutX="91.0" layoutY="180.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="116.0" text="登录">
+-         <font>
+-            <Font size="16.0" />
+-         </font>
+-      </Button>
+-      <Button layoutX="293.0" layoutY="180.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="116.0" text="注册">
+-         <font>
+-            <Font size="16.0" />
+-         </font>
+-      </Button>
+-      <CheckBox layoutX="91.0" layoutY="242.0" mnemonicParsing="false" text="我已阅读并同意服务条款、隐私政策" />
+-   </children>
+-</AnchorPane>
+Index: Client/target/surefire-reports/com.lkw.client.ClientApplicationTests.txt
+===================================================================
+diff --git a/Client/target/surefire-reports/com.lkw.client.ClientApplicationTests.txt b/Client/target/surefire-reports/com.lkw.client.ClientApplicationTests.txt
+deleted file mode 100644
+--- a/Client/target/surefire-reports/com.lkw.client.ClientApplicationTests.txt	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ /dev/null	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
+@@ -1,7 +0,0 @@
+--------------------------------------------------------------------------------
+-Test set: com.lkw.client.ClientApplicationTests
+--------------------------------------------------------------------------------
+-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.268 s <<< FAILURE! - in com.lkw.client.ClientApplicationTests
+-com.lkw.client.ClientApplicationTests  Time elapsed: 0.266 s  <<< ERROR!
+-java.lang.IllegalStateException: Found multiple @SpringBootConfiguration annotated classes [Generic bean: class [com.lkw.client.ClientApplication]; scope=; abstract=false; lazyInit=null; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [D:\work\javacode\QQ_Chat\Client\target\classes\com\lkw\client\ClientApplication.class], Generic bean: class [com.lkw.client.ClientApplication2]; scope=; abstract=false; lazyInit=null; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [D:\work\javacode\QQ_Chat\Client\target\classes\com\lkw\client\ClientApplication2.class]]
+-
+Index: Client/target/surefire-reports/TEST-com.lkw.client.ClientApplicationTests.xml
+===================================================================
+diff --git a/Client/target/surefire-reports/TEST-com.lkw.client.ClientApplicationTests.xml b/Client/target/surefire-reports/TEST-com.lkw.client.ClientApplicationTests.xml
+deleted file mode 100644
+--- a/Client/target/surefire-reports/TEST-com.lkw.client.ClientApplicationTests.xml	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ /dev/null	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
+@@ -1,80 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.lkw.client.ClientApplicationTests" time="0.268" tests="1" errors="1" skipped="0" failures="0">
+-  <properties>
+-    <property name="sun.desktop" value="windows"/>
+-    <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+-    <property name="file.encoding.pkg" value="sun.io"/>
+-    <property name="java.specification.version" value="1.8"/>
+-    <property name="sun.cpu.isalist" value="amd64"/>
+-    <property name="sun.jnu.encoding" value="GBK"/>
+-    <property name="java.class.path" value="D:\work\javacode\QQ_Chat\Client\target\test-classes;D:\work\javacode\QQ_Chat\Client\target\classes;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot-starter\2.7.4\spring-boot-starter-2.7.4.jar;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot\2.7.4\spring-boot-2.7.4.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-context\5.3.23\spring-context-5.3.23.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-aop\5.3.23\spring-aop-5.3.23.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-beans\5.3.23\spring-beans-5.3.23.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-expression\5.3.23\spring-expression-5.3.23.jar;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\2.7.4\spring-boot-autoconfigure-2.7.4.jar;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot-starter-logging\2.7.4\spring-boot-starter-logging-2.7.4.jar;C:\Users\李可文\.m2\repository\ch\qos\logback\logback-classic\1.2.11\logback-classic-1.2.11.jar;C:\Users\李可文\.m2\repository\ch\qos\logback\logback-core\1.2.11\logback-core-1.2.11.jar;C:\Users\李可文\.m2\repository\org\apache\logging\log4j\log4j-to-slf4j\2.17.2\log4j-to-slf4j-2.17.2.jar;C:\Users\李可文\.m2\repository\org\apache\logging\log4j\log4j-api\2.17.2\log4j-api-2.17.2.jar;C:\Users\李可文\.m2\repository\org\slf4j\jul-to-slf4j\1.7.36\jul-to-slf4j-1.7.36.jar;C:\Users\李可文\.m2\repository\jakarta\annotation\jakarta.annotation-api\1.3.5\jakarta.annotation-api-1.3.5.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-core\5.3.23\spring-core-5.3.23.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-jcl\5.3.23\spring-jcl-5.3.23.jar;C:\Users\李可文\.m2\repository\org\yaml\snakeyaml\1.30\snakeyaml-1.30.jar;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot-starter-test\2.7.4\spring-boot-starter-test-2.7.4.jar;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot-test\2.7.4\spring-boot-test-2.7.4.jar;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot-test-autoconfigure\2.7.4\spring-boot-test-autoconfigure-2.7.4.jar;C:\Users\李可文\.m2\repository\com\jayway\jsonpath\json-path\2.7.0\json-path-2.7.0.jar;C:\Users\李可文\.m2\repository\net\minidev\json-smart\2.4.8\json-smart-2.4.8.jar;C:\Users\李可文\.m2\repository\net\minidev\accessors-smart\2.4.8\accessors-smart-2.4.8.jar;C:\Users\李可文\.m2\repository\org\ow2\asm\asm\9.1\asm-9.1.jar;C:\Users\李可文\.m2\repository\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\李可文\.m2\repository\jakarta\xml\bind\jakarta.xml.bind-api\2.3.3\jakarta.xml.bind-api-2.3.3.jar;C:\Users\李可文\.m2\repository\jakarta\activation\jakarta.activation-api\1.2.2\jakarta.activation-api-1.2.2.jar;C:\Users\李可文\.m2\repository\org\assertj\assertj-core\3.22.0\assertj-core-3.22.0.jar;C:\Users\李可文\.m2\repository\org\hamcrest\hamcrest\2.2\hamcrest-2.2.jar;C:\Users\李可文\.m2\repository\org\junit\jupiter\junit-jupiter\5.8.2\junit-jupiter-5.8.2.jar;C:\Users\李可文\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.8.2\junit-jupiter-api-5.8.2.jar;C:\Users\李可文\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\李可文\.m2\repository\org\junit\platform\junit-platform-commons\1.8.2\junit-platform-commons-1.8.2.jar;C:\Users\李可文\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\李可文\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.8.2\junit-jupiter-params-5.8.2.jar;C:\Users\李可文\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.8.2\junit-jupiter-engine-5.8.2.jar;C:\Users\李可文\.m2\repository\org\junit\platform\junit-platform-engine\1.8.2\junit-platform-engine-1.8.2.jar;C:\Users\李可文\.m2\repository\org\mockito\mockito-core\4.5.1\mockito-core-4.5.1.jar;C:\Users\李可文\.m2\repository\net\bytebuddy\byte-buddy\1.12.17\byte-buddy-1.12.17.jar;C:\Users\李可文\.m2\repository\net\bytebuddy\byte-buddy-agent\1.12.17\byte-buddy-agent-1.12.17.jar;C:\Users\李可文\.m2\repository\org\objenesis\objenesis\3.2\objenesis-3.2.jar;C:\Users\李可文\.m2\repository\org\mockito\mockito-junit-jupiter\4.5.1\mockito-junit-jupiter-4.5.1.jar;C:\Users\李可文\.m2\repository\org\skyscreamer\jsonassert\1.5.1\jsonassert-1.5.1.jar;C:\Users\李可文\.m2\repository\com\vaadin\external\google\android-json\0.0.20131108.vaadin1\android-json-0.0.20131108.vaadin1.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-test\5.3.23\spring-test-5.3.23.jar;C:\Users\李可文\.m2\repository\org\xmlunit\xmlunit-core\2.9.0\xmlunit-core-2.9.0.jar;"/>
+-    <property name="java.vm.vendor" value="Oracle Corporation"/>
+-    <property name="sun.arch.data.model" value="64"/>
+-    <property name="user.variant" value=""/>
+-    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+-    <property name="user.timezone" value="Asia/Shanghai"/>
+-    <property name="java.vm.specification.version" value="1.8"/>
+-    <property name="os.name" value="Windows 10"/>
+-    <property name="user.country" value="CN"/>
+-    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+-    <property name="sun.boot.library.path" value="D:\work\jdk\jdk1.8_231\jre\bin"/>
+-    <property name="sun.java.command" value="C:\Users\李可文\AppData\Local\Temp\surefire7486327577753583436\surefirebooter946295920860587397.jar C:\Users\李可文\AppData\Local\Temp\surefire7486327577753583436 2022-10-19T11-37-08_322-jvmRun1 surefire3483204002319016280tmp surefire_01999996106781890766tmp"/>
+-    <property name="surefire.test.class.path" value="D:\work\javacode\QQ_Chat\Client\target\test-classes;D:\work\javacode\QQ_Chat\Client\target\classes;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot-starter\2.7.4\spring-boot-starter-2.7.4.jar;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot\2.7.4\spring-boot-2.7.4.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-context\5.3.23\spring-context-5.3.23.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-aop\5.3.23\spring-aop-5.3.23.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-beans\5.3.23\spring-beans-5.3.23.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-expression\5.3.23\spring-expression-5.3.23.jar;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\2.7.4\spring-boot-autoconfigure-2.7.4.jar;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot-starter-logging\2.7.4\spring-boot-starter-logging-2.7.4.jar;C:\Users\李可文\.m2\repository\ch\qos\logback\logback-classic\1.2.11\logback-classic-1.2.11.jar;C:\Users\李可文\.m2\repository\ch\qos\logback\logback-core\1.2.11\logback-core-1.2.11.jar;C:\Users\李可文\.m2\repository\org\apache\logging\log4j\log4j-to-slf4j\2.17.2\log4j-to-slf4j-2.17.2.jar;C:\Users\李可文\.m2\repository\org\apache\logging\log4j\log4j-api\2.17.2\log4j-api-2.17.2.jar;C:\Users\李可文\.m2\repository\org\slf4j\jul-to-slf4j\1.7.36\jul-to-slf4j-1.7.36.jar;C:\Users\李可文\.m2\repository\jakarta\annotation\jakarta.annotation-api\1.3.5\jakarta.annotation-api-1.3.5.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-core\5.3.23\spring-core-5.3.23.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-jcl\5.3.23\spring-jcl-5.3.23.jar;C:\Users\李可文\.m2\repository\org\yaml\snakeyaml\1.30\snakeyaml-1.30.jar;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot-starter-test\2.7.4\spring-boot-starter-test-2.7.4.jar;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot-test\2.7.4\spring-boot-test-2.7.4.jar;C:\Users\李可文\.m2\repository\org\springframework\boot\spring-boot-test-autoconfigure\2.7.4\spring-boot-test-autoconfigure-2.7.4.jar;C:\Users\李可文\.m2\repository\com\jayway\jsonpath\json-path\2.7.0\json-path-2.7.0.jar;C:\Users\李可文\.m2\repository\net\minidev\json-smart\2.4.8\json-smart-2.4.8.jar;C:\Users\李可文\.m2\repository\net\minidev\accessors-smart\2.4.8\accessors-smart-2.4.8.jar;C:\Users\李可文\.m2\repository\org\ow2\asm\asm\9.1\asm-9.1.jar;C:\Users\李可文\.m2\repository\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\李可文\.m2\repository\jakarta\xml\bind\jakarta.xml.bind-api\2.3.3\jakarta.xml.bind-api-2.3.3.jar;C:\Users\李可文\.m2\repository\jakarta\activation\jakarta.activation-api\1.2.2\jakarta.activation-api-1.2.2.jar;C:\Users\李可文\.m2\repository\org\assertj\assertj-core\3.22.0\assertj-core-3.22.0.jar;C:\Users\李可文\.m2\repository\org\hamcrest\hamcrest\2.2\hamcrest-2.2.jar;C:\Users\李可文\.m2\repository\org\junit\jupiter\junit-jupiter\5.8.2\junit-jupiter-5.8.2.jar;C:\Users\李可文\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.8.2\junit-jupiter-api-5.8.2.jar;C:\Users\李可文\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\李可文\.m2\repository\org\junit\platform\junit-platform-commons\1.8.2\junit-platform-commons-1.8.2.jar;C:\Users\李可文\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\李可文\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.8.2\junit-jupiter-params-5.8.2.jar;C:\Users\李可文\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.8.2\junit-jupiter-engine-5.8.2.jar;C:\Users\李可文\.m2\repository\org\junit\platform\junit-platform-engine\1.8.2\junit-platform-engine-1.8.2.jar;C:\Users\李可文\.m2\repository\org\mockito\mockito-core\4.5.1\mockito-core-4.5.1.jar;C:\Users\李可文\.m2\repository\net\bytebuddy\byte-buddy\1.12.17\byte-buddy-1.12.17.jar;C:\Users\李可文\.m2\repository\net\bytebuddy\byte-buddy-agent\1.12.17\byte-buddy-agent-1.12.17.jar;C:\Users\李可文\.m2\repository\org\objenesis\objenesis\3.2\objenesis-3.2.jar;C:\Users\李可文\.m2\repository\org\mockito\mockito-junit-jupiter\4.5.1\mockito-junit-jupiter-4.5.1.jar;C:\Users\李可文\.m2\repository\org\skyscreamer\jsonassert\1.5.1\jsonassert-1.5.1.jar;C:\Users\李可文\.m2\repository\com\vaadin\external\google\android-json\0.0.20131108.vaadin1\android-json-0.0.20131108.vaadin1.jar;C:\Users\李可文\.m2\repository\org\springframework\spring-test\5.3.23\spring-test-5.3.23.jar;C:\Users\李可文\.m2\repository\org\xmlunit\xmlunit-core\2.9.0\xmlunit-core-2.9.0.jar;"/>
+-    <property name="sun.cpu.endian" value="little"/>
+-    <property name="user.home" value="C:\Users\李可文"/>
+-    <property name="user.language" value="zh"/>
+-    <property name="java.specification.vendor" value="Oracle Corporation"/>
+-    <property name="java.home" value="D:\work\jdk\jdk1.8_231\jre"/>
+-    <property name="basedir" value="D:\work\javacode\QQ_Chat\Client"/>
+-    <property name="file.separator" value="\"/>
+-    <property name="line.separator" value="&#10;"/>
+-    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+-    <property name="java.specification.name" value="Java Platform API Specification"/>
+-    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
+-    <property name="surefire.real.class.path" value="C:\Users\李可文\AppData\Local\Temp\surefire7486327577753583436\surefirebooter946295920860587397.jar"/>
+-    <property name="sun.boot.class.path" value="D:\work\jdk\jdk1.8_231\jre\lib\resources.jar;D:\work\jdk\jdk1.8_231\jre\lib\rt.jar;D:\work\jdk\jdk1.8_231\jre\lib\sunrsasign.jar;D:\work\jdk\jdk1.8_231\jre\lib\jsse.jar;D:\work\jdk\jdk1.8_231\jre\lib\jce.jar;D:\work\jdk\jdk1.8_231\jre\lib\charsets.jar;D:\work\jdk\jdk1.8_231\jre\lib\jfr.jar;D:\work\jdk\jdk1.8_231\jre\classes"/>
+-    <property name="user.script" value=""/>
+-    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+-    <property name="java.runtime.version" value="1.8.0_231-b11"/>
+-    <property name="user.name" value="李可文"/>
+-    <property name="path.separator" value=";"/>
+-    <property name="os.version" value="10.0"/>
+-    <property name="java.endorsed.dirs" value="D:\work\jdk\jdk1.8_231\jre\lib\endorsed"/>
+-    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+-    <property name="file.encoding" value="GBK"/>
+-    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+-    <property name="localRepository" value="C:\Users\李可文\.m2\repository"/>
+-    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+-    <property name="java.io.tmpdir" value="C:\Users\李可文\AppData\Local\Temp\"/>
+-    <property name="idea.version" value="2022.1.1"/>
+-    <property name="java.version" value="1.8.0_231"/>
+-    <property name="user.dir" value="D:\work\javacode\QQ_Chat\Client"/>
+-    <property name="os.arch" value="amd64"/>
+-    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+-    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
+-    <property name="sun.os.patch.level" value=""/>
+-    <property name="java.library.path" value="D:\work\jdk\jdk1.8_231\jre\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;D:\work\VMware_Workstation\bin\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;D:\work\Xshell\;&quot;C:\Program Files\Java\jdk1.8.0_333\bin;C:\Program Files\Java\jdk1.8.0_333\jre\bin;&quot;;D:\work\mysql\mysql8.0\mysql8.0\bin;D:\work\Xftp\;D:\work\Git\Git\cmd;D:\work\node_js\;D:\Program Files\Polyspace\R2021a\runtime\win64;D:\Program Files\Polyspace\R2021a\bin;D:\Program Files\Polyspace\R2021a\polyspace\bin;C:\Users\李可文\AppData\Local\Microsoft\WindowsApps;D:\work\idea\IntelliJ IDEA 2022.1.1\bin;C:\Users\李可文\AppData\Roaming\npm;D:\work\Microsoft VS Code\bin;."/>
+-    <property name="java.vm.info" value="mixed mode"/>
+-    <property name="java.vendor" value="Oracle Corporation"/>
+-    <property name="java.vm.version" value="25.231-b11"/>
+-    <property name="java.ext.dirs" value="D:\work\jdk\jdk1.8_231\jre\lib\ext;C:\Windows\Sun\Java\lib\ext"/>
+-    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+-    <property name="java.class.version" value="52.0"/>
+-  </properties>
+-  <testcase name="com.lkw.client.ClientApplicationTests" classname="com.lkw.client.ClientApplicationTests" time="0.266">
+-    <error message="Found multiple @SpringBootConfiguration annotated classes [Generic bean: class [com.lkw.client.ClientApplication]; scope=; abstract=false; lazyInit=null; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [D:\work\javacode\QQ_Chat\Client\target\classes\com\lkw\client\ClientApplication.class], Generic bean: class [com.lkw.client.ClientApplication2]; scope=; abstract=false; lazyInit=null; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [D:\work\javacode\QQ_Chat\Client\target\classes\com\lkw\client\ClientApplication2.class]]" type="java.lang.IllegalStateException">java.lang.IllegalStateException: Found multiple @SpringBootConfiguration annotated classes [Generic bean: class [com.lkw.client.ClientApplication]; scope=; abstract=false; lazyInit=null; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [D:\work\javacode\QQ_Chat\Client\target\classes\com\lkw\client\ClientApplication.class], Generic bean: class [com.lkw.client.ClientApplication2]; scope=; abstract=false; lazyInit=null; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [D:\work\javacode\QQ_Chat\Client\target\classes\com\lkw\client\ClientApplication2.class]]
+-</error>
+-    <system-out><![CDATA[11:37:09.461 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating CacheAwareContextLoaderDelegate from class [org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate]
+-11:37:09.474 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating BootstrapContext using constructor [public org.springframework.test.context.support.DefaultBootstrapContext(java.lang.Class,org.springframework.test.context.CacheAwareContextLoaderDelegate)]
+-11:37:09.506 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating TestContextBootstrapper for test class [com.lkw.client.ClientApplicationTests] from class [org.springframework.boot.test.context.SpringBootTestContextBootstrapper]
+-11:37:09.522 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.lkw.client.ClientApplicationTests], using SpringBootContextLoader
+-11:37:09.527 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.lkw.client.ClientApplicationTests]: class path resource [com/lkw/client/ClientApplicationTests-context.xml] does not exist
+-11:37:09.528 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.lkw.client.ClientApplicationTests]: class path resource [com/lkw/client/ClientApplicationTestsContext.groovy] does not exist
+-11:37:09.528 [main] INFO org.springframework.test.context.support.AbstractContextLoader - Could not detect default resource locations for test class [com.lkw.client.ClientApplicationTests]: no resource found for suffixes {-context.xml, Context.groovy}.
+-11:37:09.529 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lkw.client.ClientApplicationTests]: ClientApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+-11:37:09.572 [main] DEBUG org.springframework.test.context.support.ActiveProfilesUtils - Could not find an 'annotation declaring class' for annotation type [org.springframework.test.context.ActiveProfiles] and class [com.lkw.client.ClientApplicationTests]
+-11:37:09.635 [main] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider - Identified candidate component class: file [D:\work\javacode\QQ_Chat\Client\target\classes\com\lkw\client\ClientApplication.class]
+-11:37:09.643 [main] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider - Identified candidate component class: file [D:\work\javacode\QQ_Chat\Client\target\classes\com\lkw\client\ClientApplication2.class]
+-]]></system-out>
+-  </testcase>
+-</testsuite>
+\ No newline at end of file
+Index: Client/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>D:\\work\\javacode\\QQ_Chat\\Client\\src\\main\\java\\com\\lkw\\client\\ClientController\\LoginController.java\r\nD:\\work\\javacode\\QQ_Chat\\Client\\src\\main\\java\\com\\lkw\\client\\Utils\\MyClient.java\r\nD:\\work\\javacode\\QQ_Chat\\Client\\src\\main\\java\\com\\lkw\\client\\MainStart.java\r\nD:\\work\\javacode\\QQ_Chat\\Client\\src\\main\\java\\com\\lkw\\client\\ClientController\\MainController.java\r\nD:\\work\\javacode\\QQ_Chat\\Client\\src\\main\\java\\com\\lkw\\client\\ClientApplication.java\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst b/Client/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+--- a/Client/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ b/Client/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst	(date 1670132414011)
+@@ -1,5 +1,6 @@
+-D:\work\javacode\QQ_Chat\Client\src\main\java\com\lkw\client\ClientController\LoginController.java
+-D:\work\javacode\QQ_Chat\Client\src\main\java\com\lkw\client\Utils\MyClient.java
+-D:\work\javacode\QQ_Chat\Client\src\main\java\com\lkw\client\MainStart.java
+-D:\work\javacode\QQ_Chat\Client\src\main\java\com\lkw\client\ClientController\MainController.java
+-D:\work\javacode\QQ_Chat\Client\src\main\java\com\lkw\client\ClientApplication.java
++D:\CodeOfJava\NetWorkSubject\QQ_Chat_imitate\Client\src\main\java\com\lkw\client\Controller\JavafxController.java
++D:\CodeOfJava\NetWorkSubject\QQ_Chat_imitate\Client\src\main\java\com\lkw\client\Main.java
++D:\CodeOfJava\NetWorkSubject\QQ_Chat_imitate\Client\src\main\java\com\lkw\client\Thread\MyClientThread.java
++D:\CodeOfJava\NetWorkSubject\QQ_Chat_imitate\Client\src\main\java\com\lkw\client\Login.java
++D:\CodeOfJava\NetWorkSubject\QQ_Chat_imitate\Client\src\main\java\com\lkw\client\Thread\MyFileThread.java
++D:\CodeOfJava\NetWorkSubject\QQ_Chat_imitate\Client\src\main\java\com\lkw\client\Controller\LoginController.java
+Index: Client/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>com\\lkw\\client\\ClientController\\MainController.class\r\ncom\\lkw\\client\\ClientApplication.class\r\ncom\\lkw\\client\\MainStart.class\r\ncom\\lkw\\client\\Utils\\MyClient.class\r\ncom\\lkw\\client\\ClientController\\LoginController.class\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst b/Client/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+--- a/Client/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ b/Client/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst	(date 1670131730044)
+@@ -1,5 +1,8 @@
+-com\lkw\client\ClientController\MainController.class
+-com\lkw\client\ClientApplication.class
+-com\lkw\client\MainStart.class
+-com\lkw\client\Utils\MyClient.class
+-com\lkw\client\ClientController\LoginController.class
++com\lkw\client\Thread\MyFileThread.class
++com\lkw\client\Login.class
++com\lkw\client\Thread\MyClientThread$1.class
++com\lkw\client\Main.class
++com\lkw\client\Controller\LoginController$MyLoginThread.class
++com\lkw\client\Controller\JavafxController.class
++com\lkw\client\Thread\MyClientThread.class
++com\lkw\client\Controller\LoginController.class
+Index: Client/target/maven-archiver/pom.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>artifactId=Client\r\ngroupId=com.lkw\r\nversion=0.0.1-SNAPSHOT\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/target/maven-archiver/pom.properties b/Client/target/maven-archiver/pom.properties
+--- a/Client/target/maven-archiver/pom.properties	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ b/Client/target/maven-archiver/pom.properties	(date 1670131730072)
+@@ -1,3 +1,5 @@
+-artifactId=Client
+-groupId=com.lkw
++#Generated by Maven
++#Sun Dec 04 13:28:50 CST 2022
+ version=0.0.1-SNAPSHOT
++groupId=com.lkw
++artifactId=Client
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ArtifactsWorkspaceSettings\">\r\n    <artifacts-to-build>\r\n      <artifact name=\"Client:jar\" />\r\n    </artifacts-to-build>\r\n  </component>\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"3cea0fed-dc54-4249-a389-a55d229ef605\" name=\"Changes\" comment=\"客户端消息收发变为nio&#10;   --shaw\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/dataSources.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/dataSources.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/pom.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/pom.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/src/main/resources/main.fxml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/src/main/resources/main.fxml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/src/test/java/com/lkw/client/ClientApplicationTests.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/javafxController.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/javafxController.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread$1.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread$1.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/target/classes/main.fxml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/target/classes/main.fxml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/target/test-classes/com/lkw/client/ClientApplicationTests.class\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Pull.Settings\">\r\n    <option name=\"OPTIONS\">\r\n      <set>\r\n        <option value=\"REBASE\" />\r\n      </set>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n    <option name=\"RESET_MODE\" value=\"HARD\" />\r\n  </component>\r\n  <component name=\"GitSEFilterConfiguration\">\r\n    <file-type-list>\r\n      <filtered-out-file-type name=\"LOCAL_BRANCH\" />\r\n      <filtered-out-file-type name=\"REMOTE_BRANCH\" />\r\n      <filtered-out-file-type name=\"TAG\" />\r\n      <filtered-out-file-type name=\"COMMIT_BY_MESSAGE\" />\r\n    </file-type-list>\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProblemsViewState\">\r\n    <option name=\"selectedTabId\" value=\"CurrentFile\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2F6M1wAhtbG0LxT4tE4zrIoP6u8\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CreateClassDialog.RecentsKey\">\r\n      <recent name=\"com.lkw.server\" />\r\n      <recent name=\"com.lkw.client.Controller\" />\r\n    </key>\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"D:\\work\\javacode\\QQ_Chat\\MyFile\" />\r\n      <recent name=\"D:\\CodeOfJava\\NetWorkSubject\\QQ_Chat_imitate\\Tools\\src\\main\\java\" />\r\n      <recent name=\"D:\\CodeOfJava\\NetWorkSubject\\QQ_Chat_imitate\\Server\\src\\main\\java\\com\\lkw\\server\\Utils\" />\r\n      <recent name=\"D:\\work\\javacode\\QQ_Chat\\Server\\src\\main\\java\\com\\lkw\\server\" />\r\n      <recent name=\"D:\\work\\javacode\\QQ_Chat\\Server\\src\\test\\java\\com\\lkw\\server\" />\r\n    </key>\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"D:\\work\\javacode\\QQ_Chat\\src\\main\\resources\" />\r\n      <recent name=\"D:\\work\\javacode\\QQ_Chat\\src\\main\\java\\org\\lkw\" />\r\n    </key>\r\n    <key name=\"CopyClassDialog.RECENTS_KEY\">\r\n      <recent name=\"com.lkw.server.Server\" />\r\n      <recent name=\"com.lkw.client\" />\r\n      <recent name=\"com.lkw.client.Client\" />\r\n      <recent name=\"com.lkw.server\" />\r\n      <recent name=\"com.lkw.client.Controller\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunDashboard\">\r\n    <option name=\"configurationTypes\">\r\n      <set>\r\n        <option value=\"SpringBootApplicationConfigurationType\" />\r\n      </set>\r\n    </option>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Application.Login\">\r\n    <configuration name=\"Login\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.lkw.client.Login\" />\r\n      <module name=\"Client\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.lkw.client.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" singleton=\"false\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.lkw.client.Main\" />\r\n      <module name=\"Client\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.lkw.client.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"NioClient (1)\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.lkw.server.Server.NioClient\" />\r\n      <module name=\"Server\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.lkw.server.Server.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"NioClient\" type=\"Application\" factoryName=\"Application\" singleton=\"false\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.lkw.server.Server.NioClient\" />\r\n      <module name=\"Server\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.lkw.server.Server.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"ServerUI\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.lkw.server.ServerUI\" />\r\n      <module name=\"Server\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.lkw.server.Server.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"test\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.lkw.test\" />\r\n      <module name=\"Server\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.lkw.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"ArquillianJUnit\" factoryName=\"\" nameIsGenerated=\"true\">\r\n      <option name=\"arquillianRunConfiguration\">\r\n        <value>\r\n          <option name=\"containerStateName\" value=\"\" />\r\n        </value>\r\n      </option>\r\n      <option name=\"TEST_OBJECT\" value=\"class\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"ClientApplication\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\">\r\n      <module name=\"Client\" />\r\n      <option name=\"SPRING_BOOT_MAIN_CLASS\" value=\"com.lkw.client.ClientApplication\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"ServerApplication\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\">\r\n      <module name=\"Server\" />\r\n      <option name=\"SPRING_BOOT_MAIN_CLASS\" value=\"com.lkw.server.ServerApplication\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"Application.NioClient\" />\r\n      <item itemvalue=\"Application.test\" />\r\n      <item itemvalue=\"Application.Login\" />\r\n      <item itemvalue=\"Application.Main\" />\r\n      <item itemvalue=\"Application.NioClient (1)\" />\r\n      <item itemvalue=\"Application.ServerUI\" />\r\n      <item itemvalue=\"Spring Boot.ClientApplication\" />\r\n      <item itemvalue=\"Spring Boot.ServerApplication\" />\r\n    </list>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Login\" />\r\n        <item itemvalue=\"Application.ServerUI\" />\r\n        <item itemvalue=\"Application.Main\" />\r\n        <item itemvalue=\"Application.test\" />\r\n        <item itemvalue=\"Application.NioClient (1)\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"3cea0fed-dc54-4249-a389-a55d229ef605\" name=\"Changes\" comment=\"\" />\r\n      <created>1663807871194</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1663807871194</updated>\r\n      <workItem from=\"1663807873290\" duration=\"6592000\" />\r\n      <workItem from=\"1663849790758\" duration=\"396000\" />\r\n      <workItem from=\"1663944857158\" duration=\"615000\" />\r\n      <workItem from=\"1663984770061\" duration=\"2267000\" />\r\n      <workItem from=\"1664082197102\" duration=\"953000\" />\r\n      <workItem from=\"1664366066395\" duration=\"2760000\" />\r\n      <workItem from=\"1665047611842\" duration=\"9325000\" />\r\n      <workItem from=\"1665066580048\" duration=\"153000\" />\r\n      <workItem from=\"1665066770623\" duration=\"804000\" />\r\n      <workItem from=\"1665574539989\" duration=\"396000\" />\r\n      <workItem from=\"1665803686964\" duration=\"7484000\" />\r\n      <workItem from=\"1665850707539\" duration=\"31000\" />\r\n      <workItem from=\"1665919383861\" duration=\"31351000\" />\r\n      <workItem from=\"1666018389675\" duration=\"5451000\" />\r\n      <workItem from=\"1666149982164\" duration=\"1285000\" />\r\n      <workItem from=\"1666242310918\" duration=\"955000\" />\r\n      <workItem from=\"1666246288076\" duration=\"6000\" />\r\n      <workItem from=\"1666264228301\" duration=\"322000\" />\r\n      <workItem from=\"1666265729704\" duration=\"3930000\" />\r\n      <workItem from=\"1666779287165\" duration=\"286000\" />\r\n      <workItem from=\"1666779597701\" duration=\"8670000\" />\r\n      <workItem from=\"1667202209829\" duration=\"1873000\" />\r\n      <workItem from=\"1667277759604\" duration=\"59000\" />\r\n      <workItem from=\"1667383971848\" duration=\"1316000\" />\r\n      <workItem from=\"1667390177544\" duration=\"702000\" />\r\n      <workItem from=\"1667395638524\" duration=\"3114000\" />\r\n      <workItem from=\"1667440465482\" duration=\"233000\" />\r\n      <workItem from=\"1667443928735\" duration=\"12310000\" />\r\n      <workItem from=\"1667523540428\" duration=\"8000\" />\r\n      <workItem from=\"1667559726989\" duration=\"12000\" />\r\n      <workItem from=\"1667612398360\" duration=\"12160000\" />\r\n      <workItem from=\"1668337106312\" duration=\"47837000\" />\r\n      <workItem from=\"1668581099009\" duration=\"22000\" />\r\n      <workItem from=\"1668593095422\" duration=\"42134000\" />\r\n      <workItem from=\"1668760562119\" duration=\"19375000\" />\r\n      <workItem from=\"1668840851282\" duration=\"11086000\" />\r\n      <workItem from=\"1670054093917\" duration=\"9059000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"基础代码\">\r\n      <created>1663814396212</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1663814396212</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"添加javafx图形界面,能打开,但是不能用\">\r\n      <created>1663988018847</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1663988018847</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"添加springboot,&#10;页面跳转逻辑完成\">\r\n      <created>1665065496855</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665065496855</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"添加springboot,&#10;页面跳转逻辑完成\">\r\n      <created>1665066371601</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665066371601</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"添加springboot,&#10;页面跳转逻辑完成\">\r\n      <created>1665066810364</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665066810364</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"添加部分页面逻辑\">\r\n      <created>1665831271079</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665831271079</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00007\" summary=\"添加socket,但是比较乱\">\r\n      <created>1666779434975</created>\r\n      <option name=\"number\" value=\"00007\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1666779434975</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00008\" summary=\"添加socket,但是比较乱\">\r\n      <created>1666779610566</created>\r\n      <option name=\"number\" value=\"00008\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00008\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1666779610566</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00009\" summary=\"添加文件上传\">\r\n      <created>1667628373417</created>\r\n      <option name=\"number\" value=\"00009\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00009\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1667628373417</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00010\" summary=\"文件上传合并\">\r\n      <created>1667634073245</created>\r\n      <option name=\"number\" value=\"00010\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00010\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1667634073245</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00011\" summary=\"文件上传合并\">\r\n      <created>1667634118154</created>\r\n      <option name=\"number\" value=\"00011\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00011\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1667634118154</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00012\" summary=\"完成文件发送接收,文本发送修改为json传送,更好拓展\">\r\n      <created>1668407412346</created>\r\n      <option name=\"number\" value=\"00012\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00012\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1668407412346</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00013\" summary=\"完成文件发送接收,文本发送修改为json传送,更好拓展\">\r\n      <created>1668407457644</created>\r\n      <option name=\"number\" value=\"00013\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00013\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1668407457644</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00014\" summary=\"服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw\">\r\n      <created>1668608710096</created>\r\n      <option name=\"number\" value=\"00014\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00014\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1668608710096</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00015\" summary=\"服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw\">\r\n      <created>1668608759226</created>\r\n      <option name=\"number\" value=\"00015\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00015\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1668608759226</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00016\" summary=\"客户端部分逻辑修改&#10;   --shaw\">\r\n      <created>1668664700231</created>\r\n      <option name=\"number\" value=\"00016\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00016\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1668664700231</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00017\" summary=\"客户端修改输入输出流&#10;   --shaw\">\r\n      <created>1668667328814</created>\r\n      <option name=\"number\" value=\"00017\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00017\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1668667328814</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"18\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.History.Properties\">\r\n    <option name=\"COLUMN_ID_ORDER\">\r\n      <list>\r\n        <option value=\"Default.Root\" />\r\n        <option value=\"Default.Author\" />\r\n        <option value=\"Default.Date\" />\r\n        <option value=\"Default.Subject\" />\r\n        <option value=\"Space.CommitStatus\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"master\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n    <option name=\"oldMeFiltersMigrated\" value=\"true\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <ignored-roots>\r\n      <path value=\"$PROJECT_DIR$/Client\" />\r\n      <path value=\"$PROJECT_DIR$/Server\" />\r\n      <path value=\"$PROJECT_DIR$\" />\r\n    </ignored-roots>\r\n    <MESSAGE value=\"基础代码\" />\r\n    <MESSAGE value=\"添加javafx图形界面,能打开,但是不能用\" />\r\n    <MESSAGE value=\"添加springboot,&#10;页面跳转逻辑完成\" />\r\n    <MESSAGE value=\"添加部分页面逻辑\" />\r\n    <MESSAGE value=\"添加socket,但是比较乱\" />\r\n    <MESSAGE value=\"添加文件上传\" />\r\n    <MESSAGE value=\"文件上传合并\" />\r\n    <MESSAGE value=\"完成文件发送接收,文本发送修改为json传送,更好拓展\" />\r\n    <MESSAGE value=\"服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw\" />\r\n    <MESSAGE value=\"客户端部分逻辑修改&#10;   --shaw\" />\r\n    <MESSAGE value=\"客户端修改输入输出流&#10;   --shaw\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"客户端修改输入输出流&#10;   --shaw\" />\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <breakpoints>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>\r\n          <line>285</line>\r\n          <option name=\"timeStamp\" value=\"56\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/io/ObjectInputStream.java</url>\r\n          <line>865</line>\r\n          <option name=\"timeStamp\" value=\"83\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>\r\n          <line>264</line>\r\n          <option name=\"timeStamp\" value=\"93\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>\r\n          <line>197</line>\r\n          <option name=\"timeStamp\" value=\"94\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>\r\n          <line>246</line>\r\n          <option name=\"timeStamp\" value=\"97\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>\r\n          <line>153</line>\r\n          <option name=\"timeStamp\" value=\"98\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>\r\n          <line>24</line>\r\n          <option name=\"timeStamp\" value=\"101\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>\r\n          <line>46</line>\r\n          <option name=\"timeStamp\" value=\"103\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-method\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>\r\n          <line>45</line>\r\n          <properties class=\"com.lkw.server.Server.LoginServer.LoginHandler\" method=\"run\">\r\n            <option name=\"EMULATED\" value=\"true\" />\r\n            <option name=\"WATCH_EXIT\" value=\"false\" />\r\n          </properties>\r\n          <option name=\"timeStamp\" value=\"102\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-method\">\r\n          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java</url>\r\n          <line>38</line>\r\n          <properties class=\"com.lkw.server.Server.LoginServer.LoginHandler\">\r\n            <option name=\"EMULATED\" value=\"true\" />\r\n            <option name=\"WATCH_EXIT\" value=\"false\" />\r\n          </properties>\r\n          <option name=\"timeStamp\" value=\"104\" />\r\n        </line-breakpoint>\r\n      </breakpoints>\r\n    </breakpoint-manager>\r\n    <pin-to-top-manager>\r\n      <pinned-members>\r\n        <PinnedItemInfo parentTag=\"com.tool.Message\" memberName=\"message\" />\r\n      </pinned-members>\r\n    </pin-to-top-manager>\r\n  </component>\r\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\r\n    <expand />\r\n    <select />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 6d98f2696c3ab34674988d8d23033dff6c545cfb)
++++ b/.idea/workspace.xml	(date 1670155260190)
+@@ -9,20 +9,39 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="客户端消息收发变为nio&#10;   --shaw">
+-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
++    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="修改聊天界面为ScrollPane+VBox&#10;   --shaw">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/pom.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/src/test/java/com/lkw/client/ClientApplicationTests.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/javafxController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/javafxController.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread$1.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/target/classes/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/main.fxml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/target/test-classes/com/lkw/client/ClientApplicationTests.class" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/Client-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/Client-0.0.1-SNAPSHOT.jar" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/Client-0.0.1-SNAPSHOT.jar.original" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/classes/META-INF/MANIFEST.MF" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/maven-archiver/pom.properties" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/surefire-reports/TEST-com.lkw.client.ClientApplicationTests.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/surefire-reports/com.lkw.client.ClientApplicationTests.txt" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/target/test-classes/com/lkw/client/Main.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pom.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/NioClient.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/ServerUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/ServerUI.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Server/target/classes/application.yml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/NioClient.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI$1.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/ServerUI.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/QQ.png" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/login.fxml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/main.fxml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ChatRoomClient.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ChatRoomServer$ServerThread.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ChatRoomServer.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ClientFrame$1.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ClientFrame$2.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ClientFrame$ReadMessageThread.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/ClientFrame.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/LinkServerFrame$1.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/LinkServerFrame.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/org/lkw/Main.class" beforeDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -66,6 +85,14 @@
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
++  </component>
++  <component name="PropertiesComponent">
++    <property name="WebServerToolWindowFactoryState" value="false" />
++    <property name="aspect.path.notification.shown" value="true" />
++    <property name="project.structure.last.edited" value="Modules" />
++    <property name="project.structure.proportion" value="0.0" />
++    <property name="project.structure.side.proportion" value="0.0" />
++    <property name="vue.rearranger.settings.migration" value="true" />
+   </component>
+   <component name="RecentsManager">
+     <key name="CreateClassDialog.RecentsKey">
+@@ -98,7 +125,7 @@
+       </set>
+     </option>
+   </component>
+-  <component name="RunManager" selected="Application.Login">
++  <component name="RunManager" selected="JAR Application.Server-0.0.1-SNAPSHOT.jar">
+     <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+       <option name="MAIN_CLASS_NAME" value="com.lkw.client.Login" />
+       <module name="Client" />
+@@ -118,19 +145,6 @@
+       <extension name="coverage">
+         <pattern>
+           <option name="PATTERN" value="com.lkw.client.*" />
+-          <option name="ENABLED" value="true" />
+-        </pattern>
+-      </extension>
+-      <method v="2">
+-        <option name="Make" enabled="true" />
+-      </method>
+-    </configuration>
+-    <configuration name="NioClient (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+-      <option name="MAIN_CLASS_NAME" value="com.lkw.server.Server.NioClient" />
+-      <module name="Server" />
+-      <extension name="coverage">
+-        <pattern>
+-          <option name="PATTERN" value="com.lkw.server.Server.*" />
+           <option name="ENABLED" value="true" />
+         </pattern>
+       </extension>
+@@ -177,16 +191,22 @@
+         <option name="Make" enabled="true" />
+       </method>
+     </configuration>
+-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
++    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+       <option name="arquillianRunConfiguration">
+         <value>
+           <option name="containerStateName" value="" />
+         </value>
+       </option>
+-      <option name="TEST_OBJECT" value="class" />
++      <option name="TEST_OBJECT" value="CLASS" />
++      <properties />
++      <listeners />
+       <method v="2">
+         <option name="Make" enabled="true" />
+       </method>
++    </configuration>
++    <configuration name="Server-0.0.1-SNAPSHOT.jar" type="JarApplication" temporary="true">
++      <option name="JAR_PATH" value="$PROJECT_DIR$/Server/target/Server-0.0.1-SNAPSHOT.jar" />
++      <method v="2" />
+     </configuration>
+     <configuration name="ClientApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+       <module name="Client" />
+@@ -207,18 +227,18 @@
+       <item itemvalue="Application.test" />
+       <item itemvalue="Application.Login" />
+       <item itemvalue="Application.Main" />
+-      <item itemvalue="Application.NioClient (1)" />
+       <item itemvalue="Application.ServerUI" />
+       <item itemvalue="Spring Boot.ClientApplication" />
+       <item itemvalue="Spring Boot.ServerApplication" />
++      <item itemvalue="JAR Application.Server-0.0.1-SNAPSHOT.jar" />
+     </list>
+     <recent_temporary>
+       <list>
++        <item itemvalue="JAR Application.Server-0.0.1-SNAPSHOT.jar" />
+         <item itemvalue="Application.Login" />
+         <item itemvalue="Application.ServerUI" />
+         <item itemvalue="Application.Main" />
+         <item itemvalue="Application.test" />
+-        <item itemvalue="Application.NioClient (1)" />
+       </list>
+     </recent_temporary>
+   </component>
+@@ -267,6 +287,7 @@
+       <workItem from="1668760562119" duration="19375000" />
+       <workItem from="1668840851282" duration="11086000" />
+       <workItem from="1670054093917" duration="9059000" />
++      <workItem from="1670130210215" duration="4825000" />
+     </task>
+     <task id="LOCAL-00001" summary="基础代码">
+       <created>1663814396212</created>
+@@ -387,7 +408,14 @@
+       <option name="project" value="LOCAL" />
+       <updated>1668667328814</updated>
+     </task>
+-    <option name="localTasksCounter" value="18" />
++    <task id="LOCAL-00018" summary="修改聊天界面为ScrollPane+VBox&#10;   --shaw">
++      <created>1670125887557</created>
++      <option name="number" value="00018" />
++      <option name="presentableId" value="LOCAL-00018" />
++      <option name="project" value="LOCAL" />
++      <updated>1670125887557</updated>
++    </task>
++    <option name="localTasksCounter" value="19" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -445,7 +473,8 @@
+     <MESSAGE value="服务器传送消息改为NIO模式 &#10;服务器的传送文件还差具体实现,流程应该已经完善&#10;   --shaw" />
+     <MESSAGE value="客户端部分逻辑修改&#10;   --shaw" />
+     <MESSAGE value="客户端修改输入输出流&#10;   --shaw" />
+-    <option name="LAST_COMMIT_MESSAGE" value="客户端修改输入输出流&#10;   --shaw" />
++    <MESSAGE value="修改聊天界面为ScrollPane+VBox&#10;   --shaw" />
++    <option name="LAST_COMMIT_MESSAGE" value="修改聊天界面为ScrollPane+VBox&#10;   --shaw" />
+   </component>
+   <component name="XDebuggerManager">
+     <breakpoint-manager>

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -16,7 +17,7 @@
 
       <Button fx:id="sendFileBtn" layoutX="684.0" layoutY="497.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="108.0" text="发送文件"><font><Font size="16.0" /></font></Button>
 
-      <TextArea fx:id="filePathArea" layoutX="14.0" layoutY="334.0" prefHeight="15.0" prefWidth="547.0" />
+      <TextArea fx:id="filePathArea" layoutX="54.0" layoutY="334.0" prefHeight="38.0" prefWidth="507.0" />
 
       <TextArea fx:id="sendArea" layoutX="14.0" layoutY="379.0" prefHeight="196.0" prefWidth="660.0" />
 
@@ -38,6 +39,7 @@
             <VBox fx:id="msgVbox" disable="true" />
          </content>
       </ScrollPane>
+      <ImageView fx:id="ic" fitHeight="35.0" fitWidth="37.0" layoutX="14.0" layoutY="335.0" pickOnBounds="true" preserveRatio="true" />
 
    </children>
 </AnchorPane>

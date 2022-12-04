@@ -29,5 +29,9 @@ public final class FinalValue {
 	 * 客户端请求更新文件列表
 	 */
 	public static final int MSG_GetFileList = 6;
+	/**
+	 * 图片信息
+	 */
+	public static final int MSG_PICTURE = 7;
 
 }
