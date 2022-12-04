@@ -1,0 +1,14 @@
+<changelist name="Uncommitted_changes_before_Update_at_2022_12_4_21_50_[Changes]" date="1670161820022" recycled="false" toDelete="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_12_4_21_50_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 2022/12/4 21:50 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="Client/target/classes/com/lkw/client/Thread/MyClientThread$2.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_12_4_21_50_[Changes]/MyClientThread$2.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Client/target/classes/com/lkw/client/Controller/javafxController.class" />
+    <option name="AFTER_PATH" value="Client/target/classes/com/lkw/client/Controller/javafxController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_12_4_21_50_[Changes]/javafxController.class" />
+  </binary>
+</changelist>
