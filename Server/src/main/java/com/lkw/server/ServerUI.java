@@ -34,7 +34,9 @@ public class ServerUI extends Application{
 	ListView<String> fileListView = new ListView<>(fileList);
 
 
-
+	public static void main(String[] args) {
+		launch(args);
+	}
 
 	public void start(Stage primaryStage) throws Exception {
 

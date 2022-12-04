@@ -23,6 +23,9 @@ public class Login extends Application {
             primaryStage.setTitle("QQ");
             primaryStage.getIcons().add(new Image("/QQ.png"));
             primaryStage.setScene(new Scene(root));
+            primaryStage.setOnCloseRequest(e->{
+                System.exit(0);
+            });
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();

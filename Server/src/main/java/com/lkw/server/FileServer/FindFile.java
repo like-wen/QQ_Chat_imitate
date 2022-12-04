@@ -18,7 +18,12 @@ public class FindFile implements Callable {
     public String call() {//未知原因不设置返回值也通过了检查
         while (true) {
             Platform.runLater(() -> {
+
+
+
                 File file = new File(System.getProperty("user.dir") + "\\MyFile\\");
+                if(!file.exists())
+                    file.mkdir();
                 File[] files = file.listFiles();
                 fileList.clear();
                 for (int i = 0; i < files.length; i++) {

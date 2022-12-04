@@ -119,8 +119,12 @@ public class MyFileThread implements Runnable {
 			try {
 				String selectedItem = fileList.getSelectionModel().getSelectedItem();
 				System.out.println("获取的文件名是"+selectedItem);
-				writerFile.writeUTF("<get>"+selectedItem);
-				writerFile.flush();
+				if(selectedItem==null){
+					toolTips.setText("没有选中文件");
+				}else {
+					writerFile.writeUTF("<get>" + selectedItem);
+					writerFile.flush();
+				}
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
 			}
@@ -160,6 +164,7 @@ public class MyFileThread implements Runnable {
 				fos.close();
 
 				System.out.println("======== 文件接收成功 [File Name：" + fileName + "] [Size：" + getFormatFileSize(fileLength) + "] ========");
+				toolTips.setText("文件接收成功");
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}

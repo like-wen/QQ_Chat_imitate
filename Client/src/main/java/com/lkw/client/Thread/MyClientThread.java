@@ -223,6 +223,7 @@ public class MyClientThread implements Runnable {
 						socketChannel.write(ByteBuffer.wrap(bytes1));
 					} catch (IOException ioException) {
 						ioException.printStackTrace();
+
 					}
 				}
 			};

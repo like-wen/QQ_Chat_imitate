@@ -108,6 +108,10 @@ public class LoginController implements Initializable {
                        Platform.runLater(()->{
                            tips.setText("注册成功");
                        });
+                   } else if (json.equals("false_signUp")) {
+                       Platform.runLater(()->{
+                           tips.setText("该用户名已注册");
+                       });
                    }
                }
            } catch (UnknownHostException e) {

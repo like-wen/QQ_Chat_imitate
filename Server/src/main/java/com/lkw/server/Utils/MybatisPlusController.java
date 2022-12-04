@@ -45,9 +45,15 @@ public class MybatisPlusController {
                 }else
                     return "false";
             } else if (mode.equals("signUp")) {
-                User user1 = new User(null,name,password,new Date(),new Date());
-                mapper.insert(user1);
-                return "true_signUp";
+                QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("name",name);
+                if (mapper.exists(queryWrapper)) {
+                    return "false_signUp";
+                }else {
+                    User user1 = new User(null, name, password, new Date(), new Date());
+                    mapper.insert(user1);
+                    return "true_signUp";
+                }
 
             }else return "false";
         }
