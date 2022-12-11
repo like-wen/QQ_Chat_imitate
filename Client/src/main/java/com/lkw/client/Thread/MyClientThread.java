@@ -3,13 +3,12 @@ package com.lkw.client.Thread;
 import com.tool.Message;
 import com.tool.Utils;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -57,6 +56,10 @@ public class MyClientThread implements Runnable {
 	private TextArea sendArea;
 
 	private VBox vBox;
+	private ScrollPane scroll;
+
+	//页面自动滚动逻辑
+	private boolean updateFlag = false;
 
 	private Text toolTips;
 	private ImageView ic;
@@ -99,11 +102,12 @@ public class MyClientThread implements Runnable {
 		timeL.setTextFill(Color.web("#1c1c1c"));
 		timePane.setPrefWidth(891.0);
 		timePane.getChildren().add(timeL);
-		AnchorPane.setRightAnchor(timeL, 48.0);
+		AnchorPane.setRightAnchor(timeL, 46.0);
 		AnchorPane.setBottomAnchor(timeL,2.0);
 
 
 		vBox.getChildren().addAll(an,timePane);
+		updateFlag = true;
 	}
 	void showReceiveMsg(String name,String msg,String time){
 
@@ -151,6 +155,7 @@ public class MyClientThread implements Runnable {
 
 
 		vBox.getChildren().addAll(an,timePane);
+		updateFlag = true;
 	}
 
 	//todo: 展示图片
@@ -202,14 +207,66 @@ public class MyClientThread implements Runnable {
 		timeL.setTextFill(Color.web("#1c1c1c"));
 		timePane.setPrefWidth(891.0);
 		timePane.getChildren().add(timeL);
-		AnchorPane.setRightAnchor(timeL, 48.0);
+		AnchorPane.setRightAnchor(timeL, 46.0);
 		AnchorPane.setBottomAnchor(timeL,2.0);
 
 
 		vBox.getChildren().addAll(an,timePane);
+		updateFlag = true;
 	}
-	void showReceivePic(){
+	void showReceivePic(String name,Object pic,String time){
+		AnchorPane an = new AnchorPane();
+		an.setPrefWidth(891);
 
+
+		Label nameL = new Label(name);
+		nameL.setFont(new Font(13));
+		nameL.setTextAlignment(TextAlignment.RIGHT);
+		nameL.setMaxWidth(400);
+		nameL.setTextFill(Color.web("#0000cd"));
+		FileInputStream fileInputStream=null;
+		try {
+			fileInputStream = new FileInputStream((File) pic);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		ImageView iv = new ImageView(new Image(fileInputStream));
+		// ImageView iv = new ImageView(new Image("/QQ.png"));
+		iv.setPreserveRatio(true);
+
+		double iWidth = iv.getImage().getWidth();
+
+
+		if(iWidth>891.0*0.4)
+		{
+			iv.setFitWidth(891.0*0.4);
+		}
+
+
+		an.getChildren().addAll(nameL,iv);
+
+
+		AnchorPane.setLeftAnchor(nameL, 26.0);
+		AnchorPane.setTopAnchor(nameL, 15.0);
+
+		AnchorPane.setLeftAnchor(iv, 46.0);
+		AnchorPane.setTopAnchor(iv, 45.0);
+
+		AnchorPane timePane = new AnchorPane();
+		Label timeL = new Label(time);
+		timeL.setFont(new Font(8));
+		timeL.setTextAlignment(TextAlignment.RIGHT);
+		timeL.setMaxWidth(100);
+		timeL.setTextFill(Color.web("#1c1c1c"));
+		timePane.setPrefWidth(891.0);
+		timePane.getChildren().add(timeL);
+		AnchorPane.setLeftAnchor(timeL, 26.0);
+		AnchorPane.setBottomAnchor(timeL,2.0);
+
+
+		vBox.getChildren().addAll(an,timePane);
+		updateFlag = true;
 	}
 
 	//缓存图片到本地
@@ -219,7 +276,7 @@ public class MyClientThread implements Runnable {
 
 		}
 	}
-	public MyClientThread(Button sendBtn, TextArea sendArea, Text toolTips, String username, ObservableList<String> fileItems,VBox vBox,ImageView ic) {
+	public MyClientThread(Button sendBtn, TextArea sendArea, Text toolTips, String username, ObservableList<String> fileItems, VBox vBox, ImageView ic, ScrollPane scrollPane) {
 		super();
 		this.sendBtn=sendBtn;
 		this.sendArea=sendArea;
@@ -228,6 +285,7 @@ public class MyClientThread implements Runnable {
 		this.username=username;
 		this.fileItems=fileItems;
 		this.vBox=vBox;
+		this.scroll=scrollPane;
 	}
 
 
@@ -235,6 +293,18 @@ public class MyClientThread implements Runnable {
 	@Override
 	public void run() {
 		try {
+
+			scroll.vvalueProperty().addListener(new ChangeListener<Number>() {
+
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					if(updateFlag) {
+						scroll.setVvalue(1.0);
+						updateFlag = false;
+					}
+				}
+			});
+
 
 			ic.setImage(new Image("/QQ.png"));
 			//点击发送图片按钮

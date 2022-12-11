@@ -34,7 +34,7 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <ScrollPane hbarPolicy="NEVER" layoutX="14.0" layoutY="14.0" prefHeight="315.0" prefWidth="891.0" style="-fx-background-color: white;" vbarPolicy="ALWAYS">
+      <ScrollPane fx:id="scroll" hbarPolicy="NEVER" layoutX="14.0" layoutY="14.0" prefHeight="315.0" prefWidth="891.0" style="-fx-background-color: white;" vbarPolicy="ALWAYS">
          <content>
             <VBox fx:id="msgVbox" disable="true" />
          </content>

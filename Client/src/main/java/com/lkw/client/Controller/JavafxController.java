@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -63,6 +64,9 @@ public class JavafxController  {
     @FXML
     private ImageView ic;
 
+    @FXML
+    private ScrollPane scroll;
+
     public void init(String username) {
 
         //添加文件列表 示例
@@ -76,7 +80,7 @@ public class JavafxController  {
         //可以继承一个监听接口
         Platform.runLater(() -> {
             //其他线程调用组件,可以用这个进行保护
-            new Thread(new MyClientThread(sendBtn,sendArea,toolTips, username,fileItems,msgVbox,ic)).start();
+            new Thread(new MyClientThread(sendBtn,sendArea,toolTips, username,fileItems,msgVbox,ic,scroll)).start();
             new Thread(new MyFileThread(sendFileBtn,acceptAreaFileBtn,filePathArea,fileList,selectFileBtn,toolTips)).start();
         });
     }
