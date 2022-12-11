@@ -162,7 +162,7 @@ public class MyServer implements Runnable {
 		SocketChannel channel = null;
 		try {
 			channel = (SocketChannel) key.channel();
-			ByteBuffer buffer = ByteBuffer.allocate(1024);
+			ByteBuffer buffer = ByteBuffer.allocate(4000);
 			int read = channel.read(buffer);
 
 			// 如果是正常断开，read 的方法的返回值是 -1
@@ -171,10 +171,10 @@ public class MyServer implements Runnable {
 				key.cancel();
 			} else if(read>0) {
 				buffer.flip();
-				System.out.println(new String(buffer.array()));
+				// System.out.println(new String(buffer.array()));
 				Message msg =  Utils.decode(buffer.array());
 				log.debug(msg.toString());
-				System.out.println("SSS");
+				// System.out.println("SSS");
 				dealMessage(msg, key, channel);
 			}
 		} catch (IOException | ClassNotFoundException e) {
@@ -197,27 +197,27 @@ public class MyServer implements Runnable {
 	protected void dealMessage(Message msg, SelectionKey key, SocketChannel channel) {
 		switch (msg.type) {
 			case MSG_NAME:
-				key.attach(msg.message);
-				log.debug("用户{}已上线", msg.message);
-				ui.updateForConnect(msg.message);
+				key.attach(msg.content);
+				log.debug("用户{}已上线", msg.content);
+				ui.updateForConnect((String) msg.content);
 
 				// ui.addClients(msg.message);
 				getConnectedChannel(channel).forEach(selectionKey -> {
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.message + "已上线"), sc);
+					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.content + "已上线"), sc);
 				});
 				break;
 			case MSG_GROUP:
 				getConnectedChannel(channel).forEach(selectionKey ->{
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-							Message message = new Message(MSG_GROUP,msg.getSendUser(),"all", msg.message);
+							Message message = new Message(MSG_GROUP,msg.getSendUser(),"all", msg.content);
 							sendMsgToClient(message, sc);
-							System.out.println(message);
+							// System.out.println(message);/
 						});
-				receivedMsgArea.appendText(key.attachment()+" : "+msg.message + "  " +sdf.format(new Date())+" \n");
+				receivedMsgArea.appendText(key.attachment()+" : "+msg.content + "  " +sdf.format(new Date())+" \n");
 				break;
 			case MSG_PRIVATE:
-				String[] s = msg.message.split("_");
+				String[] s = ((String) msg.content).split("_");
 				AtomicBoolean flag = new AtomicBoolean(false);
 				getConnectedChannel(channel).stream()
 						.filter(sk -> s[0].equals(sk.attachment()))
@@ -241,7 +241,7 @@ public class MyServer implements Runnable {
 			case MSG_SYSTEM:
 				getConnectedChannel(channel).forEach(selectionKey -> {
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.message), sc);
+					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.content), sc);
 				});
 				break;
 			case MSG_GetFileList:
@@ -262,9 +262,15 @@ public class MyServer implements Runnable {
 
 				break;
 			case MSG_PICTURE:
-
-				//todo:图片消息
+				getConnectedChannel(channel).forEach(selectionKey ->{
+					SocketChannel sc = (SocketChannel) selectionKey.channel();
+					Message message = new Message(MSG_PICTURE,msg.getSendUser(),"all", msg.content);
+					sendMsgToClient(message, sc);
+					System.out.println(msg.type);
+				});
+				receivedMsgArea.appendText(key.attachment()+" : " + "<图片信息>  " +sdf.format(new Date())+" \n");
 				break;
+				//todo:图片消息
 			default:
 				break;
 		}

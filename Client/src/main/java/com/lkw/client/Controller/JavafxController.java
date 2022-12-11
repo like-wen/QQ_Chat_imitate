@@ -29,7 +29,6 @@ public class JavafxController  {
 
     private ObservableList<String> fileItems;
 
-    @FXML
     private ListView<String> userList=new ListView<>();
 
     private ObservableList<String> userItems;

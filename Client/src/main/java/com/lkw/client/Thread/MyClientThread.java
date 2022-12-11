@@ -155,7 +155,7 @@ public class MyClientThread implements Runnable {
 
 	//todo: 展示图片
 
-	void showPic(String name,File file,String time){
+	void showPic(String name,Object pic,String time){
 		AnchorPane an = new AnchorPane();
 		an.setPrefWidth(891);
 
@@ -165,11 +165,20 @@ public class MyClientThread implements Runnable {
 		nameL.setTextAlignment(TextAlignment.RIGHT);
 		nameL.setMaxWidth(400);
 		nameL.setTextFill(Color.web("#0000cd"));
+		FileInputStream fileInputStream=null;
+		try {
+			fileInputStream = new FileInputStream((File) pic);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 
-
-		ImageView iv = new ImageView(new Image("/QQ.png"));
+		ImageView iv = new ImageView(new Image(fileInputStream));
+		// ImageView iv = new ImageView(new Image("/QQ.png"));
 		iv.setPreserveRatio(true);
+
 		double iWidth = iv.getImage().getWidth();
+
+
 		if(iWidth>891.0*0.4)
 		{
 			iv.setFitWidth(891.0*0.4);
@@ -202,6 +211,14 @@ public class MyClientThread implements Runnable {
 	void showReceivePic(){
 
 	}
+
+	//缓存图片到本地
+	void downloadPic(Message PicMsg){
+		if(PicMsg.getType()==MSG_PICTURE)
+		{
+
+		}
+	}
 	public MyClientThread(Button sendBtn, TextArea sendArea, Text toolTips, String username, ObservableList<String> fileItems,VBox vBox,ImageView ic) {
 		super();
 		this.sendBtn=sendBtn;
@@ -220,17 +237,42 @@ public class MyClientThread implements Runnable {
 		try {
 
 			ic.setImage(new Image("/QQ.png"));
+			//点击发送图片按钮
 			ic.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent mouseEvent) {
 					FileChooser fileChooser = new FileChooser();
-					fileChooser.setTitle("选择上传云端的文件");
+					fileChooser.setTitle("选择发送图片");
 					fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-					FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("JPG & PNG Images","*.jpg","*.png","*.jpeg","*.gif");
+					FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Images Only","*.jpg","*.png","*.jpeg","*.gif");
 					fileChooser.getExtensionFilters().add(filter);
 					fileChooser.setSelectedExtensionFilter(filter);
 					File file = fileChooser.showOpenDialog(new Stage());
+
+					if(file==null)
+						return;
+					ImageView imageView = null;
+					try {
+						FileInputStream fileInputStream = new FileInputStream(file);
+						imageView = new ImageView(new Image(fileInputStream));
+
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
 					showPic(username,file,sdf.format(new Date()));
+
+					//发送到聊天系统中
+					Message PicMsg = new Message(MSG_PICTURE, username, "", file);
+
+
+					try {
+						byte[] bytes1 = Utils.encode(PicMsg);
+						socketChannel.write(ByteBuffer.wrap(bytes1));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
+
 				}
 			});
 
@@ -309,18 +351,18 @@ public class MyClientThread implements Runnable {
 					SelectionKey key = iterator.next();
 					//移出已经检查的数据
 					iterator.remove();
-					log.info(String.valueOf(message.message));
+					log.info(String.valueOf(message.content));
 					//如果可读
 					if (key.isReadable()) {
 						//获取socket通道->字节缓冲区->String数据
 						SocketChannel sc = (SocketChannel) key.channel();
-						ByteBuffer buffer = ByteBuffer.allocate(1024);
+						ByteBuffer buffer = ByteBuffer.allocate(4000);
 						sc.read(buffer);
 						message = Utils.decode(buffer.array());
 
 						switch (message.getType()){
 							case MSG_GetFileList://收到文件列表更新信息
-								String[] fileNameList = message.message.split(";");//分割成字符串数组
+								String[] fileNameList = ((String)message.content).split(";");//分割成字符串数组
 								if (fileNameList.length!=fileNum) {
 									Platform.runLater(()->{//保护跨线程操作UI组件
 										//清理文件列表
@@ -328,19 +370,21 @@ public class MyClientThread implements Runnable {
 										for (int i = 0; i < fileNameList.length; i++) {
 											fileItems.add(fileNameList[i]);//添加文件列表
 										}
-
 									});
 									fileNum=fileNameList.length;
 								}
 								break;
 							case MSG_PICTURE:
-
+								Message picMessage = message;
+								Platform.runLater(()->{
+									showPic(picMessage.getSendUser(),picMessage.getContent(),sdf.format(new Date()));
+								});
 								break;
 							default://文字消息
 
 								Message finalMessage = message;
 								Platform.runLater(()->{
-									showReceiveMsg(finalMessage.getSendUser(), finalMessage.getMessage(),sdf.format(new Date()));
+									showReceiveMsg(finalMessage.getSendUser(), (String) finalMessage.getContent(),sdf.format(new Date()));
 								});
 
 								break;
