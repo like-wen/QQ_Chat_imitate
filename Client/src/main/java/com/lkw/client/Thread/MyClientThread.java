@@ -58,7 +58,7 @@ public class MyClientThread implements Runnable {
 	private VBox vBox;
 	private ScrollPane scroll;
 
-	//页面自动滚动逻辑
+	//页面自动滚动逻辑的判定
 	private boolean updateFlag = false;
 
 	private Text toolTips;
@@ -158,7 +158,7 @@ public class MyClientThread implements Runnable {
 		updateFlag = true;
 	}
 
-	//todo: 展示图片
+
 
 	void showPic(String name,Object pic,String time){
 		AnchorPane an = new AnchorPane();
@@ -269,7 +269,7 @@ public class MyClientThread implements Runnable {
 		updateFlag = true;
 	}
 
-	//缓存图片到本地
+	// Todo:缓存图片到本地
 	void downloadPic(Message PicMsg){
 		if(PicMsg.getType()==MSG_PICTURE)
 		{
@@ -294,8 +294,8 @@ public class MyClientThread implements Runnable {
 	public void run() {
 		try {
 
+			//"消息界面"的自动滚动,根据updateFlag进行
 			scroll.vvalueProperty().addListener(new ChangeListener<Number>() {
-
 				@Override
 				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 					if(updateFlag) {
@@ -305,9 +305,8 @@ public class MyClientThread implements Runnable {
 				}
 			});
 
-
 			ic.setImage(new Image("/QQ.png"));
-			//点击发送图片按钮
+			//"发送图片"对点击事件的处理,发送图片信息
 			ic.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent mouseEvent) {
@@ -347,7 +346,7 @@ public class MyClientThread implements Runnable {
 			});
 
 
-			//"发送"按钮的点击事件
+			//"发送"按钮的点击事件,即发送文字信息
 			sendBtn.setOnAction(e->{
 				String sendMsg=sendArea.getText();
 				if(sendMsg.equals("")){
@@ -379,17 +378,6 @@ public class MyClientThread implements Runnable {
 
 				}
 			});
-			selector = Selector.open();
-			socketChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 8888));
-			socketChannel.configureBlocking(false);
-			socketChannel.register(selector, SelectionKey.OP_READ);
-
-			Message message = new Message(MSG_NAME, username,"",username);
-			byte[] bytes = Utils.encode(message);
-
-			//登录
-			socketChannel.write(ByteBuffer.wrap(bytes));
-
 
 			//定时器
 			TimerTask timerTask=new TimerTask() {
@@ -411,25 +399,48 @@ public class MyClientThread implements Runnable {
 			Timer timer=new Timer();
 			timer.scheduleAtFixedRate(timerTask,500l,3000l);//0.5秒后开始,每隔3秒运行
 
+			//1.先使用Selector的open()方法,创建selector
+			//2.使用SocketChannel的open()方法,连接到指定位置,返回连接的socketchannel
+			//3.配置socketchannel为阻塞
+			//4.为这个socketchannel,注册为 对读 感兴趣,即 能通过 selector 获取 服务器传过来的消息
+			selector = Selector.open();
+			socketChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 8888));
+			socketChannel.configureBlocking(false);
+			socketChannel.register(selector, SelectionKey.OP_READ);
 
+			//登录步骤
+			// 1.先创建指定类型的消息类型
+			// 2.对消息进行编码
+			// 3.然后通过socketchannel的write方法将消息发给服务端
+			Message message = new Message(MSG_NAME, username,"",username);
+			byte[] bytes = Utils.encode(message);
+			socketChannel.write(ByteBuffer.wrap(bytes));
+
+
+			//主线程处于死循环中,处理服务器发送消息
 			while (true) {
-				//阻塞,检测数据
+				//阻塞函数,检测是否有数据进行处理
 				selector.select();
 				//获取所有数据进行遍历
 				Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
 				while (iterator.hasNext()) {
 					SelectionKey key = iterator.next();
-					//移出已经检查的数据
+					//将此次检查的数据,从selector中移除(因为是迭代器中深拷贝),避免让下次处理出现混乱
 					iterator.remove();
 					log.info(String.valueOf(message.content));
-					//如果可读
+					//如果有可读事件,则表明服务器端向客户端发送消息
 					if (key.isReadable()) {
-						//获取socket通道->字节缓冲区->String数据
+
+						//1.获取此可读的 socketchannel
+						//2.分配字节缓冲区,将发送过来的东西,读取到缓冲区
+						//3.缓冲区进行解码
+
 						SocketChannel sc = (SocketChannel) key.channel();
 						ByteBuffer buffer = ByteBuffer.allocate(4000);
 						sc.read(buffer);
 						message = Utils.decode(buffer.array());
 
+						//4.根据发送过来的消息类型 进行判定
 						switch (message.getType()){
 							case MSG_GetFileList://收到文件列表更新信息
 								String[] fileNameList = ((String)message.content).split(";");//分割成字符串数组
@@ -447,7 +458,7 @@ public class MyClientThread implements Runnable {
 							case MSG_PICTURE:
 								Message picMessage = message;
 								Platform.runLater(()->{
-									showPic(picMessage.getSendUser(),picMessage.getContent(),sdf.format(new Date()));
+									showReceivePic(picMessage.getSendUser(),picMessage.getContent(),sdf.format(new Date()));
 								});
 								break;
 							default://文字消息
@@ -462,6 +473,7 @@ public class MyClientThread implements Runnable {
 					}
 				}
 			}
+
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -35,8 +35,7 @@ public class MyServer implements Runnable {
 
 	//Server端监听的端口号
 	public static final int PORT = 9999;
-	//映射表 存放每个socket地址(IP:Port)及其对应的PrintWriter
-	//为群发消息做准备
+
 
 	//存放已连接socket地址(IP:Port)，用于clientListView
 	ObservableList<String> clients;
@@ -50,27 +49,26 @@ public class MyServer implements Runnable {
 	Button sendButton;
 	TextArea receivedMsgArea;
 
-	public void init(int port) throws IOException{
-		//1.获取一个ServerSocket通道
-		ssc = ServerSocketChannel.open();
-		// System.out.println(ssc.isBlocking());
-		ssc.configureBlocking(false);////设置为非阻塞
-		// System.out.println(ssc.isBlocking());
-		//2.绑定监听，配置TCP参数，例如backlog大小
-		ssc.socket().bind(new InetSocketAddress(port));
-		//3.获取通道管理器
-		selector= Selector.open();
-		//将通道管理器与通道绑定，并为该通道注册SelectionKey.OP_ACCEPT事件，
-		//只有当该事件到达时，Selector.select()会返回，否则一直阻塞。
-		ssc.register(selector, SelectionKey.OP_ACCEPT);//注册channel到selector,监测接受此通道套接字的连接
-	}
-
 	public MyServer() {
 		try {
 			init(8888);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	public void init(int port) throws IOException{
+		// 1.获取一个ServerSocket通道,设置为非阻塞
+		// 2.绑定监听，配置TCP参数，例如backlog大小
+		// 3.获取selector通道管理器
+		// 4.将selector与serverSocketChannel绑定，并为该通道注册SelectionKey.OP_ACCEPT事件,监测接受此通道套接字的连接,只有当该事件到达时,Selector.select()会返回,否则一直阻塞.
+		ssc = ServerSocketChannel.open();
+		ssc.configureBlocking(false);
+
+		ssc.socket().bind(new InetSocketAddress(port));
+
+		selector= Selector.open();
+
+		ssc.register(selector, SelectionKey.OP_ACCEPT);
 	}
 
 	public MyServer(TextField ipText, TextField portText, TextArea sendMsgArea, TextField statusText,
@@ -101,81 +99,76 @@ public class MyServer implements Runnable {
 
 	@Override
 	public void run() {
-		// updateIpAndPort();
-		// ServerSocket server;
-		// Socket socket;
-		// try {
-		// 	server = new ServerSocket(PORT);
-		// 	while(true) {
-		// 		socket = server.accept();
-		// 		//一个客户端接入就启动一个handler线程去处理
-		// 		new Thread(new UIhandler(map, socket, sendMsgArea, statusText, sendButton, receivedMsgArea, clients, clientListView)).start();
-		// 	}
-		// } catch (IOException e) {
-		// 	// TODO 自动生成的 catch 块
-		// 	e.printStackTrace();
-		// }
-
 		try {
 			listen();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-
 	}
 
-	private void listen() throws Exception {
-		boolean first=true;
+	private void listen()  {
 		while (true) {
-			// select 方法, 没有事件发生，线程阻塞，有事件，线程才会恢复运行, 通过Selector的select（）方法可以选择已经准备就绪的通道 （这些通道包含你感兴趣的的事件）
-			//通过Selector的select（）方法可以选择已经准备就绪的通道 （这些通道包含你感兴趣的的事件）
-			// select 在事件未处理时，它不会阻塞, 事件发生后要么处理，要么取消，不能置之不理
-			selector.select();
-			// 处理事件, selectedKeys 内部包含了所有发生的事件
-			Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
-			while (iterator.hasNext()) {
-				SelectionKey key = iterator.next();
-				// 处理key 时，要从 selectedKeys 集合中删除，否则下次处理就会有问题
-				iterator.remove();
+			try{
+				// select 方法,没有事件发生,线程阻塞
+				// 通过Selector的select（）方法可以选择已经准备就绪的通道 （这些通道包含你感兴趣的的事件）
+				// select 在事件未处理时，它不会阻塞, 事件发生后要么处理,要么取消,不能置之不理
+				selector.select();
+				Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+				// 处理事件, selectedKeys 内部包含了所有发生的事件
+				while (iterator.hasNext()) {
+					SelectionKey key = iterator.next();
+					// 处理key 时,要从 selectedKeys 集合中删除,否则下次处理就会有问题
+					iterator.remove();
+					// 区分事件类型
+					if (key.isAcceptable()) {
+						// 客户端的套接字连接 事件
+						ServerSocketChannel channel = (ServerSocketChannel) key.channel();
+						//在连接到对应的客户端channel后,服务器会创建一个对应的socketchannel与客户端通信
+						SocketChannel sc = channel.accept();
+						//配置此对应的channel为非阻塞
+						sc.configureBlocking(false);
+						//注册此channel对 可读 感兴趣, 即 对客户端发送信息时,感兴趣
+						sc.register(selector, SelectionKey.OP_READ);
 
-				// 区分事件类型
-				if (key.isAcceptable()) {
-					ServerSocketChannel channel = (ServerSocketChannel) key.channel();
-
-					SocketChannel sc = channel.accept();
-
-					sc.configureBlocking(false);
-
-					sc.register(selector, SelectionKey.OP_READ);
-
-				} else if (key.isReadable()) {
-					//客户端是否发送信息
-
+					} else if (key.isReadable()) {
+						// 客户端发送信息 事件
 						dealReadEvent(key);
+					}
 				}
+			}catch (Exception e){
 			}
 		}
 	}
 
-	private void dealReadEvent(SelectionKey key) throws IOException {
+	/**
+	 * 对 发送信息的客户端 对应的channel进行处理
+	 * @param key 有 可读事件发生 的key
+	 * @throws IOException
+	 */
+	private void dealReadEvent(SelectionKey key) {
 		SocketChannel channel = null;
 		try {
+			//获取到对应的channel
 			channel = (SocketChannel) key.channel();
+			//分配 缓冲区 空间
 			ByteBuffer buffer = ByteBuffer.allocate(4000);
+			//将发送的东西,读取到缓冲区中
 			int read = channel.read(buffer);
 
 			// 如果是正常断开，read 的方法的返回值是 -1
 			if (read == -1) {
-				//cancel 会取消注册在 selector 上的 channel，并从 keys 集合中删除 key 后续不会再监听事件
+				//cancel 会取消注册在 selector 上的 channel,并从 keys 集合中删除 key 后续不会再监听事件
 				key.cancel();
 			} else if(read>0) {
+				// 大于0的情况,就是正常的读取数据的长度
 				buffer.flip();
-				// System.out.println(new String(buffer.array()));
+				//转换为 写出 模式,通过变换 limit值,同时position值置0,写出[position,limit]区间的byte值
 				Message msg =  Utils.decode(buffer.array());
+
 				log.debug(msg.toString());
-				// System.out.println("SSS");
 				dealMessage(msg, key, channel);
+			}else if(read==0){
+			//	Todo:消息太大,超出缓冲区大小
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -184,8 +177,7 @@ public class MyServer implements Runnable {
 			ui.updateForDisConnect((String) key.attachment());
 			//取消注册
 			key.cancel();
-
-			//关闭通道
+			//出现异常,关闭通道,断开与对应客户端的连接
 			try {
 				channel.close();
 			} catch (IOException ioException) {
@@ -200,7 +192,6 @@ public class MyServer implements Runnable {
 				key.attach(msg.content);
 				log.debug("用户{}已上线", msg.content);
 				ui.updateForConnect((String) msg.content);
-
 				// ui.addClients(msg.message);
 				getConnectedChannel(channel).forEach(selectionKey -> {
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
@@ -246,16 +237,15 @@ public class MyServer implements Runnable {
 				break;
 			case MSG_GetFileList:
 				log.info("发送文件更新信息");
+				//Todo:文件表对应
 				File file = new File(System.getProperty("user.dir") + "\\MyFile\\");
 				File[] files = file.listFiles();
-
+				if(file==null)
+					break;
 				//拼接成string
 				String updateMsg="";
 				for (int i = 0; i < files.length-1; i++) {
-
 					updateMsg+=files[i].getName()+";";
-
-
 				}
 				updateMsg+=files[files.length-1].getName();
 				sendMsgToClient(new Message( MSG_GetFileList,"SYSTEM",msg.getGetUser(),updateMsg), channel);
@@ -270,7 +260,7 @@ public class MyServer implements Runnable {
 				});
 				receivedMsgArea.appendText(key.attachment()+" : " + "<图片信息>  " +sdf.format(new Date())+" \n");
 				break;
-				//todo:图片消息
+
 			default:
 				break;
 		}
@@ -329,9 +319,6 @@ public class MyServer implements Runnable {
 		Set<String> selected = new HashSet<>();
 
 		public UIhandler() {
-
-
-
 		}
 
 		public UIhandler (TextArea sendMsgArea, TextField statusText, Button sendButton,
@@ -390,7 +377,7 @@ public class MyServer implements Runnable {
 		// 				pWriter.write(returnJson);
 		// 				pWriter.flush();
 		// 			}else if(false){//其他情况
-		// 				//TODO 编写其他mode的
+		//
 		// 			}
 		//
 		//
@@ -416,8 +403,8 @@ public class MyServer implements Runnable {
 			Platform.runLater(()->{
 				clients.add(remoteSocketAddress);
 				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-				receivedMsgArea.appendText(String.valueOf(remoteSocketAddress + " Connected " + " " + sdf.format(new Date()) + "\n"));
-				statusText.setText(String.valueOf(clients.size()) + " Connect success.");
+				receivedMsgArea.appendText(remoteSocketAddress + " Connected " + " " + sdf.format(new Date()) + "\n");
+				statusText.setText(clients.size() + " Connect success.");
 			});
 		}
 
@@ -431,7 +418,7 @@ public class MyServer implements Runnable {
 		public void updateForDisConnect(String remoteSocketAddress) {
 			Platform.runLater(()->{
 				clients.remove(remoteSocketAddress);
-				statusText.setText(String.valueOf(clients.size()) + " Connect success.");
+				statusText.setText(clients.size() + " Connect success.");
 				receivedMsgArea.appendText(remoteSocketAddress + " out of connected.." + "\n");
 			});
 		}
