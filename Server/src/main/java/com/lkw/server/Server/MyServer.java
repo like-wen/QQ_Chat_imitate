@@ -1,6 +1,7 @@
 package com.lkw.server.Server;
 
 import com.tool.Message;
+import com.tool.PicContent;
 import com.tool.Utils;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -151,7 +152,7 @@ public class MyServer implements Runnable {
 			//获取到对应的channel
 			channel = (SocketChannel) key.channel();
 			//分配 缓冲区 空间
-			ByteBuffer buffer = ByteBuffer.allocate(4000);
+			ByteBuffer buffer = ByteBuffer.allocate(10000);
 			//将发送的东西,读取到缓冲区中
 			int read = channel.read(buffer);
 
@@ -187,28 +188,28 @@ public class MyServer implements Runnable {
 	}
 
 	protected void dealMessage(Message msg, SelectionKey key, SocketChannel channel) {
-		switch (msg.type) {
+		switch (msg.getType()) {
 			case MSG_NAME:
-				key.attach(msg.content);
-				log.debug("用户{}已上线", msg.content);
-				ui.updateForConnect((String) msg.content);
+				key.attach(msg.getContent());
+				log.debug("用户{}已上线", msg.getContent());
+				ui.updateForConnect((String) msg.getContent());
 				// ui.addClients(msg.message);
 				getConnectedChannel(channel).forEach(selectionKey -> {
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.content + "已上线"), sc);
+					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.getContent() + "已上线"), sc);
 				});
 				break;
 			case MSG_GROUP:
 				getConnectedChannel(channel).forEach(selectionKey ->{
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-							Message message = new Message(MSG_GROUP,msg.getSendUser(),"all", msg.content);
+							Message message = new Message(MSG_GROUP,msg.getSendUser(),"all", msg.getContent());
 							sendMsgToClient(message, sc);
 							// System.out.println(message);/
 						});
-				receivedMsgArea.appendText(key.attachment()+" : "+Utils.base64decode(String.valueOf(msg.content)) + "  " +sdf.format(new Date())+" \n");
+				receivedMsgArea.appendText(key.attachment()+" : "+Utils.base64decode((String) msg.getContent()) + "  " +sdf.format(new Date())+" \n");
 				break;
 			case MSG_PRIVATE:
-				String[] s = ((String) msg.content).split("_");
+				String[] s = ((String) msg.getContent()).split("_");
 				AtomicBoolean flag = new AtomicBoolean(false);
 				getConnectedChannel(channel).stream()
 						.filter(sk -> s[0].equals(sk.attachment()))
@@ -232,7 +233,7 @@ public class MyServer implements Runnable {
 			case MSG_SYSTEM:
 				getConnectedChannel(channel).forEach(selectionKey -> {
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.content), sc);
+					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.getContent()), sc);
 				});
 				break;
 			case MSG_GetFileList:
@@ -252,11 +253,17 @@ public class MyServer implements Runnable {
 
 				break;
 			case MSG_PICTURE:
+					//应当在服务器设置名字
+				// PicContent picContent = ((PicContent) msg.getContent());
+				// picContent.setPicName(Utils.SetFileName(picContent.getPicName()));
+				Utils.ToDownload(msg);
 				getConnectedChannel(channel).forEach(selectionKey ->{
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-					Message message = new Message(MSG_PICTURE,msg.getSendUser(),"all", msg.content);
-					sendMsgToClient(message, sc);
-					System.out.println(msg.type);
+					sendMsgToClient(msg,sc);
+
+					// Message message = new Message(MSG_PICTURE,msg.getSendUser(),"all", msg.getContent());
+					// sendMsgToClient(message, sc);
+					System.out.println(msg.getType());
 				});
 				receivedMsgArea.appendText(key.attachment()+" : " + "<图片信息>  " +sdf.format(new Date())+" \n");
 				break;

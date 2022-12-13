@@ -21,11 +21,11 @@ import static com.tool.FinalValue.*;
 @Accessors(chain = true)
 @AllArgsConstructor
 public class Message implements Serializable {
-	public int type;
-	public String SendUser;
-	public String GetUser;
+	private int type;
+	private String SendUser;
+	private String GetUser;
 	//内容对象为Object对象
-	public Object content;
+	private Object content;
 	// public String message;
 	//todo: 图片的二进制传播
 
@@ -52,18 +52,17 @@ public class Message implements Serializable {
 	// 	}
 	// }
 
-	public Message(int type, String sendUser, String getUser, File file) {
-		this.type = type;
-		SendUser = sendUser;
-		GetUser = getUser;
-		this.content =  file;
-	}
+	// public Message(int type, String sendUser, String getUser, File file) {
+	// 	this.type = type;
+	// 	SendUser = sendUser;
+	// 	GetUser = getUser;
+	// }
 
-	public Message(int type, String sendUser, String getUser, String content) {
-		this.type = type;
-		SendUser = sendUser;
-		GetUser = getUser;
-		this.content = content;
-	}
+	// public Message(int type, String sendUser, String getUser, String content) {
+	// 	this.type = type;
+	// 	SendUser = sendUser;
+	// 	GetUser = getUser;
+	// 	this.content = content;
+	// }
 }
 

@@ -104,9 +104,9 @@ public class MybatisPlusController {
     public static DataSource dataSource() {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
         dataSource.setDriverClass(com.mysql.cj.jdbc.Driver.class);
-        dataSource.setUrl("jdbc:mysql://localhost:3306/course?serverTimezone=GMT%2B8");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/network?serverTimezone=GMT%2B8");
         dataSource.setUsername("root");
-        dataSource.setPassword("148963");
+        dataSource.setPassword("*strawberry");
         return dataSource;
     }
 }

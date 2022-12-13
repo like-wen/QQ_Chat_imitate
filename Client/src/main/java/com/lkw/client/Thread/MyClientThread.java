@@ -1,6 +1,7 @@
 package com.lkw.client.Thread;
 
 import com.tool.Message;
+import com.tool.PicContent;
 import com.tool.Utils;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -232,9 +233,13 @@ public class MyClientThread implements Runnable {
 		nameL.setTextAlignment(TextAlignment.RIGHT);
 		nameL.setMaxWidth(400);
 		nameL.setTextFill(Color.web("#0000cd"));
+
+
+
 		FileInputStream fileInputStream=null;
+		File file=new File(((PicContent)pic).getPicName());
 		try {
-			fileInputStream = new FileInputStream((File) pic);
+			fileInputStream = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -337,8 +342,8 @@ public class MyClientThread implements Runnable {
 					showPic(username,file,sdf.format(new Date()));
 
 					//发送到聊天系统中
-					Message PicMsg = new Message(MSG_PICTURE, username, "", file);
-
+					Message PicMsg = new Message(MSG_PICTURE, username, "all",null);
+					Utils.fileToByteArray(file,PicMsg);
 
 					try {
 						byte[] bytes1 = Utils.encode(PicMsg);
@@ -436,7 +441,7 @@ public class MyClientThread implements Runnable {
 					SelectionKey key = iterator.next();
 					//将此次检查的数据,从selector中移除(因为是迭代器中深拷贝),避免让下次处理出现混乱
 					iterator.remove();
-					log.info(String.valueOf(message.content));
+					log.info(String.valueOf(message.getContent()));
 					//如果有可读事件,则表明服务器端向客户端发送消息
 					if (key.isReadable()) {
 
@@ -445,14 +450,14 @@ public class MyClientThread implements Runnable {
 						//3.缓冲区进行解码
 
 						SocketChannel sc = (SocketChannel) key.channel();
-						ByteBuffer buffer = ByteBuffer.allocate(4000);
+						ByteBuffer buffer = ByteBuffer.allocate(10000);
 						sc.read(buffer);
 						message = Utils.decode(buffer.array());
 
 						//4.根据发送过来的消息类型 进行判定
 						switch (message.getType()){
 							case MSG_GetFileList://收到文件列表更新信息
-								String[] fileNameList = ((String)message.content).split(";");//分割成字符串数组
+								String[] fileNameList = ((String)message.getContent()).split(";");//分割成字符串数组
 								if (fileNameList.length!=fileNum) {
 									Platform.runLater(()->{//保护跨线程操作UI组件
 										//清理文件列表
@@ -466,6 +471,9 @@ public class MyClientThread implements Runnable {
 								break;
 							case MSG_PICTURE:
 								Message picMessage = message;
+
+								Utils.ByteArrayToFile(picMessage);
+
 								Platform.runLater(()->{
 									showReceivePic(picMessage.getSendUser(),picMessage.getContent(),sdf.format(new Date()));
 								});
