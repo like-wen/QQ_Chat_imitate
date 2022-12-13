@@ -1,11 +1,22 @@
 package com.lkw.server.FileServer;
 
+import com.lkw.server.Server.MyServer;
 import com.lkw.server.Utils.MybatisPlusController;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.math.RoundingMode;
 import java.net.Socket;
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.Map;
 
 public class FileHandler implements Runnable{
@@ -87,6 +98,39 @@ public class FileHandler implements Runnable{
                 }
                 fos.close();
                 System.out.println("======== 文件接收成功 [File Name：" + fileName + "] [Size：" + getFormatFileSize(fileLength) + "] ========");
+
+                Platform.runLater(()->{
+
+                    Stage popup = new Stage();
+                    popup.setAlwaysOnTop(true);
+                    popup.initModality(Modality.APPLICATION_MODAL);
+                    Button closeBtn = new Button("知道了");
+                    closeBtn.setOnAction(e -> {
+                        popup.close();
+                    });
+                    VBox root = new VBox();
+                    root.setPadding(new Insets(20));
+                    root.setAlignment(Pos.BASELINE_CENTER);
+                    root.setSpacing(20);
+                    root.getChildren().addAll(new Label("文件接收成功 [File Name：" + fileName + "] [Size：" + getFormatFileSize(fileLength) + "]"), closeBtn);
+                    Scene scene = new Scene(root);
+                    popup.setScene(scene);
+                    popup.setTitle("文件接收成功");
+                    popup.show();
+
+                    Thread thread = new Thread(() -> {
+                        try {
+                            Thread.sleep(3000);
+                            if (popup.isShowing()) {
+                                Platform.runLater(() -> popup.close());
+                            }
+                        } catch (Exception exp) {
+                            exp.printStackTrace();
+                        }
+                    });
+                    thread.setDaemon(true);
+                    thread.start();
+                });
             }
         }catch (IOException e) {
             System.out.println("文件传输失败");

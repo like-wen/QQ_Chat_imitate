@@ -10,19 +10,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="测试">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_12_4_21_50__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022_12_4_21_50__Changes_.xml" afterDir="false" />
+    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="放虚拟机">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6c98e8b7-6f18-48b7-bff5-1bd21f2719b0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/6c98e8b7-6f18-48b7-bff5-1bd21f2719b0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyFileThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyFileThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FileHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FileHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/test/java/com/lkw/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/test/java/com/lkw/test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/MyServer$UIhandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/MyServer$UIhandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/MyServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/MyServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Utils/MybatisPlusController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Utils/MybatisPlusController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tools/src/main/java/com/tool/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/src/main/java/com/tool/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/target/test-classes/com/lkw/test.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/test-classes/com/lkw/test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tools/target/classes/com/tool/Utils.class" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/target/classes/com/tool/Utils.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Client_jar/Client.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Client_jar/Client.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Server_jar/Server.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Server_jar/Server.jar" afterDir="false" />
     </list>
@@ -124,7 +123,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Application.ServerUI">
+  <component name="RunManager" selected="Application.Login">
     <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -222,10 +221,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Login" />
         <item itemvalue="Application.ServerUI" />
         <item itemvalue="JAR Application.Client.jar" />
         <item itemvalue="JAR Application.Server.jar" />
-        <item itemvalue="Application.Login" />
         <item itemvalue="Application.test" />
       </list>
     </recent_temporary>
@@ -277,7 +276,8 @@
       <workItem from="1670054093917" duration="16663000" />
       <workItem from="1670115723563" duration="8797000" />
       <workItem from="1670332062225" duration="4208000" />
-      <workItem from="1670910964927" duration="3827000" />
+      <workItem from="1670910964927" duration="4124000" />
+      <workItem from="1670934680910" duration="6014000" />
     </task>
     <task id="LOCAL-00001" summary="基础代码">
       <created>1663814396212</created>
@@ -412,7 +412,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670072051960</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="放虚拟机">
+      <created>1670915439965</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1670915439965</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -471,7 +478,8 @@
     <MESSAGE value="客户端修改输入输出流&#10;   --shaw" />
     <MESSAGE value="登录,注册完成" />
     <MESSAGE value="数据库操作基本写完" />
-    <option name="LAST_COMMIT_MESSAGE" value="数据库操作基本写完" />
+    <MESSAGE value="放虚拟机" />
+    <option name="LAST_COMMIT_MESSAGE" value="放虚拟机" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -498,7 +506,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
-          <line>457</line>
+          <line>456</line>
           <option name="timeStamp" value="98" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -508,7 +516,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FileHandler.java</url>
-          <line>57</line>
+          <line>68</line>
           <option name="timeStamp" value="105" />
         </line-breakpoint>
       </breakpoints>

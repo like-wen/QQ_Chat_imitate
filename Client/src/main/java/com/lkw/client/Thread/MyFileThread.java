@@ -64,7 +64,7 @@ public class MyFileThread implements Runnable {
 	@Override
 	public void run() {
 		try {
-			socketFile = new Socket("127.0.0.1", 9998);
+			socketFile = new Socket("127.0.0.1", 9998);//192.168.199.100
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -72,7 +72,6 @@ public class MyFileThread implements Runnable {
 		//BufferedReader ReaderF = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		try {
 			writerFile = new DataOutputStream(socketFile.getOutputStream());
-
 			dis = new DataInputStream(socketFile.getInputStream());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
