@@ -109,6 +109,13 @@ public class MyClientThread implements Runnable {
 		vBox.getChildren().addAll(an,timePane);
 		updateFlag = true;
 	}
+
+	/**
+	 * 展示接收的信息
+	 * @param name
+	 * @param msg
+	 * @param time
+	 */
 	void showReceiveMsg(String name,String msg,String time){
 
 		AnchorPane an = new AnchorPane();
@@ -125,7 +132,9 @@ public class MyClientThread implements Runnable {
 			nameL.setTextFill(Color.web("#8f4789"));
 
 
-		Label msgL = new Label(msg);
+		//base64去盐解码
+		log.info("将"+msg+"解密");
+		Label msgL = new Label(Utils.base64decode(msg));
 		msgL.setFont(new Font(18));
 		msgL.setStyle("-fx-background-color: #ff137f");
 		msgL.setPadding(new Insets(5, 10, 5, 10));
@@ -263,8 +272,6 @@ public class MyClientThread implements Runnable {
 		timePane.getChildren().add(timeL);
 		AnchorPane.setLeftAnchor(timeL, 26.0);
 		AnchorPane.setBottomAnchor(timeL,2.0);
-
-
 		vBox.getChildren().addAll(an,timePane);
 		updateFlag = true;
 	}
@@ -349,6 +356,9 @@ public class MyClientThread implements Runnable {
 			//"发送"按钮的点击事件,即发送文字信息
 			sendBtn.setOnAction(e->{
 				String sendMsg=sendArea.getText();
+				//带盐的base64加密
+				String sendBase64Msg = Utils.base64encode(sendMsg);
+				log.info("信息加密为"+sendBase64Msg);
 				if(sendMsg.equals("")){
 					toolTips.setText("没有内容");
 				}else {
@@ -358,10 +368,10 @@ public class MyClientThread implements Runnable {
 					Message msg;
 					boolean isPrivate = false;
 					if (isPrivate) {
-						msg = new Message(MSG_PRIVATE, username, "", sendMsg);
+						msg = new Message(MSG_PRIVATE, username, "", sendBase64Msg);
 					}
 					else {
-						msg = new Message(MSG_GROUP, username,"all",sendMsg);
+						msg = new Message(MSG_GROUP, username,"all",sendBase64Msg);
 					}
 					byte[] bytes1 = new byte[0];
 					try {

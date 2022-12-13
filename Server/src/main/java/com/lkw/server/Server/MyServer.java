@@ -205,7 +205,7 @@ public class MyServer implements Runnable {
 							sendMsgToClient(message, sc);
 							// System.out.println(message);/
 						});
-				receivedMsgArea.appendText(key.attachment()+" : "+msg.content + "  " +sdf.format(new Date())+" \n");
+				receivedMsgArea.appendText(key.attachment()+" : "+Utils.base64decode(String.valueOf(msg.content)) + "  " +sdf.format(new Date())+" \n");
 				break;
 			case MSG_PRIVATE:
 				String[] s = ((String) msg.content).split("_");
@@ -292,8 +292,9 @@ public class MyServer implements Runnable {
 		collect.forEach(sk ->
 				{
 					SocketChannel sc = (SocketChannel) sk.channel();
-					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",sendMsgArea.getText()), sc);
-
+					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",Utils.base64encode(sendMsgArea.getText())), sc);//编码
+					//显示
+					receivedMsgArea.appendText("SYSTEM"+" : "+sendMsgArea.getText() + "  " +sdf.format(new Date())+" \n");
 				});
 		sendMsgArea.clear();
 

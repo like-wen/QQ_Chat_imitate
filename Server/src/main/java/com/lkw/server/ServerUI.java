@@ -71,7 +71,7 @@ public class ServerUI extends Application{
 		leftPane2.setVgap(5.5);
 		leftPane2.add(new Label("已上线用户"), 0, 0);
 		clientListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		clientListView.setMaxHeight(80);
+		clientListView.setMaxHeight(160);
 		clientListView.setMaxWidth(275);
 		leftPane2.add(clientListView, 0, 1);
 		//左边 Send Message
@@ -106,7 +106,7 @@ public class ServerUI extends Application{
 
 		//组合
 		VBox vBox = new VBox();
-		vBox.getChildren().addAll(leftPane1, leftPane2, leftPane3);
+		vBox.getChildren().addAll( leftPane2, leftPane3);//pane1不添加
 		HBox hBox = new HBox();
 		hBox.getChildren().addAll(vBox, rightPane,filePane);
 
