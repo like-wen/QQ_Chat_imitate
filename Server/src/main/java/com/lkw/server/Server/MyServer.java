@@ -216,7 +216,7 @@ public class MyServer implements Runnable {
 				// ui.addClients(msg.message);
 				getConnectedChannel(channel).forEach(selectionKey -> {
 					SocketChannel sc = (SocketChannel) selectionKey.channel();
-					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",msg.getContent() + "已上线"), sc);
+					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",Utils.base64decode(String.valueOf(msg.getContent())) + "已上线"), sc);
 				});
 				break;
 			case MSG_GROUP:
