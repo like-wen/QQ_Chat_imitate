@@ -19,8 +19,6 @@ public class FindFile implements Callable {
         while (true) {
             Platform.runLater(() -> {
 
-
-
                 File file = new File(System.getProperty("user.dir") + "\\MyFile\\");//TODO
                 if(!file.exists())
                     file.mkdir();

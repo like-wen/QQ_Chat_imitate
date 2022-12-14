@@ -83,17 +83,18 @@ public class LoginController implements Initializable {
 
 
            try {
-               socket = new Socket("192.168.199.100", 9999);//192.168.199.100
+               socket = new Socket("localhost", 9999);//192.168.199.100
                //socket的输入输出
                BufferedReader bReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                PrintWriter pWriter = new PrintWriter(socket.getOutputStream());
+
+               password.setPromptText("密码");
+               username.setPromptText("用户名");
 
                loginBtn.setOnAction(e->{
                    if(!selectBool.isSelected())
                        tips.setText("请阅读并同意协议");
                    else {
-
-
                        String usernameText = username.getText();
                        String passwordText = password.getText();
                        String msg = "login:"+usernameText + ":" + passwordText;
@@ -142,6 +143,10 @@ public class LoginController implements Initializable {
                    } else if (json.equals("false_signUp")) {
                        Platform.runLater(()->{
                            tips.setText("该用户名已注册");
+                       });
+                   }else  if(json.equals("false_logged")){
+                       Platform.runLater(()->{
+                           tips.setText("该用户已登录");
                        });
                    }
                }

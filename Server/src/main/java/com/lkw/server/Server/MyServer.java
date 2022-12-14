@@ -1,6 +1,7 @@
 package com.lkw.server.Server;
 
 import com.lkw.server.FileServer.ThreadPoolManager;
+import com.lkw.server.Utils.MybatisPlusController;
 import com.tool.Message;
 import com.tool.PicContent;
 import com.tool.Utils;
@@ -154,36 +155,45 @@ public class MyServer implements Runnable {
 			//获取到对应的channel
 			channel = (SocketChannel) key.channel();
 			//分配 缓冲区 空间
-			ByteBuffer buffer = ByteBuffer.allocate(10000);
 
 			ByteBuffer bbInt = ByteBuffer.allocate(4);    //读取INT头信息的缓存池
 			ByteBuffer bbObj = null;
 			//将发送的东西,读取到缓冲区中
-			if (channel.read(bbInt)!= 4){
-				// 如果是正常断开，read 的方法的返回值是 -1
-				key.cancel();
-				return;
-			}
-			int objLength = bbInt.getInt(0);
-			bbObj = ByteBuffer.allocate(objLength);
-
-			int readObj = channel.read(bbObj);
-
-			if(readObj==-1)
-			{
-				key.cancel();
-				return;
-			}
-			while (readObj != objLength) {
-				int read = channel.read(bbObj);
-				if(read==-1)
-				{// 如果是正常断开，read 的方法的返回值是 -1
+			try {
+				if (channel.read(bbInt)!= 4){
+					// 如果是正常断开，read 的方法的返回值是 -1
 					key.cancel();
 					return;
 				}
-				readObj += read;
+				int objLength = bbInt.getInt(0);
+				bbObj = ByteBuffer.allocate(objLength);
+
+				int readObj = channel.read(bbObj);
+
+				if(readObj==-1)
+				{
+					key.cancel();
+					return;
+				}
+				while (readObj != objLength) {
+					int read = channel.read(bbObj);
+					if(read==-1)
+					{// 如果是正常断开，read 的方法的返回值是 -1
+						key.cancel();
+						return;
+					}
+					readObj += read;
+				}
+				bbObj.flip();
+			}catch (IOException e)
+			{
+				//强迫中断
+				key.cancel();
+				MybatisPlusController.getController().RemoveUser((String) key.attachment());
+				return;
 			}
-			bbObj.flip();
+
+
 
 			Message msg = Utils.decode(bbObj.array());
 			log.debug(String.valueOf(msg.getType()));
@@ -226,7 +236,7 @@ public class MyServer implements Runnable {
 							sendMsgToClient(message, sc);
 							// System.out.println(message);/
 						});
-				receivedMsgArea.appendText(sdf.format(new Date())+"  "+key.attachment()+" : "+Utils.base64decode((String) msg.getContent()) + "  " +" \n");
+				receivedMsgArea.appendText(key.attachment()+" : "+Utils.base64decode((String) msg.getContent()) + "  " +sdf.format(new Date())+" \n");
 				break;
 			case MSG_PRIVATE:
 				String[] s = ((String) msg.getContent()).split("_");
@@ -247,8 +257,7 @@ public class MyServer implements Runnable {
 				onlineList.add((String) key.attachment());
 				getConnectedChannel(channel).forEach(selectionKey ->
 								onlineList.add((String) selectionKey.attachment()));
-				sendMsgToClient(new Message(onlineList.toString()), channel);
-
+				sendMsgToClient(new Message(MSG_ONLINE,"SYSTEM","all",String.valueOf(onlineList.size())), channel);
 				break;
 			case MSG_SYSTEM:
 				getConnectedChannel(channel).forEach(selectionKey -> {
@@ -259,7 +268,7 @@ public class MyServer implements Runnable {
 			case MSG_GetFileList:
 				log.info("发送文件更新信息");
 				//Todo:文件表对应
-				File file = new File(System.getProperty("user.dir") + "\\MyFile\\");//TODO
+				File file = new File(System.getProperty("user.dir") + "\\MyFile\\");
 				File[] files = file.listFiles();
 				if(file==null)
 					break;
@@ -285,7 +294,7 @@ public class MyServer implements Runnable {
 					// sendMsgToClient(message, sc);
 					System.out.println(msg.getType());
 				});
-				receivedMsgArea.appendText(sdf.format(new Date())+"  "+key.attachment()+" : " + "<图片信息>  " +" \n");
+				receivedMsgArea.appendText(key.attachment()+" : " + "<图片信息>  " +sdf.format(new Date())+" \n");
 				break;
 
 			default:
@@ -321,16 +330,13 @@ public class MyServer implements Runnable {
 					SocketChannel sc = (SocketChannel) sk.channel();
 					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",Utils.base64encode(sendMsgArea.getText())), sc);//编码
 					//显示
-					receivedMsgArea.appendText(sdf.format(new Date())+"  SYSTEM"+" : "+sendMsgArea.getText() + "  " +" \n");
+					receivedMsgArea.appendText("SYSTEM"+" : "+sendMsgArea.getText() + "  " +sdf.format(new Date())+" \n");
 				});
 		sendMsgArea.clear();
 
 	}
 
 	class UIhandler  {
-		public void addClients(String name) {
-			this.clients.add(name);
-		}
 
 		public Set<String> getSelected() {
 			return selected;
@@ -371,56 +377,7 @@ public class MyServer implements Runnable {
 		}
 
 
-		// @Override
-		// public void run() {
-		// 	String remoteSocketAddress = null;
-		// 	try {
-		// 		remoteSocketAddress = socket.getRemoteAddress().toString().substring(1);
-		// 	} catch (IOException e) {
-		// 		e.printStackTrace();
-		// 	}
-		// 	updateForConnect(remoteSocketAddress);
-		// 	try {
-		//
-		//
-		// 		InputStream in = socket.getInputStream();
-		// 		BufferedReader bReader = new BufferedReader(new InputStreamReader(in));
-		// 		OutputStream out = socket.getOutputStream();
-		// 		PrintWriter pWriter = new PrintWriter(out);
-		// 		map.put(remoteSocketAddress, pWriter);
-		// 		//发消息
-		// 		sendMessage();
-		// 		//收消息
-		// 		String json;
-		// 		while(true) {
-		// 			json = bReader.readLine();
-		// 			//个人响应
-		// 			System.out.println("收到"+json);
-		//
-		// 			//解析json
-		// 			Json2Object json2Object = new Json2Object(json);
-		// 			//判断mode
-		// 			if(json2Object.getMode().equals("login")){
-		// 				String returnJson = json2Object.Json2PasswordCheck();
-		// 				System.out.println("发送"+returnJson);
-		// 				pWriter.write(returnJson);
-		// 				pWriter.flush();
-		// 			}else if(false){//其他情况
-		//
-		// 			}
-		//
-		//
-		// 			//群转发
-		// 			//][]\]==
-		// 			// sendMessage2All(json,pWriter);
-		//
-		//
-		// 			receivedMsgArea.appendText(json + "\n");
-		// 		}
-		// 	} catch (IOException e) {
-		// 		updateForDisConnect(remoteSocketAddress);
-		// 	}
-		// }
+
 
 		/**
 		 * 接入客户端后，更新UI界面
@@ -451,57 +408,6 @@ public class MyServer implements Runnable {
 				receivedMsgArea.appendText(remoteSocketAddress + " out of connected.." + "\n");
 			});
 		}
-
-		/**
-		 * 给服务器选择的客户端进行发送
-		 * 1.为clientListView设置监听器
-		 *   1.1获取已选择的项(IP:Port)
-		 *   1.2从映射表中取出对应printWriter放入printWriters集合
-		 * 2.为sendButton设置鼠标点击事件
-		 *   2.1遍历printWriters集合
-		 *   2.2写入待发送的消息
-		 */
-
-		public void sendMessage() {
-			Set<PrintWriter> printWriters = new HashSet<>();
-
-			clientListView.getSelectionModel().
-					selectedItemProperty().
-					addListener(ov->
-					{ 	printWriters.clear();
-						for(String key: clientListView.getSelectionModel().getSelectedItems()) {
-
-				}
-			});
-
-			sendButton.setOnAction(e->{
-				for (PrintWriter printWriter : printWriters) {
-					printWriter.write(sendMsgArea.getText() + "\r\n");
-					printWriter.flush();
-				}
-			});
-		}
-
-
-		// /**
-		//  * 单独发送以及群发
-		//  * @param message
-		//  * @param pWriter
-		//  */
-		// public void sendMessage2All(String message, PrintWriter pWriter){
-		// 	for (PrintWriter printWriter:map.values()){
-		// 		if(!pWriter.equals(printWriter)) {
-		// 			printWriter.write(message);
-		// 			printWriter.flush();
-		// 		}
-		// 	}
-		//
-		// }
-
-
-
-
-
 
 	}
 }

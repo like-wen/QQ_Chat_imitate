@@ -64,6 +64,7 @@ public class MyClientThread implements Runnable {
 	private Text toolTips;
 	private ImageView ic;
 	ObservableList<String> fileItems;
+	private Text count;
 
 	int fileNum=0;
 
@@ -263,7 +264,7 @@ public class MyClientThread implements Runnable {
 		AnchorPane.setLeftAnchor(nameL, 26.0);
 		AnchorPane.setTopAnchor(nameL, 15.0);
 
-		AnchorPane.setLeftAnchor(iv, 46.0);
+		AnchorPane.setLeftAnchor(iv, 26.0);
 		AnchorPane.setTopAnchor(iv, 45.0);
 
 		AnchorPane timePane = new AnchorPane();
@@ -287,7 +288,7 @@ public class MyClientThread implements Runnable {
 
 		}
 	}
-	public MyClientThread(Button sendBtn, TextArea sendArea, Text toolTips, String username, ObservableList<String> fileItems, VBox vBox, ImageView ic, ScrollPane scrollPane) {
+	public MyClientThread(Button sendBtn, TextArea sendArea, Text toolTips, String username, ObservableList<String> fileItems, VBox vBox, ImageView ic, ScrollPane scrollPane,Text count) {
 		super();
 		this.sendBtn=sendBtn;
 		this.sendArea=sendArea;
@@ -297,6 +298,7 @@ public class MyClientThread implements Runnable {
 		this.fileItems=fileItems;
 		this.vBox=vBox;
 		this.scroll=scrollPane;
+		this.count=count;
 	}
 
 
@@ -316,7 +318,7 @@ public class MyClientThread implements Runnable {
 				}
 			});
 
-			ic.setImage(new Image("/QQ.png"));
+			ic.setImage(new Image("/ic.png"));
 			//"发送图片"对点击事件的处理,发送图片信息
 			ic.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 				@Override
@@ -367,16 +369,7 @@ public class MyClientThread implements Runnable {
 					toolTips.setText("没有内容");
 				}else {
 
-					//Todo 判断是群发 还是 私发
-
-					Message msg;
-					boolean isPrivate = false;
-					if (isPrivate) {
-						msg = new Message(MSG_PRIVATE, username, "", sendBase64Msg);
-					}
-					else {
-						msg = new Message(MSG_GROUP, username,"all",sendBase64Msg);
-					}
+					Message msg = new Message(MSG_GROUP, username,"all",sendBase64Msg);
 					byte[] bytes1 = new byte[0];
 					try {
 						bytes1 = Utils.encode(msg);
@@ -386,8 +379,6 @@ public class MyClientThread implements Runnable {
 					}
 					sendArea.setText("");
 
-
-					// acceptArea.appendText(username+" "+sdf.format(new Date())+"\n"+sendMsg+"\n");
 					showMsg(username,sendMsg,sdf.format(new Date()));
 
 				}
@@ -400,21 +391,23 @@ public class MyClientThread implements Runnable {
 			//3.配置socketchannel为阻塞
 			//4.为这个socketchannel,注册为 对读 感兴趣,即 能通过 selector 获取 服务器传过来的消息
 			selector = Selector.open();
-			socketChannel = SocketChannel.open(new InetSocketAddress("192.168.199.100", 8888));//192.168.199.100
+			socketChannel = SocketChannel.open(new InetSocketAddress("localhost", 8888));//192.168.199.100
 			socketChannel.configureBlocking(false);
 			socketChannel.register(selector, SelectionKey.OP_READ);
 			//定时器
 			TimerTask timerTask=new TimerTask() {
 				@Override
-				public void run() {//定时更新文件列表
+				public void run() {//定时更新文件列表+人数
 
-					// System.out.println("发送更新请求");
 					Message msg;
-					msg=new Message(MSG_GetFileList,username,username,username);
-					byte[] bytes1 = new byte[0];
+					msg=new Message(MSG_GetFileList,username,"SYSTEM","");
+					byte[] bytes = new byte[0];
 					try {
-						bytes1 = Utils.encode(msg);
-						socketChannel.write(ByteBuffer.wrap(bytes1));
+						bytes = Utils.encode(msg);
+						socketChannel.write(ByteBuffer.wrap(bytes));
+						msg=new Message(MSG_ONLINE,username,"SYSTEM","");
+						bytes = Utils.encode(msg);
+						socketChannel.write(ByteBuffer.wrap(bytes));
 					} catch (IOException ioException) {
 						ioException.printStackTrace();
 					}
@@ -507,6 +500,13 @@ public class MyClientThread implements Runnable {
 
 								Platform.runLater(()->{
 									showReceivePic(picMessage.getSendUser(),picMessage.getContent(),sdf.format(new Date()));
+								});
+								break;
+							case  MSG_ONLINE:
+								Message msg=message;
+								Platform.runLater(()->{
+									String num= (String)msg.getContent();
+									count.setText(num+"人");
 								});
 								break;
 							default://文字消息

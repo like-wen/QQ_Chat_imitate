@@ -10,7 +10,7 @@ public class LoginServer implements Runnable {
 
     public static final int PORT = 9999;
 
-
+    MybatisPlusController mybatisPlusController=MybatisPlusController.getController();
 
 
     @Override
@@ -26,7 +26,6 @@ public class LoginServer implements Runnable {
             }
         } catch (IOException e)
         {
-            // TODO 自动生成的 catch 块
             e.printStackTrace();
         }
     }
@@ -35,7 +34,7 @@ public class LoginServer implements Runnable {
 
     public class LoginHandler implements Runnable{
         Socket socket;
-        MybatisPlusController mybatisPlusController=new MybatisPlusController();
+
         public LoginHandler(Socket socket) {
             this.socket=socket;
 
@@ -56,11 +55,13 @@ public class LoginServer implements Runnable {
                     System.out.println(str);
                     String[] strs = str.split(":");
                     String response;
+                    strs[1]=strs[1].replaceAll("\\s+","");
+                    strs[2]=strs[2].replaceAll("\\s+","");
+
                     if (strs[1]!=""&&strs[2]!="") {
                         response= mybatisPlusController.loginOrSignUp(strs[0], strs[1], strs[2]);
                     } else {
                         response="false";
-
                     }
 
 
@@ -68,6 +69,7 @@ public class LoginServer implements Runnable {
 
 
                         System.out.println(response);
+                        //向socket发送消息,以便于登录判定
                         pWriter.write(response.toString() + "\n");
                         pWriter.flush();
                 }

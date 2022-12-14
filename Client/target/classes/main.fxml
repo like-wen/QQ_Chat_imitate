@@ -39,7 +39,12 @@
             <VBox fx:id="msgVbox" disable="true" />
          </content>
       </ScrollPane>
-      <ImageView fx:id="ic" fitHeight="35.0" fitWidth="37.0" layoutX="14.0" layoutY="335.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="ic" fitHeight="45.0" fitWidth="45.0" layoutY="331.0" pickOnBounds="true" preserveRatio="true" />
+      <Text fx:id="count" fill="#791919" layoutX="798.0" layoutY="567.0" lineSpacing="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="108.0">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Text>
 
    </children>
 </AnchorPane>

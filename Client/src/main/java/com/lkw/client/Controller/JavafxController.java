@@ -67,6 +67,9 @@ public class JavafxController  {
     @FXML
     private ScrollPane scroll;
 
+    @FXML
+    private Text count;
+
     public void init(String username) {
 
         //添加文件列表 示例
@@ -80,7 +83,7 @@ public class JavafxController  {
         //可以继承一个监听接口
         Platform.runLater(() -> {
             //其他线程调用组件,可以用这个进行保护
-            new Thread(new MyClientThread(sendBtn,sendArea,toolTips, username,fileItems,msgVbox,ic,scroll)).start();
+            new Thread(new MyClientThread(sendBtn,sendArea,toolTips, username,fileItems,msgVbox,ic,scroll,count)).start();
             new Thread(new MyFileThread(sendFileBtn,acceptAreaFileBtn,filePathArea,fileList,selectFileBtn,toolTips)).start();
         });
     }

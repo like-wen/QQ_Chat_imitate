@@ -14,7 +14,7 @@ import java.text.DecimalFormat;
 
 /**
  * 客户端
- * @author 花大侠
+ *
  *
  */
 public class MyFileThread implements Runnable {
@@ -53,7 +53,9 @@ public class MyFileThread implements Runnable {
 
 	public MyFileThread(Button sendFileBtn, Button acceptAreaFileBtn, TextArea filePathArea, ListView<String> fileList, Button selectFileBtn, Text toolTips) {
 		super();
+		filePathArea.setPromptText("未选择文件");
 		this.filePathArea = filePathArea;
+
 		this.sendFileBtn = sendFileBtn;
 		this.acceptAreaFileBtn=acceptAreaFileBtn;
 		this.fileList=fileList;
@@ -64,7 +66,7 @@ public class MyFileThread implements Runnable {
 	@Override
 	public void run() {
 		try {
-			socketFile = new Socket("192.168.199.100", 9998);//192.168.199.100
+			socketFile = new Socket("localhost", 9998);//192.168.199.100
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -81,6 +83,8 @@ public class MyFileThread implements Runnable {
 			fileChooser.setTitle("选择上传云端的文件");
 			fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
 			File file = fileChooser.showOpenDialog(new Stage());
+			if (file==null)
+				return;
 			filePathArea.setText(file.getAbsolutePath());
 		});
 
@@ -108,8 +112,10 @@ public class MyFileThread implements Runnable {
 					System.out.println("文件传输进度: " + (100 * progress / file.length()) + "% ");
 				}
 				toolTips.setText("传输完成");
+				filePathArea.setText("");
 			} catch (Exception ex) {
 				toolTips.setText("文件找不到!");
+				filePathArea.setText("");
 				throw new RuntimeException(ex);
 			}
 		});

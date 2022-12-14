@@ -17,15 +17,24 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class MybatisPlusController {
+    //单例模式
+    static MybatisPlusController controller=new MybatisPlusController();
+    private static SqlSessionFactory sqlSessionFactory = controller.initSqlSessionFactory();
+    private ArrayList<String> users=new ArrayList<>();
+    private MybatisPlusController(){
 
-    private static SqlSessionFactory sqlSessionFactory = initSqlSessionFactory();
-
-
-
-
+    }
+    public static MybatisPlusController getController(){
+        return controller;
+    }
+    public void RemoveUser(String name){
+        users.remove(name);
+    }
     public String loginOrSignUp(String mode,String name,String password) {
         //初始化
         try (SqlSession session = sqlSessionFactory.openSession(true)) {
@@ -37,9 +46,14 @@ public class MybatisPlusController {
                 User user = mapper.selectOne(queryWrapper);
                 if (user != null) {//未找到,尝试注册
                     if (user.getPassword().equals(password)) {//找到
-                        user.setOnlineTime(new Date());
-                        mapper.updateById(user);
-                        return "true";
+                        if (users.contains(user.getName())){
+                            return "false_logged";
+                        }else{
+                            users.add(user.getName());
+                            user.setOnlineTime(new Date());
+                            mapper.updateById(user);
+                            return "true";
+                        }
                     } else
                         return "false";
                 }else
@@ -81,14 +95,11 @@ public class MybatisPlusController {
 
             //更新对象
             mapper.updateById(file);
-
-
         }
     }
 
-
     //工厂方法
-    public static SqlSessionFactory initSqlSessionFactory() {
+    public  SqlSessionFactory initSqlSessionFactory() {
         DataSource dataSource = dataSource();
         TransactionFactory transactionFactory = new JdbcTransactionFactory();
         Environment environment = new Environment("Production", transactionFactory, dataSource);
@@ -101,11 +112,9 @@ public class MybatisPlusController {
     }
 
     //连接进行
-    public static DataSource dataSource() {
+    public DataSource dataSource() {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
 
-
-        //TODO
         dataSource.setDriverClass(com.mysql.cj.jdbc.Driver.class);
         dataSource.setUrl("jdbc:mysql://localhost:3306/network?serverTimezone=GMT%2B8");
         dataSource.setUsername("root");

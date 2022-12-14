@@ -31,7 +31,7 @@ public class FileHandler implements Runnable{
     private DataOutputStream writerFile;
     private FileInputStream fileInputStream;
 
-    private MybatisPlusController mybatisPlusController=new MybatisPlusController();
+    private MybatisPlusController mybatisPlusController=MybatisPlusController.getController();
 
 
 

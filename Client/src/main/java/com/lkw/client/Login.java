@@ -20,8 +20,8 @@ public class Login extends Application {
         Parent root = null;
         try {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/login.fxml")));
-            primaryStage.setTitle("QQ");
-            primaryStage.getIcons().add(new Image("/QQ.png"));
+            primaryStage.setTitle("File-Cloud");
+            primaryStage.getIcons().add(new Image("/cloud-file.png"));
             primaryStage.setScene(new Scene(root));
             primaryStage.setOnCloseRequest(e->{
                 System.exit(0);
