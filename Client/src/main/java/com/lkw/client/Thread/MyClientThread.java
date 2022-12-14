@@ -393,12 +393,22 @@ public class MyClientThread implements Runnable {
 				}
 			});
 
+
+
+			//1.先使用Selector的open()方法,创建selector
+			//2.使用SocketChannel的open()方法,连接到指定位置,返回连接的socketchannel
+			//3.配置socketchannel为阻塞
+			//4.为这个socketchannel,注册为 对读 感兴趣,即 能通过 selector 获取 服务器传过来的消息
+			selector = Selector.open();
+			socketChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 8888));//192.168.199.100
+			socketChannel.configureBlocking(false);
+			socketChannel.register(selector, SelectionKey.OP_READ);
 			//定时器
 			TimerTask timerTask=new TimerTask() {
 				@Override
 				public void run() {//定时更新文件列表
 
-					System.out.println("发送更新请求");
+					// System.out.println("发送更新请求");
 					Message msg;
 					msg=new Message(MSG_GetFileList,username,username,username);
 					byte[] bytes1 = new byte[0];
@@ -412,16 +422,6 @@ public class MyClientThread implements Runnable {
 			};
 			Timer timer=new Timer();
 			timer.scheduleAtFixedRate(timerTask,500l,3000l);//0.5秒后开始,每隔3秒运行
-
-			//1.先使用Selector的open()方法,创建selector
-			//2.使用SocketChannel的open()方法,连接到指定位置,返回连接的socketchannel
-			//3.配置socketchannel为阻塞
-			//4.为这个socketchannel,注册为 对读 感兴趣,即 能通过 selector 获取 服务器传过来的消息
-			selector = Selector.open();
-			socketChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 8888));//192.168.199.100
-			socketChannel.configureBlocking(false);
-			socketChannel.register(selector, SelectionKey.OP_READ);
-
 			//登录步骤
 			// 1.先创建指定类型的消息类型
 			// 2.对消息进行编码
@@ -445,14 +445,44 @@ public class MyClientThread implements Runnable {
 					//如果有可读事件,则表明服务器端向客户端发送消息
 					if (key.isReadable()) {
 
+						ByteBuffer bbInt = ByteBuffer.allocate(4);    //读取INT头信息的缓存池
+						ByteBuffer bbObj = null;     				  //读取OBJ有效数据的缓存池
+
 						//1.获取此可读的 socketchannel
 						//2.分配字节缓冲区,将发送过来的东西,读取到缓冲区
 						//3.缓冲区进行解码
 
 						SocketChannel sc = (SocketChannel) key.channel();
-						ByteBuffer buffer = ByteBuffer.allocate(10000);
-						sc.read(buffer);
-						message = Utils.decode(buffer.array());
+
+						if (sc.read(bbInt)!= 4){
+							key.cancel();
+							continue;
+						}
+						int objLength = bbInt.getInt(0);
+						bbObj = ByteBuffer.allocate(objLength);
+
+						int readObj = sc.read(bbObj);
+
+						if(readObj==-1)
+						{
+							key.cancel();
+							continue;
+						}
+						boolean isReady = true;
+						while (readObj != objLength) {
+							int read = sc.read(bbObj);
+							if(read==-1)
+							{
+								key.cancel();
+								isReady=false;
+								break;
+							}
+							readObj += read;
+						}
+						if (!isReady)
+							continue;
+						bbObj.flip();
+						message = Utils.decode(bbObj.array());
 
 						//4.根据发送过来的消息类型 进行判定
 						switch (message.getType()){
@@ -470,6 +500,7 @@ public class MyClientThread implements Runnable {
 								}
 								break;
 							case MSG_PICTURE:
+								System.out.println("收到<图片>");
 								Message picMessage = message;
 
 								Utils.ByteArrayToFile(picMessage);

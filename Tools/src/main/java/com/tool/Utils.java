@@ -3,6 +3,7 @@ package com.tool;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -37,11 +38,25 @@ public class Utils {
 	 * @return
 	 */
 	public static byte[] encode(Message message) throws IOException {
+
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(baos);
 		oos.writeObject(message);
 		oos.flush();
-		return baos.toByteArray();
+
+		//构造发送数据:整型数据头+有效数据段
+		byte[] arr = baos.toByteArray();
+		int ObjLength = arr.length;   //获取有效数据段长度
+		ByteBuffer bb = ByteBuffer.allocate(ObjLength+4);
+
+		bb.clear();
+
+		bb.putInt(ObjLength);	//存放一个int值在缓冲池头,表示有效数据段
+		bb.put(arr);
+		bb.flip();           //调整重置读写指针
+		//转换为 写出 模式,通过变换 limit值,同时position值置0,写出[position,limit]区间的byte值
+
+		return bb.array();
 	}
 
 

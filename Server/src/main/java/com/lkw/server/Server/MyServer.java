@@ -1,5 +1,6 @@
 package com.lkw.server.Server;
 
+import com.lkw.server.FileServer.ThreadPoolManager;
 import com.tool.Message;
 import com.tool.PicContent;
 import com.tool.Utils;
@@ -137,6 +138,7 @@ public class MyServer implements Runnable {
 					}
 				}
 			}catch (Exception e){
+				e.printStackTrace();
 			}
 		}
 	}
@@ -153,24 +155,42 @@ public class MyServer implements Runnable {
 			channel = (SocketChannel) key.channel();
 			//分配 缓冲区 空间
 			ByteBuffer buffer = ByteBuffer.allocate(10000);
+
+			ByteBuffer bbInt = ByteBuffer.allocate(4);    //读取INT头信息的缓存池
+			ByteBuffer bbObj = null;
 			//将发送的东西,读取到缓冲区中
-			int read = channel.read(buffer);
-
-			// 如果是正常断开，read 的方法的返回值是 -1
-			if (read == -1) {
-				//cancel 会取消注册在 selector 上的 channel,并从 keys 集合中删除 key 后续不会再监听事件
+			if (channel.read(bbInt)!= 4){
+				// 如果是正常断开，read 的方法的返回值是 -1
 				key.cancel();
-			} else if(read>0) {
-				// 大于0的情况,就是正常的读取数据的长度
-				buffer.flip();
-				//转换为 写出 模式,通过变换 limit值,同时position值置0,写出[position,limit]区间的byte值
-				Message msg =  Utils.decode(buffer.array());
-
-				log.debug(msg.toString());
-				dealMessage(msg, key, channel);
-			}else if(read==0){
-			//	Todo:消息太大,超出缓冲区大小
+				return;
 			}
+			int objLength = bbInt.getInt(0);
+			bbObj = ByteBuffer.allocate(objLength);
+
+			int readObj = channel.read(bbObj);
+
+			if(readObj==-1)
+			{
+				key.cancel();
+				return;
+			}
+			while (readObj != objLength) {
+				int read = channel.read(bbObj);
+				if(read==-1)
+				{// 如果是正常断开，read 的方法的返回值是 -1
+					key.cancel();
+					return;
+				}
+				readObj += read;
+			}
+			bbObj.flip();
+
+			Message msg = Utils.decode(bbObj.array());
+			log.debug(String.valueOf(msg.getType()));
+
+			dealMessage(msg, key, channel);
+
+
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println((key.attachment() == null ? "匿名用户" : key.attachment()) + " 离线了..");
@@ -253,7 +273,7 @@ public class MyServer implements Runnable {
 
 				break;
 			case MSG_PICTURE:
-					//应当在服务器设置名字
+				System.out.println("<图片>");
 				// PicContent picContent = ((PicContent) msg.getContent());
 				// picContent.setPicName(Utils.SetFileName(picContent.getPicName()));
 				Utils.ToDownload(msg);
