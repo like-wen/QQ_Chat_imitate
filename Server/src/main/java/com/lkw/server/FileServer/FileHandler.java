@@ -76,7 +76,7 @@ public class FileHandler implements Runnable{
                 //数据库更新
                 mybatisPlusController.fileAdd(fileName,"SYSTEM");
                 long fileLength = dis.readLong();
-                File directory = new File(System.getProperty("user.dir") + "\\MyFile");//指定目录
+                File directory = new File(System.getProperty("user.dir") + "\\MyFile");//指定目录//TODO
                 if (!directory.exists()) {
                     directory.mkdir();
                 }

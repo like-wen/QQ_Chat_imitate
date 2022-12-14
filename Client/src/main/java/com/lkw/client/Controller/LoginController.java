@@ -83,7 +83,7 @@ public class LoginController implements Initializable {
 
 
            try {
-               socket = new Socket("127.0.0.1", 9999);//192.168.199.100
+               socket = new Socket("192.168.199.100", 9999);//192.168.199.100
                //socket的输入输出
                BufferedReader bReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                PrintWriter pWriter = new PrintWriter(socket.getOutputStream());

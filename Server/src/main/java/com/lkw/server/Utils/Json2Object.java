@@ -35,14 +35,14 @@ public class Json2Object {
        String password = (String) this.data.get("password");
 
 
-        //TODO 查数据库,密码判断
+
         String json = Object2Json.creat(this.getUsername(), "logged")
                 .addObject("logged", password.equals("123456"))
                 .buildJson();
 
         return json;
     }
-    //TODO 其他mode情况的解析json方法,按照上面的模仿
+
 
 
 

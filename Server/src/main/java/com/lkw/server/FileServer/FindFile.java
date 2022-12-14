@@ -21,7 +21,7 @@ public class FindFile implements Callable {
 
 
 
-                File file = new File(System.getProperty("user.dir") + "\\MyFile\\");
+                File file = new File(System.getProperty("user.dir") + "\\MyFile\\");//TODO
                 if(!file.exists())
                     file.mkdir();
                 File[] files = file.listFiles();

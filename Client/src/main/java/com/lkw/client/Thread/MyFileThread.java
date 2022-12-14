@@ -64,7 +64,7 @@ public class MyFileThread implements Runnable {
 	@Override
 	public void run() {
 		try {
-			socketFile = new Socket("127.0.0.1", 9998);//192.168.199.100
+			socketFile = new Socket("192.168.199.100", 9998);//192.168.199.100
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

@@ -400,7 +400,7 @@ public class MyClientThread implements Runnable {
 			//3.配置socketchannel为阻塞
 			//4.为这个socketchannel,注册为 对读 感兴趣,即 能通过 selector 获取 服务器传过来的消息
 			selector = Selector.open();
-			socketChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 8888));//192.168.199.100
+			socketChannel = SocketChannel.open(new InetSocketAddress("192.168.199.100", 8888));//192.168.199.100
 			socketChannel.configureBlocking(false);
 			socketChannel.register(selector, SelectionKey.OP_READ);
 			//定时器
