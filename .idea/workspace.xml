@@ -10,38 +10,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="Nio的断包,粘包问题解决,(发送超大图片,线程卡死无法解决)">
-      <change afterPath="$PROJECT_DIR$/Client/src/main/resources/cloud-file.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/main/resources/ic.png" afterDir="false" />
+    <list default="true" id="3cea0fed-dc54-4249-a389-a55d229ef605" name="Changes" comment="12/16 13:57">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6c98e8b7-6f18-48b7-bff5-1bd21f2719b0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/6c98e8b7-6f18-48b7-bff5-1bd21f2719b0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/JavafxController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Controller/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyFileThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyFileThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/login.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/LoginController$MyLoginThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/LoginController$MyLoginThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/LoginController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/javafxController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Controller/javafxController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Login.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Login.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyClientThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyFileThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Thread/MyFileThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/login.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/main.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FileHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FileHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FindFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/FileServer/FindFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/LoginServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/com/lkw/client/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Utils/MybatisPlusController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/FindFile.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/FindFile.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/fileHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/FileServer/fileHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer$LoginHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer$LoginHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/LoginServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/MyServer$UIhandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/MyServer$UIhandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/MyServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Server/MyServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Utils/MybatisPlusController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Server/target/classes/com/lkw/server/Utils/MybatisPlusController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Client_jar/Client.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Client_jar/Client.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Server_jar/Server.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Server_jar/Server.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,6 +64,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "WebServerToolWindowFactoryState": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "spring.configuration.checksum": "587c446a63103530d5d08b0cda6169ec"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.lkw.server" />
@@ -119,6 +106,19 @@
     </option>
   </component>
   <component name="RunManager" selected="Application.Login">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Login" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.lkw.client.Login" />
       <module name="Client" />
@@ -167,19 +167,6 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -274,6 +261,8 @@
       <workItem from="1670115723563" duration="8797000" />
       <workItem from="1670332062225" duration="4208000" />
       <workItem from="1670910964927" duration="3827000" />
+      <workItem from="1671176019622" duration="278000" />
+      <workItem from="1671176494251" duration="1355000" />
     </task>
     <task id="LOCAL-00001" summary="基础代码">
       <created>1663814396212</created>
@@ -415,7 +404,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670974043849</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="12/16 13:57">
+      <created>1671170246088</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1671170246088</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -454,7 +450,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
@@ -476,7 +471,8 @@
     <MESSAGE value="登录,注册完成" />
     <MESSAGE value="数据库操作基本写完" />
     <MESSAGE value="将图片以字节形式进行传输,同时在客户端以及服务器保存图片副本" />
-    <option name="LAST_COMMIT_MESSAGE" value="将图片以字节形式进行传输,同时在客户端以及服务器保存图片副本" />
+    <MESSAGE value="12/16 13:57" />
+    <option name="LAST_COMMIT_MESSAGE" value="12/16 13:57" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -498,18 +494,28 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
-          <line>451</line>
+          <line>445</line>
           <option name="timeStamp" value="134" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
-          <line>461</line>
+          <line>455</line>
           <option name="timeStamp" value="135" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Client/src/main/java/com/lkw/client/Thread/MyClientThread.java</url>
-          <line>475</line>
+          <line>469</line>
           <option name="timeStamp" value="136" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
+          <line>152</line>
+          <option name="timeStamp" value="159" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Server/src/main/java/com/lkw/server/Server/MyServer.java</url>
+          <line>214</line>
+          <option name="timeStamp" value="160" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

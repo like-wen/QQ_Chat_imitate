@@ -237,7 +237,7 @@ public class MyServer implements Runnable {
 							sendMsgToClient(message, sc);
 							// System.out.println(message);/
 						});
-				receivedMsgArea.appendText(key.attachment()+" : "+Utils.base64decode((String) msg.getContent()) + "  " +sdf.format(new Date())+" \n");
+				receivedMsgArea.appendText(sdf.format(new Date())+"  "+key.attachment()+" : "+Utils.base64decode((String) msg.getContent()) + "  " +" \n");
 				break;
 			case MSG_PRIVATE:
 				String[] s = ((String) msg.getContent()).split("_");
@@ -295,7 +295,7 @@ public class MyServer implements Runnable {
 					// sendMsgToClient(message, sc);
 					System.out.println(msg.getType());
 				});
-				receivedMsgArea.appendText(key.attachment()+" : " + "<图片信息>  " +sdf.format(new Date())+" \n");
+				receivedMsgArea.appendText(sdf.format(new Date())+"  "+key.attachment()+" : " + "<图片信息>  " +" \n");
 				break;
 
 			default:
@@ -331,7 +331,7 @@ public class MyServer implements Runnable {
 					SocketChannel sc = (SocketChannel) sk.channel();
 					sendMsgToClient(new Message( MSG_SYSTEM,"SYSTEM","",Utils.base64encode(sendMsgArea.getText())), sc);//编码
 					//显示
-					receivedMsgArea.appendText("SYSTEM"+" : "+sendMsgArea.getText() + "  " +sdf.format(new Date())+" \n");
+					receivedMsgArea.appendText(sdf.format(new Date())+"  SYSTEM"+" : "+sendMsgArea.getText() + "  " +" \n");
 				});
 		sendMsgArea.clear();
 

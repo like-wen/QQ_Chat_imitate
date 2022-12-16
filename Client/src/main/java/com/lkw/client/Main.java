@@ -32,8 +32,8 @@ public class Main extends Application {
             JavafxController controller = loader.getController();
             controller.init(username);
 
-            primaryStage.setTitle("QQ");
-            primaryStage.getIcons().add(new Image("/QQ.png"));
+            primaryStage.setTitle("File-Cloud");
+            primaryStage.getIcons().add(new Image("/cloud-file.png"));
             primaryStage.setScene(new Scene(root));
 
 
