@@ -1,11 +1,13 @@
 package com.lkw.server.Server;
 
 import com.lkw.server.Utils.MybatisPlusController;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+@Slf4j
 public class LoginServer implements Runnable {
 
     public static final int PORT = 9999;
@@ -82,7 +84,11 @@ public class LoginServer implements Runnable {
 
 
             }catch (Exception e){
-                e.printStackTrace();
+                //e.printStackTrace();
+
+                log.info("线程关闭");
+                return;
+                //离线
             }
         }
 

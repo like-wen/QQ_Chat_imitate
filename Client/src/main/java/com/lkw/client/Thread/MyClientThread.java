@@ -40,11 +40,6 @@ import java.util.TimerTask;
 import static com.tool.FinalValue.*;
 
 
-/**
- * 客户端
- * @author 花大侠
- *
- */
 @Slf4j
 public class MyClientThread implements Runnable {
 	private Selector selector;
@@ -398,7 +393,6 @@ public class MyClientThread implements Runnable {
 			TimerTask timerTask=new TimerTask() {
 				@Override
 				public void run() {//定时更新文件列表+人数
-
 					Message msg;
 					msg=new Message(MSG_GetFileList,username,"SYSTEM","");
 					byte[] bytes = new byte[0];

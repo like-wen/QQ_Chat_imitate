@@ -11,9 +11,9 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="294.0" prefWidth="506.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lkw.client.Controller.LoginController">
    <children>
-      <TextField fx:id="username" layoutX="91.0" layoutY="43.0" prefHeight="31.0" prefWidth="320.0"><font><Font size="15.0" /></font></TextField>
+      <TextField fx:id="username" layoutX="91.0" layoutY="43.0" prefHeight="31.0" prefWidth="215.0"><font><Font size="15.0" /></font></TextField>
 
-      <PasswordField fx:id="password" layoutX="91.0" layoutY="111.0" prefHeight="31.0" prefWidth="320.0"><font><Font size="15.0" /></font></PasswordField>
+      <PasswordField fx:id="password" layoutX="91.0" layoutY="111.0" prefHeight="31.0" prefWidth="215.0"><font><Font size="15.0" /></font></PasswordField>
 
       <Text fx:id="tips" layoutX="93.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="227.240234375" />
 
@@ -24,7 +24,7 @@
 
       <CheckBox fx:id="selectBool" layoutX="96.0" layoutY="242.0" mnemonicParsing="false" text="我已阅读并同意" />
 
-      <Hyperlink fx:id="link" layoutX="207.0" layoutY="239.0" text="服务条款、隐私政策" />
+      <Hyperlink fx:id="link" layoutX="198.0" layoutY="240.0" text="服务条款、隐私政策" />
 
 
    </children>

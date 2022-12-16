@@ -190,6 +190,17 @@ public class MyServer implements Runnable {
 				//强迫中断
 				key.cancel();
 				MybatisPlusController.getController().RemoveUser((String) key.attachment());
+				System.out.println((key.attachment() == null ? "匿名用户" : key.attachment()) + " 离线了..");
+				dealMessage(new Message(MSG_SYSTEM, key.attachment() + " 离线了.."), key, channel);
+				ui.updateForDisConnect((String) key.attachment());
+				//取消注册
+				key.cancel();
+				//出现异常,关闭通道,断开与对应客户端的连接
+				try {
+					channel.close();
+				} catch (IOException ioException) {
+					ioException.printStackTrace();
+				}
 				return;
 			}
 
@@ -203,17 +214,7 @@ public class MyServer implements Runnable {
 
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
-			System.out.println((key.attachment() == null ? "匿名用户" : key.attachment()) + " 离线了..");
-			dealMessage(new Message(MSG_SYSTEM, key.attachment() + " 离线了.."), key, channel);
-			ui.updateForDisConnect((String) key.attachment());
-			//取消注册
-			key.cancel();
-			//出现异常,关闭通道,断开与对应客户端的连接
-			try {
-				channel.close();
-			} catch (IOException ioException) {
-				ioException.printStackTrace();
-			}
+
 		}
 	}
 
